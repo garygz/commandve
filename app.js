@@ -43,8 +43,8 @@ app.get('/api/users', users.list_users(User));
 app.get('/api/users/:id', users.find_user(User));
 
 //Snippet routes
-app.get('api/snippets', snippets.list_snippets(User, Snippet));
-app.get('api/snippets/:id', snippets.find_snippet(User, Snippet));
+app.get('/api/snippets', snippets.list_snippets(User, Snippet));
+app.get('/api/snippets/:id', snippets.find_snippet(User, Snippet));
 
 
 // catch 404 and forward to error handler
