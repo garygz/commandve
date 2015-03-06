@@ -15,16 +15,17 @@
       <script src="app/js/app.js"></script>
       <script src="app/js/services/services.js"></script>
       <!--<script src="/js/filters/time.js"></script>-->
-
+      <script src="app/js/controllers/snippet_controller.js"></script>
       <script src="app/js/controllers/user_controller.js"></script>
       <script src="app/js/controllers/header_controller.js"></script>
 
     </head>
-    <body class="vanilla"  ng-app="users">
+    <body class="vanilla"  ng-app="cmndvninja">
         <header ng-controller="HeaderController">
           <ul class="nav nav-pills">
             <li role="presentation"><a href="#/users">Users</a></li>
             <li role="presentation"><a href="#/bags">Snippet Bags</a></li>
+            <li role="presentation"><a href="#/snippets/new">New Snippet</a></li>
             <li role="presentation"><a ng-show="user.name" ng-href="#/edit/{{user._id}}">Edit</a></li>
             <li role="presentation"><a ng-show="user.name" ng-href="#/detail/{{user._id}}">Detail</a></li>
           </ul>

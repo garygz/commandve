@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('users'). controller('UserController',
+angular.module('cmndvninja'). controller('UserController',
   ['$scope', '$location', 'User', 'Shared',
   function($scope, $location, User, Shared){
 
