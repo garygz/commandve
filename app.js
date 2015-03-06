@@ -36,15 +36,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+
 
 //User routes
-app.get('/users', users.list_users(User));
-app.get('/users/:id', users.find_user(User));
+app.get('/api/users', users.list_users(User));
+app.get('/api/users/:id', users.find_user(User));
 
 //Snippet routes
-app.get('/snippets', snippets.list_snippets(User, Snippet));
-app.get('/snippets/:id', snippets.find_snippet(User, Snippet));
+app.get('api/snippets', snippets.list_snippets(User, Snippet));
+app.get('api/snippets/:id', snippets.find_snippet(User, Snippet));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

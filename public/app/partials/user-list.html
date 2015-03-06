@@ -1,0 +1,12 @@
+<h1>Listing Users</h1>
+<table id="users" class="table table-responsive table-striped">
+  <tr>
+    <th>User</th>
+    <th>Email</th>
+  </tr>
+  <tr ng-repeat="u in data.users">
+    <td class="name"><a ng-href="#/users/{{u._id}}" ng-bind="u.username"></a></td>
+    <td class="email" ng-bind="u.email"></td>
+
+  </tr>
+</table>
