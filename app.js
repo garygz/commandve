@@ -41,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //User routes
 app.get('/api/users', users.list_users(User));
 app.get('/api/users/:id', users.find_user(User));
+app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
 
 //Snippet routes
 app.get('/api/snippets', snippets.list_snippets(User, Snippet));

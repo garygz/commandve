@@ -40,3 +40,17 @@ exports.find_snippet = function(User,Snippet){
     });
   }
 }
+
+
+exports.find_user_snippets = function(User,Snippet){
+  return function(req,res){
+    Snippet.find({user: req.params.user_id}, function(error, snippets){
+        if(error){
+          handleError(err, res);
+        }else{
+          res.json(snippets);
+        }
+
+    });
+  }
+}
