@@ -28,7 +28,7 @@ exports.list_users = function(User){
       if(error)  {
           handleErrors(error, res);
          }else{
-          res.json({ users: users });
+          res.json(users);
          }
     });
 
