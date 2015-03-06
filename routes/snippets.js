@@ -20,7 +20,7 @@ exports.list_snippets = function(User,Snippet){
         if(error){
           handleError(err, res);
         }else{
-          res.json({ snippets: snippets});
+          res.json(snippets);
         }
 
     });
