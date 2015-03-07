@@ -29,7 +29,7 @@ exports.list_snippets = function(User,Snippet){
 
 exports.find_snippet = function(User,Snippet){
   return function(req,res){
-    Snippet.findById(req.params.id).populate('user').exec(
+    Snippet.findById(req.body.id).populate('user').exec(
       function(error, snippet){
         if(error){
           handleError(err, res);
@@ -44,7 +44,7 @@ exports.find_snippet = function(User,Snippet){
 
 exports.find_user_snippets = function(User,Snippet){
   return function(req,res){
-    Snippet.find({user: req.params.user_id}, function(error, snippets){
+    Snippet.find({user: req.body.user_id}, function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{

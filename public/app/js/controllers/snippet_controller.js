@@ -3,27 +3,28 @@
 angular.module('cmndvninja'). controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared',
   function($scope, $location, $route, Snippet, Shared){
+  
+    $scope.formData = {
+      user: '54f9fe5f2913f1f928a09fea'
+    };
 
-  $scope.data = {};
-  function createSnippet() {
-    console.log('hello there')
-  };
 
+    $scope.data = {};
+    $scope.createSnippet = function () {
+      console.log($scope.formData)
+      Snippet.post($scope.formData)
+    };
+
+
+  $scope.snippets = ["snippet", "snippet1"]
   $scope.greeting = 'hello there!';
-
-
-  function newProduct() {
-    $scope.mainHeader = "Create Product";
-    $scope.product = {};
-    $scope.product.is_new = true;
-    Shared.product = null;
-  }
 
 
 
   Snippet.query().$promise.then(function(snippets){
     $scope.data.snippets = snippets;
     Shared.snippets = null;
+    console.log(snippets)
   });
 
 }]);

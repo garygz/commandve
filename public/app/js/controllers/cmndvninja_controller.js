@@ -16,9 +16,9 @@ angular.module('cmndvninja').controller('cmndvninja', ['$scope', function($scope
   }]);
 
 
-  angular.module('cmndvninja').config( function($mdThemingProvider){
-    // Configure a dark theme with primary foreground yellow
-    $mdThemingProvider.theme('docs-dark', 'default')
-        .primaryPalette('pink')
-        .dark();
-  });
+  // angular.module('cmndvninja').config( function($mdThemingProvider){
+  //   // Configure a dark theme with primary foreground yellow
+  //   $mdThemingProvider.theme('docs-dark', 'default')
+  //       .primaryPalette('green')
+  //       .dark();
+  // });
