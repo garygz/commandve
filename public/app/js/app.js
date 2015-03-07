@@ -2,7 +2,7 @@
 
 /* App Module */
 
-angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMaterial', 'ngMessages']);
+angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMaterial', 'ngMessages', 'ui.ace']);
 
 angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) {
 
