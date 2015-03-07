@@ -79,8 +79,7 @@ exports.create_new_snippet = function(User,Snippet){
 
     snippet.save(function(err){
       if(err){
-          console.log("Failed to save new snippet", err, snippet.content);
-          handleErrors(err,res, "Failed to save the snippet");
+        handleErrors(err,res, "Failed to save the snippet");
       }else{
         res.status(200).send();
       }
