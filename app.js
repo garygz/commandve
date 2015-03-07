@@ -47,6 +47,8 @@ app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippe
 //Snippet routes
 app.get('/api/snippets', snippets.list_snippets(User, Snippet));
 app.get('/api/snippets/:id', snippets.find_snippet(User, Snippet));
+app.post('/api/snippets', snippets.create_new_snippet(User, Snippet));
+
 
 
 // catch 404 and forward to error handler
@@ -62,6 +64,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
+    console.log(err.stack);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,

@@ -6,16 +6,6 @@ var handleErrors = function(err, res, msg){
 
 exports.list_snippets = function(User,Snippet){
   return function(req,res){
-    // console.log('parmas are' + params)
-
-    var snippet =  Snippet({content: "bla bla bla bla", user: '54f9e8e2e537f8cc40e63265'});
-    snippet.save(function(err){
-      if(err){
-          console.log("Failed to save new snippet", err, snippet.content);
-      }
-
-    });
-
     Snippet.find({}, function(error, snippets){
         if(error){
           handleError(err, res);
@@ -50,6 +40,20 @@ exports.find_user_snippets = function(User,Snippet){
         }else{
           res.json(snippets);
         }
+
+    });
+  }
+}
+
+
+exports.create_new_snippet = function(User,Snippet){
+  return function(req,res){
+    console.log(req.body);
+    var snippet =  Snippet({content: req.body.content, user: req.body.user});
+    snippet.save(function(err){
+      if(err){
+          console.log("Failed to save new snippet", err, snippet.content);
+      }
 
     });
   }
