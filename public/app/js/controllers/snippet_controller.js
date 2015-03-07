@@ -6,7 +6,7 @@ angular.module('cmndvninja'). controller('SnippetController',
 
   console.log('SnippetController init', $location);
   $scope.data = {};
-
+  $scope.greeting = 'hello there!';
   Snippet.query().$promise.then(function(snippets){
     $scope.data.snippets = snippets;
     Shared.snippets = null;

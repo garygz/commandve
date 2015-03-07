@@ -2,7 +2,7 @@
 
 /* App Module */
 
-angular.module('cmndvninja', ['ngResource', 'ngRoute']);
+angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMaterial', 'ngMessages']);
 
 angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) {
 
@@ -19,4 +19,3 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
     $routeProvider.otherwise({redirectTo: '/'});
 
 }]);
-
