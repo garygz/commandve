@@ -49,7 +49,8 @@ app.get('/api/snippets', snippets.list_snippets(User, Snippet));
 app.get('/api/snippets/:id', snippets.find_snippet(User, Snippet));
 app.post('/api/snippets', snippets.create_new_snippet(User, Snippet));
 
-
+//search routes
+app.get('/api/search', snippets.search_snippet(User, Snippet));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
