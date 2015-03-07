@@ -13,6 +13,8 @@ var handleErrors = function(err, res, msg){
   res.status(500).send(msg);
 };
 
+
+
 exports.list_users = function(User){
   return function(req,res){
     var testUserName = "username_"+Date.now();
@@ -47,3 +49,5 @@ exports.find_user = function(User){
     });
   }
 }
+
+
