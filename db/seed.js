@@ -1,3 +1,5 @@
+var NUM_OF_SNIPPETS = 20;
+
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/test');
