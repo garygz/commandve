@@ -59,7 +59,24 @@ exports.find_user_snippets = function(User,Snippet){
 exports.create_new_snippet = function(User,Snippet){
   return function(req,res){
     console.log(req.body);
-    var snippet =  Snippet({content: req.body.content, user: req.body.user});
+    var paramsIn = {
+        content: req.body.content,
+        user: req.body.user
+    }
+    if(req.body.unique_handle){
+      paramsIn.unique_handle = req.body.unique_handle;
+    }
+
+    if(req.body.group){
+      paramsIn.group = req.body.group;
+    }
+
+    if(req.body.tags){
+      paramsIn.tags = req.body.tags;
+    }
+
+    var snippet = Snippet(paramsIn);
+
     snippet.save(function(err){
       if(err){
           console.log("Failed to save new snippet", err, snippet.content);
