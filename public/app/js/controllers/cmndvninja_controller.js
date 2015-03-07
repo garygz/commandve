@@ -1,6 +1,6 @@
 // var app = angular.module('cmndvninja', ['ngRoute', 'ngMaterial']);
 
-angular.module('cmndvninja').controller('cmndvninja', ['$scope', '$mdSidenav', function($scope) {
+angular.module('cmndvninja').controller('cmndvninja', ['$scope', function($scope) {
     $scope.user = {
       title: '',
       language: '',
