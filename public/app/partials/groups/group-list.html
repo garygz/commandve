@@ -1,0 +1,13 @@
+<h1>Groups</h1>
+<table id="groups" class="table table-responsive table-striped">
+  <tr>
+    <th>Group</th>
+    <th>Description</th>
+  </tr>
+  <tr ng-repeat="group in groupData.groups">
+    <td class="name"><a ng-href="#/group/{{group._id}}" ng-bind="group.name"></a></td>
+    <td class="description" ng-bind="group.description"></td>
+
+  </tr>
+</table>
+

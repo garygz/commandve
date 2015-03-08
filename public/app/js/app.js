@@ -17,7 +17,7 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
     });
 
     $routeProvider.when('/groups', {
-      templateUrl: 'app/partials/group-list.html',
+      templateUrl: 'app/partials/groups/group-list.html',
       controller: 'GroupController'
     });
 
