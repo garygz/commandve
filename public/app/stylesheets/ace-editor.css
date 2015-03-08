@@ -1,0 +1,10 @@
+.ace-editor {
+  height: 400px;
+  width: 700px;
+  margin-top: 20px;
+}
+
+#snippet-name-input {
+  margin-right: 20px;
+}
+

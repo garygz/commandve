@@ -5,6 +5,7 @@ angular.module('cmndvninja').controller('GroupController',
   function($scope, $location, Group, Shared){
 
   console.log('GroupController init', $location);
+
   $scope.groupData = {};
   $scope.$parent.userGroups = {};
 
@@ -15,7 +16,7 @@ angular.module('cmndvninja').controller('GroupController',
 
   $scope.showGroup = function(id){
     $location.path('groups/'+id + '/snippets');
-    console.log($location.path());
+    Shared.currentGroupId = id;
   }
 
 }]);

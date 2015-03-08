@@ -18,6 +18,20 @@ var getQueryParams = function(req){
 
 exports.list_snippets = function(User,Snippet){
   return function(req,res){
+    console.log(req.params)
+    Snippet.find({group: req.params.groupId}, function(error, snippets){
+        if(error){
+          handleErrors(error, res);
+        }else{
+          res.json(snippets);
+        }
+    });
+  }
+}
+
+exports.all_snippets = function(User,Snippet){
+  return function(req,res){
+    console.log(req.params)
     Snippet.find({}, function(error, snippets){
         if(error){
           handleErrors(error, res);

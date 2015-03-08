@@ -1,28 +1,39 @@
-<button ng-click="newSnippet()">make a new snippet</button>
-<div ng-repeat="snippet in snippets">
-  <button ng-click="selectSnippet(snippet._id)">{{snippet._id}}</button>
-</div>
-
-<select ng-model="currentSnippet.tags[0]" ng-options="language for language in languages">
-  <option value="">--- choose language ---</option>
-</select>
-
-<input type="text" ng-model="currentSnippet.unique_handle"></input>
-
-<textarea ng-model="currentSnippet.content"></textarea>
-
-
 <button ng-click="createOrEditSnippet()">submit</button>
 
 
-<md-sidenav is-locked-open="true" class="md-sidenav-right md-whiteframe-z2" component-id="right">
-    <md-toolbar class="md-theme-dark">
-        <div class="md-toolbar-tools">
-            <md-button ng-click="toggleMenu()" class="md-button-colored"><core-icon icon="polymer"></core-icon></md-button>
-            <span flex></span>
-        </div>
-    </md-toolbar>
-    <md-content class="md-content-padding">
-        <md-button ng-click="toggleMenu()" class="md-button-colored">Stuff</md-button>
-    </md-content>
-</md-sidenav>
+<div class="new-snippet-container center">
+<nav class="navbar navbar-inverse" id="minified-snippet-nav">
+  <div class="navbar-header">
+    <a class="navbar-brand" id="big-plus" ng-click="newSnippet()">+</a>
+  </div>
+  <ul class="nav navbar-nav"  id="minified-snippet-nav">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" ng-bind="displayedLanguage"aria-expanded="false"></a>
+      <ul class="dropdown-menu" role="menu">
+        <li ng-repeat="language in languages" ng-click="selectLanguage(language)"><a>{{language}}</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<div class="minified-snippet-display col-sm-3" ng-controller="SideNavController">
+  <div ng-repeat="snippet in snippets">
+    <div ng-click="selectSnippet(snippet._id)">
+      <h3>{{snippet.unique_handle}} </h3>
+          {{snippet.content}}
+    </div>
+  </div>
+</div>
+
+
+<div class="input-group" id="snippet-name-input">
+  <span class="input-group-addon" id="basic-addon1"></span>
+  <input type="text" class="form-control" id="snippet-name-input" ng-model="currentSnippet.unique_handle" placeholder="Ninjas like names" aria-describedby="basic-addon1"></input>
+</div>
+
+<div ui-ace class='ace-editor' ng-model="currentSnippet.content"></div>
+</div>
+
+<ul class="dropdown-menu" role="menu">
+  <li ng-repeat="language in languages" ng-click="selectLanguage(language)"><a>{{language}}</a></li>
+</ul>

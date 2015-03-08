@@ -47,11 +47,12 @@ app.get('/api/users/:id', users.find_user(User));
 app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
 
 //Snippet routes
-app.get('/api/snippets', snippets.list_snippets(User, Snippet));
-app.get('/api/snippets/:id', snippets.find_snippet(User, Snippet));
-app.post('/api/snippets', snippets.create_new_snippet(User, Snippet));
-app.put('/api/snippets/:id', snippets.edit_snippet(User, Snippet));
-app.delete('/api/snippets/:id', snippets.delete_snippet(User, Snippet));
+app.get('/api/groups/:groupId/snippets', snippets.list_snippets(User, Snippet));
+app.get('/api/snippets', snippets.all_snippets(User, Snippet));
+// app.get('/api/groups/:groupId/snippets/:id', snippets.find_snippet(User, Snippet));
+app.post('/api/groups/:groupId/snippets', snippets.create_new_snippet(User, Snippet));
+app.put('/api/groups/:groupId/snippets/:id', snippets.edit_snippet(User, Snippet));
+app.delete('/api/groups/:groupId/snippets/:id', snippets.delete_snippet(User, Snippet));
 
 //search routes
 app.get('/api/search', snippets.search_snippet(User, Snippet));

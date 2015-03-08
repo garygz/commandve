@@ -8,11 +8,13 @@ angular.module('cmndvninja'). controller('UserController',
   $scope.data = {};
   //for test only
   //setup after login
+
   $scope.user = {username: "garygz76812736", _id:"54fb97b211a8fdea326df321"}
   $scope.userGroups = [
       {name: "HTML", description: "html stuff"},
       {name: "CSS", description: "css stuff"},
       {name: "Ruby", description: "ruby stuff"}];
+
 
   $scope.search = function(searchCriteria, options){
     // Shared.searchCriteria = searchCriteria;

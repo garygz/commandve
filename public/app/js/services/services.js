@@ -14,7 +14,7 @@ angular.module('cmndvninja').factory('Shared', [function($resource){
 }]);
 
 angular.module('cmndvninja').factory('Snippet', ['$resource', function($resource){
-  return $resource('/api/snippets/:id', {id: '@_id'}, {
+  return $resource('/api/groups/:groupId/snippets/:id', {id: '@_id', groupId: '@groupId'}, {
     query: {method:'GET', isArray:true},
     getOne: {method:'GET', isArray:false},
     post: {method:'POST'},
