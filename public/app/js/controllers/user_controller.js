@@ -9,15 +9,27 @@ angular.module('cmndvninja'). controller('UserController',
   //for test only
   //setup after login
   $scope.user = {username: "garygz76812736", _id:"54fb97b211a8fdea326df321"}
+  $scope.userGroups = [
+      {name: "HTML", description: "html stuff"},
+      {name: "CSS", description: "css stuff"},
+      {name: "Ruby", description: "ruby stuff"}];
 
+  $scope.search = function(searchCriteria, options){
+    // Shared.searchCriteria = searchCriteria;
+    // Shared.searchOptions = options;
+    // console.log("invoke search");
+    // var searchCriteria = Shared.searchCriteria;
+    // console.log("search for",searchCriteria);
 
-  // $scope.deleteOne = function(id) {
-  //   Product.remove({id: id}).$promise.then(function(data){
-  //    $scope.data.products = $scope.data.products.filter(function(ele){
-  //     console.log(ele._id + " " + id);
-  //     return ele._id !== id;
-  //    });
-  //   });
-  // };
+    if(searchCriteria && searchCriteria.trim().length>0){
+       SearchItem.query({query:searchCriteria, limit: 50, type: "webapp"}).$promise.then(
+        function(searchResults){
+          console.log("search results", searchResults);
+          $scope.searchResults = searchResults;
+          $location.path("/search");
+       });
+    }
+
+  }
 
 }]);

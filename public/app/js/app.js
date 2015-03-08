@@ -21,6 +21,11 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
       controller: 'UserController'
     });
 
+    $routeProvider.when('/search', {
+      templateUrl: 'app/partials/search/search-results.html',
+      controller: 'SearchController'
+    });
+
     $routeProvider.otherwise({redirectTo: '/groups'});
 
 }]);

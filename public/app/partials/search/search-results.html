@@ -1,0 +1,29 @@
+<h4>Search Results</h4>
+
+<div class="search-panel search-results pull-left" >
+  <div ng-repeat="searchItem in $parent.searchResults" ng-model="$parent.searchResults">
+      <div class="panel panel-default col-md-2 margin-left-1">
+        <div class="panel-body">
+          <div>{{searchItem.unique_handle}}</div>
+
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="search-panel search-groups pull-right">
+  <div ng-repeat="group in $parent.userGroups">
+
+      <div class="panel panel-default row margin-right-2 droppable">
+        <div class="panel-body clickable" ng-click="showGroup(group._id)">
+          <div>{{group.name}}</div>
+          <div>{{group.description}}<div>
+        </div>
+      </div>
+
+  </div>
+
+</div>
+
+
