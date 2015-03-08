@@ -6,11 +6,10 @@ angular.module('cmndvninja'). controller('UserController',
 
   console.log('UserController init', $location);
   $scope.data = {};
+  //for test only
+  //setup after login
+  $scope.user = {username: "garygz76812736", _id:"54fb97b211a8fdea326df321"}
 
-  User.query().$promise.then(function(users){
-    $scope.data.users = users;
-    Shared.users = null;
-  });
 
   // $scope.deleteOne = function(id) {
   //   Product.remove({id: id}).$promise.then(function(data){

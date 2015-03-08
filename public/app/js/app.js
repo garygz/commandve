@@ -2,11 +2,16 @@
 
 /* App Module */
 
-angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMaterial', 'ngMessages', 'ui.ace']);
+angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMessages', 'ui.ace']);
 
 angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) {
 
-    $routeProvider.when('/snippets/new', {
+    $routeProvider.when('/groups', {
+      templateUrl: 'app/partials/groups/group-list.html',
+      controller: 'GroupController'
+    });
+
+    $routeProvider.when('/groups/:groupid/snippets', {
       templateUrl: 'app/partials/snippets/new.html',
       controller: 'SnippetController'
     });
@@ -16,6 +21,6 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
       controller: 'UserController'
     });
 
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({redirectTo: '/groups'});
 
 }]);
