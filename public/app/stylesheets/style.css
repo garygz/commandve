@@ -66,5 +66,8 @@ Fix for Angular UI not displaying curors correctly
 .margin-left-1{
   margin-left: 1%;
 }
+.clickable{
+  cursor: pointer;
+}
 
 

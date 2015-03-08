@@ -17,7 +17,9 @@ angular.module('cmndvninja').controller('GroupController',
   });
 
   $scope.showGroup = function(id){
-    $scope.$location.path='#/groups/'+id;
+    $location.path('groups/'+id + '/snippets');
+    console.log($location.path());
+
   }
 
 }]);
