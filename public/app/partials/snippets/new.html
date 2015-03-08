@@ -1,32 +1,25 @@
-<!--    <md-whiteframe class="md-whiteframe-z1" layout="column" layout-align="center" layout-margin layout-padding>
-    <p>hello</p>
-  </md-whiteframe>
+<button ng-click="newSnippet()">make a new snippet</button>
+<div ng-repeat="snippet in snippets">
+  <button ng-click="selectSnippet(snippet._id)">{{snippet._id}}</button>
+</div>
+
+<select ng-model="currentSnippet.tags[0]" ng-options="language for language in languages">
+  <option value="">--- choose language ---</option>
+</select>
+
+<input type="text" ng-model="currentSnippet.unique_handle"></input>
+
+<textarea ng-model="currentSnippet.content"></textarea>
 
 
-  <md-whiteframe class="md-whiteframe-z1" layout="row" layout-wrap layout-margin layout-padding>
-    <md-content class="md-padding">
-    <md-input-container flex="75">
-      <div flex ng-model="formData.content" id='ui-ace-main' ui-ace style="width: 600px;
-      height:300px"></div>
-    </md-input-container>
-    <md-button class="md-raised" ng-click="createSnippet()">submit</md-button>
-    </md-content>
+<button ng-click="createOrEditSnippet()">submit</button>
 
-    <div layout="column" ng-repeat="(key, value) in snippets" flex="25">
-     <p>{{key}}</p>
-    <p>{{value}}</p>
-    <br>
-    </div>
-  </md-whiteframe> -->
 
-<!--   <md-grid-list md-cols="12" md-gutter="1em" md-row-height="2.2">
-    <md-grid-tile md-rowspan="1" md-colspan="12"></md-grid-tile>
-    <md-grid-tile md-rowspan="3" md-colspan="1"></md-grid-tile>
-    <md-grid-tile md-rowspan="3" md-colspan="10" class="md-whiteframe-z2" layout-align="center" layout-margin layout-padding> </md-grid-tile>
-    <md-grid-tile md-rowspan="1" md-colspan="12"></md-grid-tile>
-    <md-grid-tile md-rowspan="18" md-colspan="1"></md-grid-tile>
-    <md-grid-tile md-rowspan="18" md-colspan="3" class="md-whiteframe-z2" layout-align="center" layout-margin layout-padding></md-grid-tile>
-    <md-grid-tile md-rowspan="18" md-colspan="7" class="md-whiteframe-z2" layout-align="center" layout-margin layout-padding></md-grid-tile> -->
+
+
+
+
+<!--
 <md-grid-list md-cols="12" md-gutter="1em" md-row-height="12.5">
     <md-grid-tile flex md-rowspan="1" md-colspan="12"></md-grid-tile>
     <div class='snippet-form'>
@@ -50,54 +43,4 @@
     </div>
 </md-grid-list>
 
-
-<!--
-
-
-
-    </md-whiteframe> -->
-
-<!--
-
-<div>
-  <md-grid-list class="gridListdemoBasicUsage"
-        md-cols-sm="1" md-cols-md="2" md-cols-gt-md="6"
-        md-row-height-gt-md="1:1" md-row-height="2:2"
-        md-gutter="12x" md-gutter-gt-sm="8px" >
-    <md-grid-tile class="gray"
-        md-rowspan="3" md-colspan="2">
-      <md-grid-tile-footer>
-        <h3>#1: (3r x 2c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="green">
-      <md-grid-tile-footer>
-        <h3>#2: (1r x 1c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="yellow">
-      <md-grid-tile-footer>
-        <h3>#3: (1r x 1c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="blue"
-        md-rowspan="2">
-      <md-grid-tile-footer>
-        <h3>#4: (2r x 1c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="red"
-        md-rowspan="2" md-colspan="2">
-      <md-grid-tile-footer>
-        <h3>#5: (2r x 2c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="green"
-        md-rowspan="2" >
-      <md-grid-tile-footer>
-        <h3>#6: (2r x 1c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-  </md-grid-list>
-</div>
  -->

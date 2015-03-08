@@ -1,3 +1,5 @@
+"use strict";
+
 var handleErrors = function(err, res, msg){
   console.log(err.stack);
   msg = msg || 'Unable to process your request';
@@ -18,11 +20,48 @@ exports.list_snippets = function(User,Snippet){
   return function(req,res){
     Snippet.find({}, function(error, snippets){
         if(error){
-          handleError(err, res);
+          handleErrors(error, res);
         }else{
           res.json(snippets);
         }
+    });
+  }
+}
 
+
+exports.delete_snippet = function(User,Snippet){
+  return function(req,res){
+    Snippet.findOneAndRemove(
+      {_id: req.body._id},
+       ).exec(
+      function(error, snippet){
+        if(error){
+          handleErrors(error, res);
+        }else{
+          res.json(snippet);
+        }
+    });
+  }
+}
+
+
+exports.edit_snippet = function(User,Snippet){
+  return function(req,res){
+    console.log(req.body)
+    Snippet.findOneAndUpdate(
+      {_id: req.body._id},
+      {
+       unique_handle:   req.body.unique_handle,
+       content:         req.body.content,
+       tags:            req.body.tags
+      }
+       ).exec(
+      function(error, snippet){
+        if(error){
+          handleErrors(error, res);
+        }else{
+          res.json(snippet);
+        }
     });
   }
 }
@@ -32,7 +71,7 @@ exports.find_snippet = function(User,Snippet){
     Snippet.findById(req.params.id).populate('user').exec(
       function(error, snippet){
         if(error){
-          handleError(err, res);
+          handleErrors(err, res);
         }else{
           res.json(snippet);
         }
