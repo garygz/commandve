@@ -1,6 +1,3 @@
-var express = require('express');
-
-// module.exports = router;
 var handleErrors = function(err, res, msg){
   console.log(err.stack);
   msg = msg || 'Unable to process your request';
@@ -9,26 +6,26 @@ var handleErrors = function(err, res, msg){
 
 
 
-exports.list_users = function(User){
+exports.list_groups = function(Group){
   return function(req,res){
-    User.find({}, function(error, users){
+    Group.find({user: req.params.user_id}, function(error, groups){
       if(error)  {
           handleErrors(error, res);
          }else{
-          res.json(users);
+          res.json(groups);
          }
     });
 
   }
 }
 
-exports.find_user = function(User){
+exports.find_group = function(Group){
   return function(req,res){
-    User.findById(req.params.id, function(error, user){
+    Group.findById(req.params.id, function(error, group){
         if(error)  {
           handleErrors(error, res);
          }else{
-          res.json(user);
+          res.json(group);
          }
 
     });

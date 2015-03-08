@@ -2,7 +2,7 @@
 
 /* App Module */
 
-angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMaterial', 'ngMessages', 'ui.ace']);
+angular.module('cmndvninja', ['ngResource', 'ngRoute', 'ngMessages', 'ui.ace']);
 
 angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) {
 
@@ -14,6 +14,11 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
     $routeProvider.when('/users', {
       templateUrl: 'app/partials/user-list.html',
       controller: 'UserController'
+    });
+
+    $routeProvider.when('/groups', {
+      templateUrl: 'app/partials/group-list.html',
+      controller: 'GroupController'
     });
 
     $routeProvider.otherwise({redirectTo: '/'});

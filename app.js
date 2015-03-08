@@ -4,11 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
+//require all routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var snippets = require('./routes/snippets');
-var mongoose = require('mongoose');
+var groups = require('./routes/groups');
 
 var app = express();
 
@@ -53,6 +55,11 @@ app.delete('/api/snippets/:id', snippets.delete_snippet(User, Snippet));
 
 //search routes
 app.get('/api/search', snippets.search_snippet(User, Snippet));
+
+//group routes
+app.get('/api/users/:user_id/groups', groups.list_groups(Group));
+app.get('/api/users/:user_id/groups/:id', groups.find_group(Group));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
