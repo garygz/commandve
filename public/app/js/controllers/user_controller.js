@@ -10,7 +10,6 @@ angular.module('cmndvninja'). controller('UserController',
   User.query().$promise.then(function(users){
     $scope.data.users = users;
     Shared.users = null;
-
   });
 
   // $scope.deleteOne = function(id) {
