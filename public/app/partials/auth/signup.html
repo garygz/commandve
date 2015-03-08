@@ -1,0 +1,9 @@
+<div ng-controller="AuthController">
+	<form novalidate class="simple-form">
+    Username: <input type="text" ng-model="user.name" /><br />
+    E-mail: <input type="email" ng-model="user.email" /><br />
+   	Password: <input type="password" ng-model="user.email" /><br />
+   	Password Confirmation: <input type="password" ng-model="user.email" /><br />
+    <input type="submit" ng-click="update(user)" value="Save" />
+  </form>
+</div>

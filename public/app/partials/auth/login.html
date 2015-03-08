@@ -1,0 +1,8 @@
+<!-- Need a way to hide the navbar when here  -->
+<div ng-controller="AuthController">
+	<form novalidate class="simple-form">
+    E-mail: <input type="email" ng-model="user.email" /><br />
+   	Password: <input type="password" ng-model="user.password" /><br />
+    <input type="submit" ng-click="login(user)" value="Log In" />
+  </form>
+</div>
