@@ -70,4 +70,19 @@ Fix for Angular UI not displaying curors correctly
   cursor: pointer;
 }
 
+.search-group-panel{
+  height: 95vh;
+  overflow: scroll;
+}
+
+.search-results{
+  width:75vw;
+}
+
+.search-groups{
+  width:20vw;
+}
+
+
+
 

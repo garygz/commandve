@@ -6,20 +6,16 @@ angular.module('cmndvninja').controller('GroupController',
 
   console.log('GroupController init', $location);
   $scope.groupData = {};
-
+  $scope.$parent.userGroups = {};
 
   Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
     $scope.groupData.groups = groups;
-    //TODO remove this
-    //This should be a logged in user id
-
-
+    $scope.$parent.userGroups = groups;
   });
 
   $scope.showGroup = function(id){
     $location.path('groups/'+id + '/snippets');
     console.log($location.path());
-
   }
 
 }]);

@@ -1,9 +1,9 @@
 angular.module('cmndvninja').controller('HeaderController', ['$scope', 'Shared', function($scope, Shared){
   console.log('Header init');
 
-  $scope.$watch( function() { return Shared; }, function(data) {
-    console.log('Shared init');
-  }, true);
+  // $scope.$watch( function() { return Shared; }, function(data) {
+  //   console.log('Shared init');
+  // }, true);
 
 
 

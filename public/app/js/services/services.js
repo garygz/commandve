@@ -35,3 +35,15 @@ angular.module('cmndvninja').factory('Group', ['$resource', 'Shared', function($
   return Group;
 }]);
 
+angular.module('cmndvninja').factory('SearchItem', ['$resource', function($resource){
+  SearchItem = $resource('/api/search', {}, {
+    query: {method:'GET', isArray:true},
+    getOne: {method:'GET', isArray:false},
+    post: {method:'POST'},
+    update: {method:'PUT' },
+    remove: {method:'DELETE'}
+  });
+
+  return SearchItem;
+}]);
+
