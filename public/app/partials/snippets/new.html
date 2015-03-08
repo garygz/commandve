@@ -15,32 +15,14 @@
 <button ng-click="createOrEditSnippet()">submit</button>
 
 
-
-
-
-
-
-<md-grid-list md-cols="12" md-gutter="1em" md-row-height="12.5">
-    <md-grid-tile flex md-rowspan="1" md-colspan="12"></md-grid-tile>
-    <div class='snippet-form'>
-      <md-grid-tile md-rowspan="3" md-colspan="1"></md-grid-tile>
-      <md-grid-tile md-rowspan="3" md-colspan="10" layout-align="center" ><md-toolbar></md-toolbar></md-grid-tile>
-      <md-grid-tile md-rowspan="3" md-colspan="1"></md-grid-tile>
-      <md-grid-tile md-rowspan="18" md-colspan="1"></md-grid-tile>
-      <md-grid-tile class="snippet-area md-whiteframe-z2"md-rowspan="18" md-colspan="10" layout-align="center" layout-padding>
-      <div layout="row" flex>
-        <div flex>
-          [flex]
+<md-sidenav is-locked-open="true" class="md-sidenav-right md-whiteframe-z2" component-id="right">
+    <md-toolbar class="md-theme-dark">
+        <div class="md-toolbar-tools">
+            <md-button ng-click="toggleMenu()" class="md-button-colored"><core-icon icon="polymer"></core-icon></md-button>
+            <span flex></span>
         </div>
-        <div flex>
-          [flex]
-        </div>
-        <div flex>
-          [flex]
-        </div>
-      </div>
-      </md-grid-tile>
-    </div>
-</md-grid-list>
-
-
+    </md-toolbar>
+    <md-content class="md-content-padding">
+        <md-button ng-click="toggleMenu()" class="md-button-colored">Stuff</md-button>
+    </md-content>
+</md-sidenav>

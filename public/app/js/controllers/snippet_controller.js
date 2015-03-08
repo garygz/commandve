@@ -4,6 +4,8 @@ angular.module('cmndvninja'). controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared',
   function($scope, $location, $route, Snippet, Shared){
 
+    $scope.test1="test1";
+    $scope.test2="test2";
     $scope.snippetIsNew = false;
 
     $scope.languages = [
