@@ -21,6 +21,6 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
       controller: 'GroupController'
     });
 
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({redirectTo: '/groups'});
 
 }]);

@@ -59,6 +59,12 @@ Fix for Angular UI not displaying curors correctly
 */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
-.brand-font-brand{
-  color: red;
+.margin-right-2{
+  margin-right: 2%;
 }
+
+.margin-left-1{
+  margin-left: 1%;
+}
+
+
