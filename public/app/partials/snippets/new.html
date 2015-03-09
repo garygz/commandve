@@ -2,38 +2,61 @@
 
 
 <div class="new-snippet-container center">
-<nav class="navbar navbar-inverse" id="minified-snippet-nav">
-  <div class="navbar-header">
-    <a class="navbar-brand" id="big-plus" ng-click="newSnippet()">+</a>
-  </div>
-  <ul class="nav navbar-nav"  id="minified-snippet-nav">
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" ng-bind="displayedLanguage"aria-expanded="false"></a>
-      <ul class="dropdown-menu" role="menu">
-        <li ng-repeat="language in languages" ng-click="selectLanguage(language)"><a>{{language}}</a></li>
+  <section ng-controller="AceController">
+
+    <nav class="navbar navbar-inverse" id="minified-snippet-nav">
+      <div class="navbar-header">
+        <a class="navbar-brand" id="big-plus" ng-click="newSnippet()">+</a>
+      </div>
+
+      <ul class="nav navbar-nav"  id="ace-nav">
+        <li class="dropdown">
+          <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+              ng-bind="displayedLanguage" aria-expanded="false">
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="language in languages" ng-click="selectLanguage(language)">
+              <a>{{language}}</a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+             ng-bind="displayedTheme"aria-expanded="false"></a>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="theme in themes" ng-click="themeChanged">
+              <a>{{theme}}</a>
+            </li>
+          </ul>
+        </li>
+
+        <select ng-model="mode" ng-options="m for m in modes" ng-change="modeChanged()"></select>
+
       </ul>
-    </li>
-  </ul>
-</nav>
+    </nav>
 
-<div class="minified-snippet-display col-sm-3" ng-controller="SideNavController">
-  <div ng-repeat="snippet in snippets">
-    <div ng-click="selectSnippet(snippet._id)">
-      <h3>{{snippet.unique_handle}} </h3>
-          {{snippet.content}}
+    <div class="minified-snippet-display col-sm-3" ng-controller="SideNavController">
+      <div ng-repeat="snippet in snippets">
+        <div ng-click="selectSnippet(snippet._id)">
+          <h3>{{snippet.unique_handle}} </h3>
+              {{snippet.content}}
+        </div>
+      </div>
     </div>
-  </div>
+
+
+    <div class="input-group" id="snippet-name-input">
+      <span class="input-group-addon" id="basic-addon1"></span>
+      <input  type="text" class="form-control" id="snippet-name-input"
+              ng-model="currentSnippet.unique_handle" placeholder="Ninjas like names"
+              aria-describedby="basic-addon1">
+      </input>
+    </div>
+
+    <div ui-ace="aceOption" ng-model="currentSnippet.content" class='ace-editor'></div>
+
+  </section> <!-- end Ace Controller -->
 </div>
 
 
-<div class="input-group" id="snippet-name-input">
-  <span class="input-group-addon" id="basic-addon1"></span>
-  <input type="text" class="form-control" id="snippet-name-input" ng-model="currentSnippet.unique_handle" placeholder="Ninjas like names" aria-describedby="basic-addon1"></input>
-</div>
-
-<div ui-ace class='ace-editor' ng-model="currentSnippet.content"></div>
-</div>
-
-<ul class="dropdown-menu" role="menu">
-  <li ng-repeat="language in languages" ng-click="selectLanguage(language)"><a>{{language}}</a></li>
-</ul>
