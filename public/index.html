@@ -14,7 +14,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-resource.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.js"></script>
       <script src="https://code.angularjs.org/1.3.14/angular-messages.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-cookies.js"></script>
+      <script src="https://code.angularjs.org/1.3.14/angular-cookies.js"></script>
 
       <!-- Angular Bootstrap -->
       <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.min.js"></script>
@@ -72,11 +72,11 @@
                 </form>
             </div>
           <ul class="nav navbar-nav navbar-right margin-right-2 margin-left-1">
-            <li ng-show="$parent.user.username"><a ng-href="#/users/profile">Profile</a></li>
-            <li ng-show="$parent.user.username"><a ng-href="#/create_snippet">Create New Snip</a></li>
-            <li ng-show="$parent.user.username"><a ng-href="#/logout">Log Out</a></li>
-            <li ng-hide="$parent.user.username"><a ng-href="#/login">Log In</a></li>
-            <li ng-hide="$parent.user.username"><a ng-href="#/login">Sign Up</a></li>
+            <li ng-show="check_token()"><a ng-href="#/users/profile">Profile</a></li>
+            <li ng-show="check_token()"><a ng-href="#/create_snippet">Create New Snip</a></li>
+            <li ng-show="check_token()"><a ng-click="logout()">Log Out</a></li>
+            <li ng-hide="check_token()"><a ng-href="#/login">Log In</a></li>
+            <li ng-hide="check_token()"><a ng-href="#/login">Sign Up</a></li>
           </ul>
       </div>
 
