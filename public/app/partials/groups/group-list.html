@@ -1,14 +1,17 @@
 
+<input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
+
 <div ng-repeat="group in groupData.groups">
-  <div class="panel panel-default col-md-2 margin-left-1" ng-keyup="pasteIfCmdV()">
-    <div class="panel-header">
-      <span class="button-group">
-        <button type="button" class="btn btn-default paste-button">Paste</button>
+  <div class="panel panel-default col-md-2 margin-left-1" ng-init="showButtons=false" ng-mouseover="showButtons=true" ng-mouseleave="showButtons=false">
+    <div class="panel-header" >
+      <span class="button-group" ng-show="showButtons">
+        <button type="button" class="btn btn-default paste-button" ng-click="pasteSnippet()">Paste</button>
       </span>
     </div>
     <div class="panel-body clickable" ng-click="showGroup(group._id)">
-      <div>{{group.name}} <span class="badge pull-right">{{group.snippetCount}}</span></div>
+      <div>{{group.name}} <span class="pull-right"><span class="badge" ng-bind="group.snippetCount">{{snippetCount}}</span></span></div>
       <div>{{group.description}}<div>
     </div>
+
   </div>
 </div>
