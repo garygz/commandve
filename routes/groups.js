@@ -16,23 +16,58 @@ var findGroupById = function(id, groups){
   return null;
 }
 
-var assignSnippetCount = function(Snippet,Group,groups,userid,resposne, callback){
-  console.log('groups for',userid);
-  var agg =[
-            //{ $match : { user : userid } },
+var jobCount = 1;
+var jobFinished = function(total, callback){
+  if(jobCount === total){
+    callback.call(null);
+    jobStarted();
+  }else{
+    jobCount+=1;
+  }
+}
 
-            { $group: { _id: '$group', count: { $sum: 1 } } }
-           ];
+var jobStarted = function(){
+  jobCount = 1;
+}
 
-  Snippet.aggregate(agg, function(err, results){
-    if (err) {
-      handleErrors(err,resposne);
-    }else{
-      callback.call();
-    }
+var assignSnippetCount = function(Snippet,Group,groups,userid,response, callback){
+  jobStarted();
+  console.log("userid", userid);
+   Snippet.aggregate([
+        { $match: {
+            user: userid
+        }},
 
-    console.log(results);
-  });
+        { $group: {
+            _id: "$group",
+            count: { $sum: 1  }
+        }}
+    ], function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log("Aggregate",result);
+    });
+
+
+
+
+  // groups.forEach(function(group){
+  //   console.log("count",group._id)
+  //   Snippet.find({}).where('group', group._id).count(function (err, count) {
+  //       if (err) {
+  //         console.log(err);
+  //         return handleErrors(err,response
+  //           );
+  //       }else{
+  //          group.snippetCount = count;
+  //          console.log("group count: ", group.name, count);
+  //         jobFinished(groups.length, callback);
+  //       }
+
+  //   });
+  // });
 }
 
 exports.list_groups = function(Group,Snippet){
@@ -43,7 +78,15 @@ exports.list_groups = function(Group,Snippet){
          }else{
           //FIX this to support actual logged in users
           var userid = req.session.user ? req.session.user.userid : '54fb97b211a8fdea326df321';
-          assignSnippetCount (Group,Snippet, groups, userid, res,function(){res.json(groups)});
+          assignSnippetCount (Group,
+                              Snippet,
+                              groups,
+                              userid,
+                              res,
+                              function(){
+                                console.log("sending groups");
+                                res.json(groups);
+                              });
          }
     });
 
