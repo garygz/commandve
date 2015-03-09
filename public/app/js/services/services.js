@@ -54,8 +54,8 @@ angular.module('cmndvninja').factory('userSnippets', ['$resource', function($res
 }]);
 
 angular.module('cmndvninja').factory('auth', ['$resource', function($resource){
-  return $resource('/api/users/login', {
-    login: {method:'GET', isArray:false}
+  return $resource('/login', {},  {
+    login: {method:'POST'}
   });
 }]);
 
