@@ -16,7 +16,7 @@ angular.module('cmndvninja').controller('GroupController',
   Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
     $scope.groupData.groups = groups;
     $scope.$parent.userGroups = groups;
-    groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
+    groups.forEach(function(item){item.snippetCount = item.snippetCount || 5});
 
   });
 
