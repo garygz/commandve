@@ -38,12 +38,17 @@ exports.find_user = function(User){
 exports.login_user = function(User){
   return function(req,res){
     console.log("login", req.body);
-    User.find({email:req.body.email, password: req.body.password}, function(error, user){
+    User.findOne({email:req.body.email, password: req.body.password}, function(error, user){
         if(error)  {
           handleErrors(error, res);
          }else{
-          req.session.user = user;
-          res.json(user);
+          if(user){
+            req.session.user = user;
+            res.json(user);  
+          }else{
+            res.stats(404).send();
+          }
+          
          }
 
     });
