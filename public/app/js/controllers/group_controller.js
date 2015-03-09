@@ -31,6 +31,7 @@ angular.module('cmndvninja').controller('GroupController',
     newSnippet.content = $scope.snippetPastedText;
     newSnippet.groupId = $scope.groupData.groups[0]._id;//TODO get the correct gropu id
     newSnippet.group = $scope.groupData.groups[0]._id;
+    newSnippet.unique_handle = "Just added using CMD+V (" + Date.now()+")";
     console.log("new group snippets",newSnippet);
 
     Snippet.post(newSnippet).$promise.then(function(group){
