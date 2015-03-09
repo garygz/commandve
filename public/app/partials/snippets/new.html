@@ -6,25 +6,24 @@
         <a class="navbar-brand" id="big-plus" ng-click="newSnippet()">+</a>
       </div>
 
-      <select ng-model="mode" ng-options="m for m in modes" ng-change="modeChanged()"></select>
-
       <ul class="nav navbar-nav"  id="ace-nav">
         <li class="dropdown">
           <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-              ng-bind="displayedLanguage" aria-expanded="false">
+              ng-bind="mode" aria-expanded="false">
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li ng-repeat="language in languages" ng-click="selectLanguage(language)">
-              <a>{{language}}</a>
+            <li ng-repeat="mode in modes" ng-click="modeChanged(mode)">
+              <a>{{mode}}</a>
             </li>
           </ul>
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-             ng-bind="displayedTheme"aria-expanded="false"></a>
+          <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+              ng-bind="theme" aria-expanded="false">
+          </a>
           <ul class="dropdown-menu" role="menu">
-            <li ng-repeat="theme in themes" ng-click="themeChanged">
+            <li ng-repeat="theme in themes" ng-click="selectTheme(theme)">
               <a>{{theme}}</a>
             </li>
           </ul>
@@ -53,9 +52,10 @@
       </input>
     </div>
 
-    <div ui-ace="aceOption" ng-model="currentSnippet.content" class='ace-editor'></div>
+    <div ui-ace="aceOption" ng-model="currentSnippet.content" class='ace-editor' id='editor'></div>
 
   </section> <!-- end Ace Controller -->
+
 </div>
 
 

@@ -96,14 +96,11 @@ angular.module('cmndvninja'). controller('SnippetController',
       $scope.displayedLanguage = language;
     }
 
-    $scope.selectTheme = function(themeName) {
-      // editor.setTheme("ace/theme/twilight")
-      $scope.displayedTheme=themeName
-    }
+    // $scope.selectTheme = function(themeName) {
+    //   // editor.setTheme("ace/theme/twilight")
+    //   $scope.displayedTheme=themeName
+    // }
 
-    $scope.displayedTheme = "default theme"
-
-    $scope.themes = ["hi", "there", "alex!"]
 
     function testTheme () {
 
