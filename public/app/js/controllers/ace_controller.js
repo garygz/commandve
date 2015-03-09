@@ -4,34 +4,34 @@ angular.module('cmndvninja'). controller('AceController',
   ['$scope',
   function($scope) {
 
-  $scope.themes = ['solarized_dark', 'eclipse', 'Javascript'];
+  var editor = ace.edit("editor");
+
+  $scope.themes = ['solarized_dark', 'eclipse'];
+  $scope.modes = ['Ruby', 'XML', 'Javascript'];
+
   $scope.theme = $scope.themes[0];
-
-  $scope.aceOption = {
-    theme: $scope.theme.toLowerCase(),
-    onLoad: function (_ace) {
-
-      $scope.themeChanged = function () {
-        _ace.getSession().setTheme("ace/theme/" + $scope.theme.toLowerCase() + ".js");
-        $scope.displayedTheme = $scope.theme;
-      };
-
-    }
-  };
-
-  $scope.modes = ['Scheme', 'XML', 'Javascript'];
   $scope.mode = $scope.modes[0];
+
+  $scope.selectTheme = function(theme) {
+    $scope.theme = theme;
+    editor.setTheme("ace/theme/" + theme);
+  }
+
+  $scope.selectTheme($scope.theme);
 
   $scope.aceOption = {
     mode: $scope.mode.toLowerCase(),
     onLoad: function (_ace) {
 
-      $scope.modeChanged = function () {
+      $scope.modeChanged = function (mode) {
+        $scope.mode = mode;
         _ace.getSession().setMode("ace/mode/" + $scope.mode.toLowerCase());
       };
 
     }
-  };
+  }
 
 }]);
+
+
 
