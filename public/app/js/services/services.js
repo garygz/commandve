@@ -1,5 +1,6 @@
 angular.module('cmndvninja').factory('User', ['$resource', function($resource){
-  return $resource('/api/users/:id', {id: '@_id'}, {
+  return $resource('/api/users/:id', {id: '@_id'}, 
+  {
     query: {method:'GET', isArray:true},
     getOne: {method:'GET', isArray:false},
     post: {method:'POST'},
@@ -43,7 +44,18 @@ angular.module('cmndvninja').factory('SearchItem', ['$resource', function($resou
     update: {method:'PUT' },
     remove: {method:'DELETE'}
   });
-
   return SearchItem;
+}]);
+
+angular.module('cmndvninja').factory('userSnippets', ['$resource', function($resource){
+  return $resource('/api/users/:id/snippets', {id: '@_id'}, {
+    query: {method:'GET', isArray:true}
+  });
+}]);
+
+angular.module('cmndvninja').factory('auth', ['$resource', function($resource){
+  return $resource('/login', {},  {
+    login: {method:'POST'}
+  });
 }]);
 

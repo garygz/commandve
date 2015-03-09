@@ -50,3 +50,7 @@ Fix for Angular UI not displaying curors correctly
      margin-left: auto;
      margin-right: auto;
 }
+
+.initiallyHidden {
+  display: none;
+}
