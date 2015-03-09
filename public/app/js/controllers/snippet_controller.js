@@ -70,10 +70,7 @@ angular.module('cmndvninja'). controller('SnippetController',
 
     getSnippets();
 
-    $scope.snippetIsNew = false;
-
     $scope.newSnippet = function () {
-      // $scope.snippetIsNew = true;
       $scope.currentSnippet = {
         group: groupId,
         groupId: groupId,
@@ -112,7 +109,10 @@ angular.module('cmndvninja'). controller('SnippetController',
       var map = {groupId: $scope.snippetToDelete.group,
                 id: $scope.snippetToDelete._id}
       Snippet.remove(map);
-      $scope.snippets[$scope.snippets.getIndexBy("_id", $scope.snippetToDelete._id)] = null;
+
+      $scope.snippets.splice($scope.snippets.getIndexBy("_id", $scope.snippetToDelete._id), 1);
+
+
       console.log($scope.snippets)
     }
 
@@ -148,7 +148,6 @@ angular.module('cmndvninja'). controller('SnippetController',
 
     $scope.selectSnippet = function (id) {
       $scope.currentSnippet = findById($scope.snippets, id);
-      $scope.snippetIsNew = false;
       return $scope.currentSnippet;
     }
 
@@ -162,11 +161,15 @@ angular.module('cmndvninja'). controller('SnippetController',
     }
 
     $scope.formatMinifiedViewContent = function (str) {
-      return str.length > 175 ? str.substr(0, 175) + '...' : str;
+      if (str){
+        return str.length > 175 ? str.substr(0, 175) + '...' : str;
+      }
     }
 
     $scope.formatMinifiedViewTitle = function (str) {
-      return str.length > 30 ? str.substr(0, 30) + '...' : str;
+      if (str){
+        return str.length > 30 ? str.substr(0, 30) + '...' : str;
+      }
     }
 
 
