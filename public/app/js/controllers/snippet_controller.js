@@ -109,8 +109,11 @@ angular.module('cmndvninja'). controller('SnippetController',
       console.log('fired')
     }
     $scope.deleteSnippet = function () {
-      console.log($scope.snippetToDelete)
-      Snippet.remove($scope.snippetToDelete);
+      var map = {groupId: $scope.snippetToDelete.group,
+                id: $scope.snippetToDelete._id}
+      Snippet.remove(map);
+      $scope.snippets[$scope.snippets.getIndexBy("_id", $scope.snippetToDelete._id)] = null;
+      console.log($scope.snippets)
     }
 
     function createSnippet (snippet) {
@@ -126,6 +129,13 @@ angular.module('cmndvninja'). controller('SnippetController',
       Snippet.update(snippet);
     };
 
+    Array.prototype.getIndexBy = function (name, value) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i][name] == value) {
+            return i;
+        }
+      }
+    }
 
     function findById(source, id) {
       for (var i = 0; i < source.length; i++) {

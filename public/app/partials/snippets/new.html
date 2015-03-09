@@ -44,7 +44,7 @@ r<div class="new-snippet-container center shadow-z-5">
     </nav>
     <div class="minified-snippet-display col-sm-3">
       <div ng-repeat="snippet in snippets">
-        <div class="well" ng-click="selectSnippet(snippet._id)" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
+        <div class="well" ng-show="snippet" ng-click="selectSnippet(snippet._id)" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
           <div class="mini-toolbar" ng-show="snippet.showToolbar">
             <button data-toggle="modal" data-target="#delete-modal" ng-click="stageDelete(snippet)"
             class="mini-toolbar-btn btn btn-fab btn-fab-mini btn-raised btn-danger">
@@ -60,7 +60,7 @@ r<div class="new-snippet-container center shadow-z-5">
     <div class="input-group well" id="snippet-name-input">
       <span class="input-group-addon" id="basic-addon1"></span>
       <input  type="text" class="form-control" id="snippet-name-input"
-              ng-model="currentSnippet.unique_handle" placeholder="Ninjas like names"
+              ng-model="currentSnippet.unique_handle" ng-change="flagSnippet()" placeholder="Ninjas like names"
               aria-describedby="basic-addon1">
       </input>
     </div>
@@ -68,9 +68,6 @@ r<div class="new-snippet-container center shadow-z-5">
   </section> <!-- end Ace Controller -->
 
 </div>
-
-<button class="btn btn-primary" data-toggle="modal" data-target="#delete-modal">Open dialog</button>
-
 
 <div id="delete-modal" class="modal" tabindex="-1">
   <div class="modal-dialog">
