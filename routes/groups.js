@@ -4,22 +4,53 @@ var handleErrors = function(err, res, msg){
   res.status(500).send(msg);
 };
 
+var findGroupById = function(id, groups){
+  if(groups==null){
+      return null;
+  }
+  for(var i=0;i<groups.length;i++){
+    if(groups[i]._id === id){
+      return groups[i];
+    }
+  }
+  return null;
+}
 
+var assignSnippetCount = function(Snippet,Group,groups,userid,resposne, callback){
+  console.log('groups for',userid);
+  var agg =[
+            //{ $match : { user : userid } },
 
-exports.list_groups = function(Group){
+            { $group: { _id: '$group', count: { $sum: 1 } } }
+           ];
+
+  Snippet.aggregate(agg, function(err, results){
+    if (err) {
+      handleErrors(err,resposne);
+    }else{
+      callback.call();
+    }
+
+    console.log(results);
+  });
+}
+
+exports.list_groups = function(Group,Snippet){
   return function(req,res){
     Group.find({user: req.params.user_id}, function(error, groups){
       if(error)  {
           handleErrors(error, res);
          }else{
-          res.json(groups);
+          //FIX this to support actual logged in users
+          var userid = req.session.user ? req.session.user.userid : '54fb97b211a8fdea326df321';
+          assignSnippetCount (Group,Snippet, groups, userid, res,function(){res.json(groups)});
          }
     });
 
   }
 }
 
-exports.find_group = function(Group){
+exports.find_group = function(Group,Snippet){
   return function(req,res){
     Group.findById(req.params.id, function(error, group){
         if(error)  {
