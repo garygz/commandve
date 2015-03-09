@@ -37,6 +37,27 @@ exports.find_user = function(User){
 
 exports.login_user = function(User){
   return function(req,res){
+    //Using oauth so we should have the info in cookies
+    console.log("login", req.cookies);
+    User.findOne({email:req.body.email, password: req.body.password}, function(error, user){
+        if(error)  {
+          handleErrors(error, res);
+         }else{
+          if(user){
+            req.session.user = user;
+            res.json(user);
+          }else{
+            res.stats(404).send();
+          }
+
+         }
+
+    });
+  }
+}
+
+exports.login_user = function(User){
+  return function(req,res){
     console.log("login", req.body);
     User.findOne({email:req.body.email, password: req.body.password}, function(error, user){
         if(error)  {
@@ -44,16 +65,17 @@ exports.login_user = function(User){
          }else{
           if(user){
             req.session.user = user;
-            res.json(user);  
+            res.json(user);
           }else{
             res.stats(404).send();
           }
-          
+
          }
 
     });
   }
 }
+
 
 
 exports.logout_user = function(User){

@@ -7,7 +7,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.2/css/material-wfont.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.2/css/ripples.min.css">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.2.1/bootstrap-social.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="app/stylesheets/style.css">
 
      <!-- Angular TODO: Install locally-->
 
@@ -56,7 +57,6 @@
       <script type="text/javascript" src="ace_editor/ace-builds/src-min-noconflict/ace.js"></script>
       <script type="text/javascript" src="ace_editor/angular-ui-ace/ui-ace.min.js"></script>
 
-      <link rel="stylesheet" href="app/stylesheets/style.css">
     </head>
 
   <body ng-controller="cmndvninja">
@@ -79,11 +79,11 @@
                 </form>
             </div>
           <ul class="nav navbar-nav navbar-right margin-right-2 margin-left-1">
-            <li ng-show="$parent.user.username"><a ng-href="#/users/profile">Profile</a></li>
-            <li ng-show="$parent.user.username"><a ng-href="#/create_snippet">Create New Snip</a></li>
-            <li ng-show="$parent.user.username"><a ng-href="#/logout">Log Out</a></li>
-            <li ng-hide="$parent.user.username"><a ng-href="#/login">Log In</a></li>
-            <li ng-hide="$parent.user.username"><a ng-href="#/login">Sign Up</a></li>
+            <li ng-show="$parent.user"><a ng-href="#/users/profile">{{$parent.user.username}}</a></li>
+
+            <li ng-show="$parent.user"><a ng-href="#/logout">Log Out</a></li>
+            <li ng-hide="$parent.user"><a ng-href="#/login">Sign In</a></li>
+            <!--<li ng-hide="$parent.user.username"><a ng-href="#/login">Sign Up</a></li>-->
           </ul>
       </div>
 

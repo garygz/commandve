@@ -42,6 +42,11 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
       controller: 'AuthController'
     })
 
+    $routeProvider.when('/callback', {
+      templateUrl: 'app/partials/groups/group-list.html',
+      controller: 'AuthController'
+    })
+
     $routeProvider.otherwise({redirectTo: '/groups'});
 
 }]);

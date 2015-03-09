@@ -9,12 +9,12 @@ angular.module('cmndvninja'). controller('UserController',
   //for test only
   //setup after login
 
-  $scope.user = {username: "garygz76812736", _id:"54fcd6a07e409d9a82a4bec8"}
-  $scope.userGroups = [
-      {name: "HTML", description: "html stuff"},
-      {name: "CSS", description: "css stuff"},
-      {name: "Ruby", description: "ruby stuff"}];
+  $scope.user = null;//{username: "garygz76812736", _id:"54fcd6a07e409d9a82a4bec8"}
+  $scope.userGroups = null;
 
+  $scope.isUserLoggedIn = function(){
+    return false;//TODO check the oauth tokens
+  };
 
   $scope.search = function(searchCriteria, options){
     // Shared.searchCriteria = searchCriteria;
@@ -31,7 +31,12 @@ angular.module('cmndvninja'). controller('UserController',
           $location.path("/search");
        });
     }
-
   }
+
+
+    if(!$scope.isUserLoggedIn()){
+      console.log('user is not logged in - redirecting');
+      $location.path('/login');
+    }
 
 }]);

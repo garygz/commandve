@@ -71,9 +71,9 @@ app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
 
 //login routes
-app.post('/login/', users.login_user(User));
-app.get('/logout/', users.logout_user(User));
-app.get('/signup/', users.signup_user(User));
+app.post('/api/login/', users.login_user(User));
+app.get('/api/logout/', users.logout_user(User));
+app.get('/api/signup/', users.signup_user(User));
 
 
 // catch 404 and forward to error handler

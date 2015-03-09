@@ -1,5 +1,5 @@
 angular.module('cmndvninja').factory('User', ['$resource', function($resource){
-  return $resource('/api/users/:id', {id: '@_id'}, 
+  return $resource('/api/users/:id', {id: '@_id'},
   {
     query: {method:'GET', isArray:true},
     getOne: {method:'GET', isArray:false},
@@ -54,7 +54,7 @@ angular.module('cmndvninja').factory('userSnippets', ['$resource', function($res
 }]);
 
 angular.module('cmndvninja').factory('auth', ['$resource', function($resource){
-  return $resource('/login', {},  {
+  return $resource('/api/login', {},  {
     login: {method:'POST'}
   });
 }]);
