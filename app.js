@@ -53,7 +53,9 @@ app.use('/ace_editor',  express.static(__dirname + '/ace_editor'));
 //User routes
 app.get('/api/users', users.list_users(User));
 app.get('/api/users/:id', users.find_user(User));
-app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
+app.get('/api/users/:userId/snippets', snippets.find_user_snippets(User, Snippet));
+app.get('/api/users/:userId/groups', groups.find_groups_for_user(Group, Snippet));
+
 
 //Snippet routes
 app.get('/api/groups/:groupId/snippets', snippets.list_snippets(User, Snippet));

@@ -63,4 +63,32 @@ exports.find_group = function(Group,Snippet){
   }
 }
 
+exports.find_groups_for_user = function(Group,Snippet){
+  return function(req,res){
+
+    Group.find({user:req.params.userId}, function(error, groups){
+        if(error)  {
+          handleErrors(error, res);
+         }else{
+          res.json(groups);
+         }
+
+    });
+  }
+}
+
+exports.list_all = function(Group,Snippet){
+  return function(req,res){
+
+    Group.find({}, function(error, groups){
+        if(error)  {
+          handleErrors(error, res);
+         }else{
+          res.json(groups);
+         }
+
+    });
+  }
+}
+
 
