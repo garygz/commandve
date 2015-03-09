@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var session = require('express-session');
 
 //require all routes
 var routes = require('./routes/index');
@@ -29,6 +30,14 @@ var Snippet = require('./db/models/snippet')(mongoose);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use(session({
+  // genid: function(req) {
+  //   return genuuid() // use UUIDs for session IDs
+  // },
+  secret: 'X717197123987123'//TODO change this to a long key
+}))
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -60,6 +69,11 @@ app.get('/api/search', snippets.search_snippet(User, Snippet));
 //group routes
 app.get('/api/users/:user_id/groups', groups.list_groups(Group));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group));
+
+//login routes
+app.get('/login/', users.login_user(User));
+app.get('/logout/', users.logout_user(User));
+app.get('/signup/', users.signup_user(User));
 
 
 // catch 404 and forward to error handler

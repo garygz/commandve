@@ -35,4 +35,43 @@ exports.find_user = function(User){
   }
 }
 
+exports.login_user = function(User){
+  return function(req,res){
+    console.log("login", req.body);
+    User.find({email:req.body.email, password: req.body.password}, function(error, user){
+        if(error)  {
+          handleErrors(error, res);
+         }else{
+          req.session.user = user;
+          res.json(user);
+         }
+
+    });
+  }
+}
+
+
+exports.logout_user = function(User){
+  return function(req,res){
+    req.session.destroy();
+    res.status(200).send();
+  }
+}
+
+
+exports.signup_user = function(User){
+  return function(req,res){
+    User.create({username: req.body.username, email:req.body.email, password: req.body.password}, function(error, user){
+        if(error)  {
+          handleErrors(error, res);
+         }else{
+          res.json(user);
+         }
+
+    });
+  }
+}
+
+
+
 

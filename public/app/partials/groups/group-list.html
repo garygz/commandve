@@ -1,8 +1,13 @@
 
 <div ng-repeat="group in groupData.groups">
-  <div class="panel panel-default col-md-2 margin-left-1">
+  <div class="panel panel-default col-md-2 margin-left-1" ng-keyup="pasteIfCmdV()">
+    <div class="panel-header">
+      <span class="button-group">
+        <button type="button" class="btn btn-default paste-button">Paste</button>
+      </span>
+    </div>
     <div class="panel-body clickable" ng-click="showGroup(group._id)">
-      <div>{{group.name}}</div>
+      <div>{{group.name}} <span class="badge pull-right">{{group.snippetCount}}</span></div>
       <div>{{group.description}}<div>
     </div>
   </div>
