@@ -13,12 +13,14 @@ angular.module('cmndvninja').controller('GroupController',
 
   var hiddenInput = document.getElementById("hidden-input");
 
-  Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
-    $scope.groupData.groups = groups;
-    $scope.$parent.userGroups = groups;
-    groups.forEach(function(item){item.snippetCount = item.snippetCount || 5});
+  if($scope.$parent.user){
+    Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
+      $scope.groupData.groups = groups;
+      $scope.$parent.userGroups = groups;
+      //groups.forEach(function(item){item.snippetCount = item.snippetCount || 5});
+    });
+  }
 
-  });
 
   $scope.showGroup = function(id){
     $location.path('groups/'+id + '/snippets');
