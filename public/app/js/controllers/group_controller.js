@@ -29,16 +29,22 @@ angular.module('cmndvninja').controller('GroupController',
     var newSnippet = {};
     newSnippet.user = $scope.$parent.user._id;
     newSnippet.content = $scope.snippetPastedText;
-    newSnippet.groupId = $scope.groupData.groups[0]._id;//TODO get the correct gropu id
-    newSnippet.group = $scope.groupData.groups[0]._id;
+    newSnippet.groupId =$scope.groupId;
+    newSnippet.group = $scope.groupId;
     newSnippet.unique_handle = "Just added using CMD+V (" + Date.now()+")";
     console.log("new group snippets",newSnippet);
 
     Snippet.post(newSnippet).$promise.then(function(group){
       //animate
       //change count
-      $scope.groupData.groups[0].snippetCount +=1;
-    });
+            $scope.groupData.groups.forEach (
+                  function(item){
+                    if (item._id === newSnippet.groupId){
+                      item.snippetCount+=1;
+                    }
+                  }
+              );
+      });
 
     // //console.log("Pasted Text", $scope.snippetPastedText);
     // var pressEvent = document.createEvent ("KeyboardEvent");
@@ -64,6 +70,8 @@ angular.module('cmndvninja').controller('GroupController',
           var text = e.clipboardData.getData("text/plain");
           console.log("Paste event", text);
           $scope.snippetPastedText = text;
+          var activeGroup = $('.activegroup');
+          $scope.groupId = activeGroup.data("id");
           $scope.pasteSnippet();
           //focusHiddenArea();
           //e.preventDefault();

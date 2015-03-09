@@ -67,8 +67,8 @@ app.delete('/api/groups/:groupId/snippets/:id', snippets.delete_snippet(User, Sn
 app.get('/api/search', snippets.search_snippet(User, Snippet));
 
 //group routes
-app.get('/api/users/:user_id/groups', groups.list_groups(Group));
-app.get('/api/users/:user_id/groups/:id', groups.find_group(Group));
+app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
+app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
 
 //login routes
 app.post('/login/', users.login_user(User));
