@@ -4,7 +4,14 @@ angular.module('cmndvninja'). controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared',
   function($scope, $location, $route, Snippet, Shared){
 
-    var groupId = Shared.currentGroupId;
+    var func = function(){
+      var url = $location.absUrl();
+      var beg = url.indexOf("groups") + "groups/".length;
+      var end = url.indexOf("/snippet")
+      return url.slice(beg, end)
+    };
+
+    var groupId = func();
 
     function getSnippets() { Snippet.query({groupId: groupId}).$promise.then(
       function(snippets){
@@ -15,9 +22,6 @@ angular.module('cmndvninja'). controller('SnippetController',
     })};
 
     getSnippets();
-
-    var myLocation = $location.absUrl();
-
 
     $scope.test1="test1";
     $scope.test2="test2";
@@ -60,11 +64,14 @@ angular.module('cmndvninja'). controller('SnippetController',
 
     function createSnippet () {
       console.log('creating snippet:', $scope.currentSnippet);
+      $scope.currentSnippet.groupId = groupId;
+      console.log($scope.currentSnippet);
       Snippet.post($scope.currentSnippet);
     };
 
     function editSnippet () {
       console.log('editing snippet:', $scope.currentSnippet);
+      $scope.currentSnippet.groupId = groupId;
       Snippet.update($scope.currentSnippet);
     };
 
@@ -90,7 +97,16 @@ angular.module('cmndvninja'). controller('SnippetController',
     }
 
     $scope.selectTheme = function(themeName) {
-      editor.setTheme("ace/theme/twilight")
+      // editor.setTheme("ace/theme/twilight")
+      $scope.displayedTheme=themeName
+    }
+
+    $scope.displayedTheme = "default theme"
+
+    $scope.themes = ["hi", "there", "alex!"]
+
+    function testTheme () {
+
     }
 
 

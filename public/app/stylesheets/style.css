@@ -45,12 +45,6 @@ Fix for Angular UI not displaying curors correctly
   margin-top: none;
 }
 
-#minified-snippet-nav {
-  margin-bottom: none;
-  height: 53px;
-}
-
-
 .center {
      float: none;
      margin-left: auto;

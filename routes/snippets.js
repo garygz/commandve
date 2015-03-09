@@ -114,7 +114,9 @@ exports.create_new_snippet = function(User,Snippet){
     console.log(req.body);
     var paramsIn = {
         content: req.body.content,
-        user: req.body.user
+        user: req.body.user,
+        unique_handle: req.body.handle,
+        tags: req.body.tags
     }
     if(req.body.unique_handle){
       paramsIn.unique_handle = req.body.unique_handle;
