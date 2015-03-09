@@ -6,8 +6,8 @@ angular.module('cmndvninja'). controller('AceController',
 
   var editor = ace.edit("editor");
 
-  $scope.themes = ['solarized_dark', 'eclipse'];
-  $scope.modes = ['Ruby', 'XML', 'Javascript'];
+  $scope.themes = ['eclipse', 'solarized_dark'];
+  $scope.modes = ['Javascript', 'Ruby', 'XML'];
 
   $scope.theme = $scope.themes[0];
   $scope.mode = $scope.modes[0];
