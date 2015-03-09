@@ -34,14 +34,23 @@ Fix for Angular UI not displaying curors correctly
 }
 .new-snippet-container {
   width: 960px;
-  border: 1px solid black;
   position: relative;
-  height: 540px;
+  height: 580px;
+}
+
+.mini-toolbar {
+  position: absolute;
+  width:80%;
+}
+
+.mini-toolbar-btn {
+  text-align: right;
+  float: right;
 }
 
 .minified-snippet-display {
   overflow: scroll;
-  height: 460px;
+  height: 486px;
   margin-top: none;
 }
 

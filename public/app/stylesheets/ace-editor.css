@@ -1,14 +1,15 @@
 .ace-editor {
   height: 400px;
   width: 700px;
+}
+/*.ace-well-wrapper{
+  height:400px;
+  width:700px;
   margin-top: 20px;
 }
+*/
 
 #snippet-name-input {
   margin-right: 20px;
-}
-
-#ace-nav {
-  margin-bottom: none;
-  height: 53px;
+  font-size: 20px;
 }

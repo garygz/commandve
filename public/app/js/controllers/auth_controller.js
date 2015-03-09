@@ -3,16 +3,16 @@
 angular.module('cmndvninja').controller('AuthController',
   ['$scope', '$location', '$cookies', 'User', 'Shared', 'auth',
   function($scope, $location, $cookies, User, Shared, auth){
-  
+
   'use strict';
-  
+
   console.log('AuthController init', $location);
 
   $scope.login = function(user_info){
     console.log(user_info); // This is approprately passing username and password
     auth.login(user_info).$promise.then(function(data){
       console.log(data);
-    });  
+    });
   };
 
   $scope.signup = function(user_info){

@@ -4,6 +4,8 @@ angular.module('cmndvninja'). controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared',
   function($scope, $location, $route, Snippet, Shared){
 
+    $.material.ripples()
+
     var func = function(){
       var url = $location.absUrl();
       var beg = url.indexOf("groups") + "groups/".length;
@@ -21,17 +23,10 @@ angular.module('cmndvninja'). controller('SnippetController',
         console.log(snippets);
     })};
 
-    getSnippets();
+    var modifiedSnippets = [];
 
-    $scope.test1="test1";
-    $scope.test2="test2";
+    getSnippets();
     $scope.snippetIsNew = false;
-    $scope.displayedLanguage= "Language"
-    $scope.languages = [
-      "Ruby",
-      "Javascript",
-      "Assembly",
-    ];
 
     $scope.newSnippet = function () {
       $scope.snippetIsNew = true;
@@ -44,12 +39,7 @@ angular.module('cmndvninja'). controller('SnippetController',
       $scope.snippets.unshift($scope.currentSnippet);
     };
 
-    $scope.addNewSnippetToView = function () {
-
-    };
-
     $scope.createOrEditSnippet = function () {
-      console.log($scope.currentSnippet);
       $scope.currentSnippet.user = "54fb6fd500f914a0a09e54b2";
       if ($scope.snippetIsNew) {
         createSnippet();
@@ -96,15 +86,19 @@ angular.module('cmndvninja'). controller('SnippetController',
       $scope.displayedLanguage = language;
     }
 
-    // $scope.selectTheme = function(themeName) {
-    //   // editor.setTheme("ace/theme/twilight")
-    //   $scope.displayedTheme=themeName
-    // }
-
-
-    function testTheme () {
-
+    $scope.hover = function (snippet){
+      snippet.showToolbar = ! snippet.showToolbar;
     }
+
+    $scope.formatMinifiedViewContent = function (str) {
+      return str.length > 175 ? str.substr(0, 175) + '...' : str;
+    }
+
+    $scope.formatMinifiedViewTitle = function (str) {
+      return str.length > 30 ? str.substr(0, 30) + '...' : str;
+    }
+
+
 
 
 
