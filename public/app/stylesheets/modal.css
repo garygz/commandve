@@ -1,0 +1,32 @@
+/*  #save-modal h2 {
+    width: 400px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -200px;
+    padding: 20px;
+  }*/
+
+.center-modal {
+
+    position: absolute;
+    width: 500px;
+    height: 200px;
+    margin-top: 40%;
+    margin-left:10%;
+    margin-right:75%;
+
+
+}
+
+.separator {
+  width: 500px;
+  height: 10px;
+}
+
+/*.modal-title {
+  text-align: center;
+}
+*/

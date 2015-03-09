@@ -4,33 +4,80 @@ angular.module('cmndvninja'). controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared',
   function($scope, $location, $route, Snippet, Shared){
 
+    $('#simple-dialog').modal()
     $.material.ripples()
 
-    var func = function(){
+    var getGroupId = function(){
       var url = $location.absUrl();
       var beg = url.indexOf("groups") + "groups/".length;
       var end = url.indexOf("/snippet")
       return url.slice(beg, end)
     };
 
-    var groupId = func();
+    var groupId = getGroupId();
 
     function getSnippets() { Snippet.query({groupId: groupId}).$promise.then(
       function(snippets){
         $scope.snippets = snippets;
         $scope.currentSnippet = $scope.snippets[0];
-        Shared.snippets = null;
-        console.log(snippets);
-    })};
+        markSnippetsAsSaved(snippets);
+        }
+      )
+      return $scope.snippets
+    };
 
-    var modifiedSnippets = [];
+    function waitForChanges(snippet) {
+      $scope.$watch(snippet, function(){
+        console.log("snippet with id", snippet._id, "was changed")
+      })
+    }
+
+    $scope.flagSnippet = function(){
+      $scope.currentSnippet.saved = false;
+      console.log($scope.currentSnippet)
+      console.log($scope.snippets)
+    }
+
+    function markOneSnippetAsSaved(snippet) {
+      snippet.saved = true;
+      snippet.new = false;
+    }
+
+    function typeOf(value) {
+      var s = typeof value;
+      if (s === 'object') {
+          if (value) {
+              if (value instanceof Array) {
+                  s = 'array';
+              }
+          } else {
+              s = 'null';
+          }
+      }
+      return s;
+    }
+
+    function markSnippetsAsSaved(snippets) {
+      if (typeOf(snippets) === "array") {
+        for (var i = 0; i < snippets.length; i++) {
+          markOneSnippetAsSaved(snippets[i]);
+        }
+      } else {
+          throw 'in markSnippetsAsSaved, snippets is not an array'
+      }
+      return snippets
+    };
 
     getSnippets();
+
     $scope.snippetIsNew = false;
 
     $scope.newSnippet = function () {
-      $scope.snippetIsNew = true;
+      // $scope.snippetIsNew = true;
       $scope.currentSnippet = {
+        group: groupId,
+        groupId: groupId,
+        isNew: true,
         tags: ["Languages"],
         unique_handle: "My Snippet Name",
         id: undefined,
@@ -39,30 +86,44 @@ angular.module('cmndvninja'). controller('SnippetController',
       $scope.snippets.unshift($scope.currentSnippet);
     };
 
-    $scope.createOrEditSnippet = function () {
-      $scope.currentSnippet.user = "54fb6fd500f914a0a09e54b2";
-      if ($scope.snippetIsNew) {
-        createSnippet();
+    $scope.saveAllSnippets = function (){
+      for (var i = 0; i < $scope.snippets.length; i++) {
+        if ($scope.snippets[i].saved === false) {
+          console.log('snippet=', $scope.snippets[i])
+          createOrEditSnippet($scope.snippets[i]);
+        }
+      }
+    }
+
+    function createOrEditSnippet (snippet) {
+      snippet.user = "54fb6fd500f914a0a09e54b2";
+      if (snippet.isNew) {
+        createSnippet(snippet);
       } else {
-        editSnippet();
+        editSnippet(snippet);
       }
     };
 
-    $scope.deleteSnippet = function (snippet) {
-      Snippet.remove(snippet);
+    $scope.stageDelete = function (snippet) {
+      $scope.snippetToDelete = snippet;
+      console.log('fired')
+    }
+    $scope.deleteSnippet = function () {
+      console.log($scope.snippetToDelete)
+      Snippet.remove($scope.snippetToDelete);
     }
 
-    function createSnippet () {
-      console.log('creating snippet:', $scope.currentSnippet);
-      $scope.currentSnippet.groupId = groupId;
-      console.log($scope.currentSnippet);
-      Snippet.post($scope.currentSnippet);
+    function createSnippet (snippet) {
+      console.log('creating snippet:', snippet);
+      snippet.groupId = groupId;
+      Snippet.post(snippet);
     };
 
-    function editSnippet () {
-      console.log('editing snippet:', $scope.currentSnippet);
-      $scope.currentSnippet.groupId = groupId;
-      Snippet.update($scope.currentSnippet);
+    function editSnippet (snippet) {
+      console.log('editing snippet:', snippet);
+      snippet.groupId = groupId;
+      snippet.group = groupId;
+      Snippet.update(snippet);
     };
 
 

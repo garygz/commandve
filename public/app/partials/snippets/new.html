@@ -34,7 +34,7 @@ r<div class="new-snippet-container center shadow-z-5">
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="javascript:void(0)" ng-click="createOrEditSnippet()">Save
+        <li><a href="javascript:void(0)" ng-click="saveAllSnippets()">Save
           </a>
         </li>
         <li>
@@ -42,13 +42,14 @@ r<div class="new-snippet-container center shadow-z-5">
       </ul>
 
     </nav>
-
-    <div class="minified-snippet-display col-sm-3" ng-controller="SideNavController">
+    <div class="minified-snippet-display col-sm-3">
       <div ng-repeat="snippet in snippets">
         <div class="well" ng-click="selectSnippet(snippet._id)" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
           <div class="mini-toolbar" ng-show="snippet.showToolbar">
-          <button class="mini-toolbar-btn btn btn-fab btn-fab-mini btn-raised btn-danger"><i class="mdi-content-clear"></i></button>
-        </div>
+            <button data-toggle="modal" data-target="#delete-modal" ng-click="stageDelete(snippet)"
+            class="mini-toolbar-btn btn btn-fab btn-fab-mini btn-raised btn-danger">
+            <i class="mdi-content-clear"></i></button>
+          </div>
           <h4>{{formatMinifiedViewTitle(snippet.unique_handle)}} </h4>
               {{formatMinifiedViewContent(snippet.content)}}
         </div>
@@ -63,7 +64,38 @@ r<div class="new-snippet-container center shadow-z-5">
               aria-describedby="basic-addon1">
       </input>
     </div>
-    <div ui-ace="aceOption" ng-model="currentSnippet.content" class='ace-editor shadow-z-3' id='editor'></div>
+    <div ui-ace="aceOption" ng-model="currentSnippet.content" ng-change="flagSnippet()" class='ace-editor shadow-z-3' id='editor'></div>
   </section> <!-- end Ace Controller -->
 
 </div>
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#delete-modal">Open dialog</button>
+
+
+<div id="delete-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="center-modal modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Danger</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you'd like to delete this snippet?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal">Keep it</button>
+        <button class="btn btn-danger" data-dismiss="modal" ng-click="deleteSnippet()">Delete it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
