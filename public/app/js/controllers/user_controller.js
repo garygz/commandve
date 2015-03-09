@@ -9,7 +9,7 @@ angular.module('cmndvninja'). controller('UserController',
   //for test only
   //setup after login
 
-  $scope.user = {username: "garygz76812736", _id:"54fcd6a07e409d9a82a4bec8"}
+  $scope.user = {username: "garygz76812736", _id:"54fcfcaad94a15c0880f548d"}
   $scope.userGroups = [
       {name: "HTML", description: "html stuff"},
       {name: "CSS", description: "css stuff"},

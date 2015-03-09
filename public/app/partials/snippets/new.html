@@ -1,4 +1,4 @@
-<button ng-click="createOrEditSnippet()">submit</button>
+
 
 
 <div class="new-snippet-container center">
@@ -31,9 +31,9 @@
           </ul>
         </li>
 
-        <select ng-model="mode" ng-options="m for m in modes" ng-change="modeChanged()"></select>
-
       </ul>
+              <button class="btn btn-default navbar-btn" ng-click="createOrEditSnippet()">submit</button>
+                   <select ng-model="mode" ng-options="m for m in modes" ng-change="modeChanged()"></select>
     </nav>
 
     <div class="minified-snippet-display col-sm-3" ng-controller="SideNavController">
