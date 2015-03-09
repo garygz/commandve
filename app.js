@@ -71,7 +71,7 @@ app.get('/api/users/:user_id/groups', groups.list_groups(Group));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group));
 
 //login routes
-app.get('/login/', users.login_user(User));
+app.post('/login/', users.login_user(User));
 app.get('/logout/', users.logout_user(User));
 app.get('/signup/', users.signup_user(User));
 
