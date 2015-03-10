@@ -1,7 +1,7 @@
 
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
 <div id="group-list-wrapper">
-  <div ng-repeat="group in testGroups" ng-click="showGroup(group._id) "style="{padding:none}">
+  <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id) "style="{padding:none}">
     <div data-id="{{group._id}}"
         class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
         ng-init="showButtons=false"
