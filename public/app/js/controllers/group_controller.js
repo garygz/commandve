@@ -22,7 +22,6 @@ angular.module('cmndvninja').controller('GroupController',
     console.log('this group should be shared:', group)
   }
 
-
 $scope.testGroups = [
   {
   _id: '1',
@@ -65,6 +64,7 @@ $scope.testGroups = [
 
 ]
 
+Shared.groups = $scope.testGroups;
 
 
 

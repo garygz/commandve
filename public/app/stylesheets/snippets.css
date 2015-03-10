@@ -1,0 +1,75 @@
+.group-preview {
+  width: 150px;
+  height: 150px;
+  padding: 0;
+}
+
+.collapsable-group-container {
+  width: 150px;
+  position: absolute;
+  height: 100%;
+  z-index: 1000;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: scroll;
+  padding: 0;
+}
+
+.thumbnail {
+  padding: 0;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  border: none;
+}
+
+.thumbnail img {
+  padding: 0;
+  width: auto;
+  height: auto;
+  border: none;
+/*  margin: -80px -324px;*/
+}
+
+
+#save {
+  font-size: 20px;
+}
+
+#add {
+  font-size: 20px;
+}
+
+#toggle-back {
+  position: absolute;
+  right: 180px;
+  z-index: 1003;
+}
+.toggle-groups {
+  float: right;
+  margin-right: 40px;
+  z-index: 1;
+}
+
+.new-snippet-container {
+  width: 960px;
+  position: relative;
+  height: 580px;
+}
+
+.mini-toolbar {
+  position: absolute;
+  width:80%;
+}
+
+.mini-toolbar-btn {
+  text-align: right;
+  float: right;
+}
+
+.minified-snippet-display {
+  overflow: scroll;
+  height: 486px;
+  margin-top: none;
+}
