@@ -11,9 +11,15 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.$parent.userGroups = {};
   $scope.snippetCount = 0;
   $scope.snippetPastedText = "";
+  $scope.formGroup = {};
 
-
-  function createGroup (group) {
+  function createGroup () {
+    var group = {
+      name: $scope.formGroup.name,
+      description: $scope.formGroup.description,
+      image_url: $scope.formGroup.description,
+      user: Shared.userId
+    }
     console.log('creating group:', group);
     Group.post(group);
   };
@@ -65,26 +71,6 @@ $scope.testGroups = [
 ]
 
 Shared.groups = $scope.testGroups;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   var hiddenInput = document.getElementById("hidden-input");
 

@@ -14,7 +14,8 @@ angular.module('cmndvninja'). controller('UserController',
   var promise = Auth.login().$promise;
   promise.then(function(user){
     console.log("user logged in");
-    $scope.user  = user;
+    $scope.user = user;
+    Shared.userId = user._id
     $location.path('/');
   }, function(reason) {
       console.log('login failed: ' + reason);

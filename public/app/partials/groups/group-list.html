@@ -2,9 +2,11 @@
 
 <div id="group-list-wrapper">
 
-  <button type="button" ng-click=""class="btn btn-default" data-toggle="modal" data-target="#new-group-modal">New Group</button>
+  <button type="button" ng-click=""class="btn btn-default"
+  data-toggle="modal" data-target="#new-group-modal">New Group</button>
 
-  <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id) "style="{padding:none}">
+  <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)
+   "style="{padding:none}">
     <div data-id="{{group._id}}"
         class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
         ng-init="showButtons=false"
@@ -14,11 +16,14 @@
       <div>
         <div class="groups-toolbar" ng-show="showButtons">
           <button ng-click="shareGroup(group)"
-                  class="groups-toolbar-share-btn btn btn-fab btn-fab-mini btn-raised btn-material-light-blue">
+                  class="groups-toolbar-share-btn btn btn-fab
+                  btn-fab-mini btn-raised btn-material-light-blue">
           <i class="mdi-social-share"></i></button>
 
           <button ng-click="pasteSnippet()"
-                  class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
+                  class="groups-toolbar-paste-btn btn btn-fab
+                  btn-fab-mini btn-raised btn-material-grey-200">
+
           <i class="mdi-content-content-paste"></i></button>
         </div>
         <img class= "group-image" src='{{group.image_url}}'>
@@ -48,17 +53,19 @@
         <h2 class="modal-title">Create a group</h2>
       </div>
   <div class="new-group-inputs">
-    <input type="text" class="form-control floating-label" placeholder="Title">
+    <input type="text" ng-model="formGroup.name" class="form-control floating-label" placeholder="Title">
     <br>
     <br>
-    <textarea class="form-control floating-label" placeholder="Description"></textarea>
+    <textarea class="form-control floating-label" ng-model="formGroup.description" placeholder="Description"></textarea>
     <br>
     <br>
-    <input type="text" class="form-control floating-label" data-hint="A thumbnail will be generated" placeholder="Image url">
+    <input type="text" ng-model="formGroup.image_url" class="form-control floating-label"
+    data-hint="A thumbnail will be generated" placeholder="Image url">
   </div>
 
   <div class="modal-footer">
-    <div class="centered"><button class="input-center btn btn-default" data-dismiss="modal">Create</button>
+    <div class="centered">
+      <button class="input-center btn btn-default" data-dismiss="modal">Create</button>
     </div>
   </div>
 </div>
