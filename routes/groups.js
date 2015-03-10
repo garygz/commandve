@@ -98,7 +98,7 @@ exports.create_group = function(Group,Snippet){
       handleErrors(err,res,"Failed to create a group");
     }
 
-    var user = {_id : userId}
+    var user = {_id : req.body.user}
     var findOptions = {
         user: user._id,
         group_type: constants.GROUP_TYPE_UNCATEGORIZED
