@@ -1,7 +1,9 @@
-/*#group-list-wrapper {
+#group-list-wrapper {
   max-width: 1000px;
-
-}*/
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .group-container {
   padding: 0;
   width: 224px;
