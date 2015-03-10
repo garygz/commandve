@@ -1,5 +1,5 @@
 var UserModel = null;
-
+//using dependency injection
 exports.setUserModel = function(User){
   UserModel = User;
 }

@@ -1,5 +1,5 @@
 var express = require('express');
-var httpHelper = require('../helpers/https.js')
+var httpHelper = require('../helpers/https-helper.js')
 var users = require('../helpers/users.js')
 var querystring = require('querystring');
 
