@@ -17,8 +17,10 @@
     margin-top: 40%;
     margin-left:10%;
     margin-right:75%;
+}
 
-
+.new-group-inputs {
+  padding: 40px;
 }
 
 .separator {
@@ -26,7 +28,7 @@
   height: 10px;
 }
 
-/*.modal-title {
+
+.centered {
   text-align: center;
 }
-*/

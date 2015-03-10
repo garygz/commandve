@@ -1,6 +1,9 @@
-
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
+
 <div id="group-list-wrapper">
+
+  <button type="button" ng-click=""class="btn btn-default" data-toggle="modal" data-target="#new-group-modal">New Group</button>
+
   <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id) "style="{padding:none}">
     <div data-id="{{group._id}}"
         class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
@@ -36,3 +39,27 @@
     </div>
   </div>
 </div>
+
+<div id="new-group-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="centered modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 class="modal-title">Create a group</h2>
+      </div>
+  <div class="new-group-inputs">
+    <input type="text" class="form-control floating-label" placeholder="Title">
+    <br>
+    <br>
+    <textarea class="form-control floating-label" placeholder="Description"></textarea>
+    <br>
+    <br>
+    <input type="text" class="form-control floating-label" data-hint="A thumbnail will be generated" placeholder="Image url">
+  </div>
+
+  <div class="modal-footer">
+    <div class="centered"><button class="input-center btn btn-default" data-dismiss="modal">Create</button>
+    </div>
+  </div>
+</div>
+
