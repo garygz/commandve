@@ -1,37 +1,23 @@
-<div class="profile" ng-controller="ProfileController"> 
+<div class="row profile margin-left-10" ng-controller="ProfileController">
 
-	<div class="info">
-		<h3>Your Info</h3>
-		<table class="table table-responsive">
-			<tr>
-				<td class="name">Username</td>
-				<td class="email">{{ userProfile.username }}</td>
-			</tr>
-			<tr>
-				<td>Email</td>
-				<td>{{ userProfile.email }}</td>
-			</tr>
-		</table>
-		<a class="btn btn-active" ng-href="/#/user/{{userProfile._id}}/edit">Update Profile</a>
+	<div class="row">
+		<h3>Account Details</h3>
 	</div>
+		<div class="row">
+			<div><h4>User Name</h4></div>
+			<div ng-bind="user.username"></div>
+		</div>
+		<div class="row">
+			<div><h4>Email</h4></div><div ng-bind="user.email">{{user.email}}</div>
+		</div>
+		<div class="row">
+			<div><h4>Account Type</h4></div>
+			<div ng-show="user.githubId">GitHub</div>
+			<div ng-hide="user.githubId">Local</div>
+		</div>
 
-	<!-- <div class="groups"> -->
-		<!-- <h2>My Groups</h2> -->
-		<!-- We want this to use the material design carousel -->
-	<!-- </div> -->
 
-	<div class="snippets">
-		<!-- Want the snippets to be draggable into a class -->
-		<h2>My Snippets</h2>
-		<table id="users" class="table table-responsive table-striped">
-			<tr ng-href="/groups">
-				<th>Title</th>
-				<th>Content</th>
-			</tr>
-		  <tr ng-repeat="snippet in snippets">
-		    <td class="name">{{ snippet.unique_handle }}</td>
-		    <td class="email">{{ snippet.content }}</td>
-		  </tr>
-		</table>
-	</div>
+		<!--<a class="btn btn-active" ng-href="/#/user/{{userProfile._id}}/edit">Update Profile</a>-->
 </div>
+
+
