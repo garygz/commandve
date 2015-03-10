@@ -11,7 +11,7 @@ exports.setModels = function(User,Group,Snippet){
   UserModel = User;
   GroupModel = Group;
   SnippetModel = Snippet;
-  groups.setModels(Group,Snippet);
+  groups.setModels(User,Group,Snippet);
 }
 
 var handleErrors = function(err, res, msg){
@@ -145,18 +145,7 @@ exports.create_new_snippet = function(User,Snippet){
         createSnippetFromRequest(req, callbackSuccess,callbackError);
       }
 
-      var user = {_id : req.body.user}
-      var findOptions = {
-          user: user._id,
-          type: constants.GROUP_TYPE_UNCATEGORIZED
-      }
-      var createOptions = {
-        user: user._id,
-        type: constants.GROUP_TYPE_UNCATEGORIZED,
-        name: constants.GROUP_NAME_UNCATEGORIZED
-      }
-
-      groups.findOrCreateNewGroup(user, findOptions, createOptions,callbackSuccessGroupCreate,callbackError);
+      groups.findOrCreateUncategorized(req.body.user, callbackSuccess,callbackError);
     }
   }
 }

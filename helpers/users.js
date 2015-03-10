@@ -1,7 +1,12 @@
+var GroupModel = null;
 var UserModel = null;
-//using dependency injection
-exports.setUserModel = function(User){
+var SnippetModel = null;
+
+//dependency injection
+exports.setModels = function(User,Group,Snippet){
   UserModel = User;
+  GroupModel = Group;
+  SnippetModel = Snippet;
 }
 
 exports.findUser = function(githubId, callbackSuccess, callbackError){

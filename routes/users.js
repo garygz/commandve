@@ -10,7 +10,8 @@ var CLIENT_ID = '9e8ff83bdb61dae15c5c';
 var CLIENT_SECRET = '13a3d9632063f5f9229c17e9b704d1c9ae620f1d';
 
 exports.setModels = function(User,Group,Snippet){
-  groups.setModels(Group,Snippet);
+  groups.setModels(User,Group,Snippet);
+  users.setModels(User,Group,Snippet);
 }
 
 exports.list_users = function(User){
@@ -86,8 +87,6 @@ exports.signup_user = function(User){
 exports.authenticate_github = function(User, http){
   return function(req,res){
     var code = req.query.code;
-    //set the model for the helper methods
-    users.setUserModel(User);
 
     if(!code){
       redirect('/');
@@ -114,11 +113,25 @@ exports.authenticate_github = function(User, http){
                   console.log(accessData);
                   getGitHubProfile(accessData, function(user){
                       //SUCCESS - we are able to login
+                      var onFailEmail = function(err){
+                        console.log(err,"Failed to obtain email from GitHub", user._id);
+                      }
+                      var onFailGroups = function(err){
+                        console.log(err,"Failed to create default groups", user._id);
+                        onDefaultGroupCreation();
+                      }
+                      var onDefaultGroupCreation = function(){
+                        console.log("login success", user);
+                        req.session.user = user;
+                        res.redirect('/');
+                      }
 
-                      resolveGitHubProfileEmail(user, function(){console.log("git hub resolved for", user)}, function(){console.log("git hub NOT resolved for", user)});
-                      console.log("login success", user);
-                      req.session.user = user;
-                      res.redirect('/');
+                      var onEmailResoluionSuccess = function(user){
+                        groups.findOrCreateDefaultGroups(user, onDefaultGroupCreation, onFailGroups);
+                      };
+
+                      resolveGitHubProfileEmail(user, onEmailResoluionSuccess, onFailEmail);
+
                     },
                      function(err){
                         console.log(err);
@@ -191,8 +204,8 @@ var resolveGitHubProfileEmail = function(user, callbackSuccess, callbackError){
       var profile = JSON.parse(text)[0];
       console.log('resolve github email', profile);
       user.email = profile.email;
+      callbackSuccess(user);
       user.save();
-
     },
     function(err){
       callbackError(err);
