@@ -19,7 +19,6 @@ exports.setModels = function(User,Group,Snippet){
 
 exports.findOrCreateGitHubGroup = function(user,callbackSuccess,callbackError){
   var callbackSuccessNew = function(group){
-    console.log('git hib is created', err);
       callbackSuccess();
       //gitHubGroups.importGists(group,user);
   }
