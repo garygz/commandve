@@ -29,6 +29,7 @@ var Snippet = require('./db/models/snippet')(mongoose);
 
 snippets.setModels(User,Group,Snippet);
 users.setModels(User,Group,Snippet);
+groups.setModels(User,Group,Snippet);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -74,6 +75,7 @@ app.get('/api/search', snippets.search_snippet(User, Snippet));
 //group routes
 app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
+app.post('/api/users/:user_id/groups', groups.create_group(Group,Snippet));
 
 //login routes
 app.post('/login/', users.login_user(User));
