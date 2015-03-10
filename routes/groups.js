@@ -4,6 +4,7 @@ var SnippetModel = null;
 
 var groups = require('../helpers/groups.js');
 
+
 //dependency injection
 exports.setModels = function(User,Group,Snippet){
   UserModel = User;
@@ -120,3 +121,38 @@ exports.create_group = function(Group,Snippet){
   }
 }
 
+
+exports.update_group = function(Group,Snippet){
+  return function(req,res){
+    var onSuccess = function(group){
+      res.status(200).send("group created");
+    }
+
+    var onFail = function(err){
+      handleErrors(err,res,"Failed to update a group");
+    }
+
+    var user = {_id : req.body.user}
+    var findOptions = {
+        _id: req.params.id
+    }
+    var updateOptions = {
+      name: req.body.name,
+      description: req.body.description,
+    }
+
+    if(req.body.image_url){
+      createOptions.image_url = req.body.image_url;
+    }
+
+    console.log("update group", updateOptions);
+    Group.update(findOptions, updateOptions, function(err, count){
+        if(err){
+          onFail(err);
+        }else{
+          onSuccess();
+        }
+    });
+
+  }
+}

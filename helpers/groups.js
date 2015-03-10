@@ -4,6 +4,7 @@ var httpsHelper = require("./https-helper");
 var constants = require('./constants.js');
 var gitHubGroups = require('./git-hub');
 var syncJob = require('./sync_jobs');
+var mongooseIds = require('../helpers/mongoose_objectid');
 
 var GroupModel = null;
 var UserModel = null;
@@ -27,11 +28,9 @@ exports.findOrCreateGitHubGroup = function(user,callbackSuccess,callbackError){
     console.log('Failed to import git hub gists', err);
   }
   var callbackSuccessFind = function(group){
-    console.log('git hub is found',group);
     if(group == null){
       createGitHubGroup(user,callbackSuccessNew,onFail);
     }else{
-      console.log('call git hub success',callbackSuccess);
        callbackSuccess();
     }
   }
@@ -50,7 +49,7 @@ exports.findOrCreateUncategorized = function(userId, callbackSuccess,callbackErr
       name: constants.GROUP_NAME_UNCATEGORIZED,
       description: constants.GROUP_DESCR_UNCATEGORIZED
     }
-    console.log("create other group", createOptions);
+
     exports.findOrCreateNewGroup(user, findOptions, createOptions,callbackSuccess,callbackError);
 }
 
@@ -78,11 +77,13 @@ exports.findOrCreateDefaultGroups = function(user,callbackSuccess,callbackError)
 }
 
 var findGroup = function(user,condition, callbackSuccess,callbackError){
-  condition.user = user._id;
+  condition.user = (typeof user._id) == "string"? mongooseIds.castToObjectId(user._id): user._id;
+  console.log("look for group", condition);
   GroupModel.findOne(condition, function(err,group){
     if(err){
       callbackError(err);
     }else{
+      console.log("group found", group);
       callbackSuccess(group);
     }
   });
