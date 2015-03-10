@@ -134,8 +134,9 @@ exports.login_user = function(User){
 
 exports.logout_user = function(User){
   return function(req,res){
+    console.log("log out user");
     req.session.destroy();
-    res.status(200).send();
+    res.redirect('/');
   }
 }
 
@@ -182,9 +183,17 @@ exports.authenticate_github = function(User, http){
         httpPost(options,data,
                 function(accessData){
                   console.log(accessData);
-                  getGitHubProfile(accessData, function(){
-                    res.redirect('/');
-                  }, handleErrors);
+                  getGitHubProfile(accessData, function(user){
+                      //SUCCESS - we are able to login
+                      req.session.user = user;
+                      console.log("login success", user);
+                      res.redirect('/');
+                    },
+                     function(err){
+                        console.log(err);
+                        res.redirect('/')
+                     }
+                  );
                 },
                 function(err){
                   console.log(err);
@@ -194,6 +203,18 @@ exports.authenticate_github = function(User, http){
     }
   }
 };
+
+
+exports.get_logged_in_user = function(User){
+  return function(req,res){
+    if (req.session.user){
+      res.json(req.session.user);
+    }else{
+      res.status(404).send();
+    }
+
+  }
+}
 
 var getGitHubProfile = function(urlEncodedToken, callbackSuccess, callbackError){
   var dataPart = urlEncodedToken.split('&');
@@ -208,10 +229,11 @@ var getGitHubProfile = function(urlEncodedToken, callbackSuccess, callbackError)
           }
 
     };
-
+  var cleanToken = token.replace('access_token=','');
   httpGet(options,
-    function(profile){
-      profile.token = token;
+    function(text){
+      var profile = JSON.parse(text);
+      profile.token = cleanToken;
       findOrCreateUser(profile, callbackSuccess,callbackError);
     },
     function(err){
@@ -228,42 +250,50 @@ var handleErrors = function(err, res, msg){
   res.status(500).send(msg);
 };
 
-var findUser = function(githubId, callback){
+var findUser = function(githubId, callbackSuccess, callbackError){
   console.log("find user", githubId);
-  UserModel.find({githubId:githubId}, function(error, user){
+  UserModel.findOne({githubId:githubId}, function(error, user){
+
      if(error)  {
-          handleErrors(error, res);
+          console.log("find user error", error);
+          callbackError(error);
       }else{
-         console.log("found user", user);
-         callback(user);
+
+         console.log("found user", user, callbackSuccess);
+         callbackSuccess(user);
       }
   });
 }
 
-var createUser = function(profile, callback){
-  console.log("create user", profile);
-   UserModel.create({username: profile.login,
-                email:profile.email,
+var createUser = function(profile, callbackSuccess, callbackError){
+  var createArgs = {username: profile.login,
+                email:profile.email || profile.login+"@gmail.com",//TODO get actual email by issuing one more request
                 githubId: profile.id,
                 token: profile.token,
                 gists_url: profile.gists_url
-              }, function(error, user){
+              };
+
+  console.log("create user", createArgs);
+   UserModel.create(createArgs, function(error, user){
         if(error)  {
-          handleErrors(error, res);
+         callbackError(error);
         }else{
-          callback.call();
+          callbackSuccess(user);
         }
 
   });
 }
 
 var findOrCreateUser = function(profile, callbackSuccess, callbackError){
+  console.log("findOrCreate", profile["id"]);
   findUser(profile.id,function(user){
     if(user){
       callbackSuccess(user);
     }else{
       //get email
-      callbackSuccess(user);
+      createUser(profile, callbackSuccess, callbackError);
     }
   });
 }
+
+
