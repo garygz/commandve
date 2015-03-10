@@ -1,9 +1,11 @@
 "use strict";
 
 var httpsHelper = require("./https-helper");
+
 var GROUP_TYPE_GITHUB = "github-gist";
 var GROUP_NAME_GITHUB = "My GitHub Gists";
-var GROUP_DESCR_GITHUB = "Gists group which exposes your GitHub and automatically synchronizes with GitHub.";
+var GROUP_DESCR_GITHUB = "Gists group which exposes your GitHub gists and automatically synchronizes them with GitHub.";
+var GIT_GIST_ID_PLACEHOLDER = "{/gist_id}";
 
 var GroupModel = null;
 var SnippetModel = null;

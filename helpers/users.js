@@ -45,7 +45,7 @@ exports.findOrCreateUser = function(profile, callbackSuccess, callbackError){
       callbackSuccess(user);
     }else{
       //get email
-      createUser(profile, callbackSuccess, callbackError);
+      exports.createUser(profile, callbackSuccess, callbackError);
     }
   });
 }
