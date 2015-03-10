@@ -8,8 +8,8 @@
 <body>
 
 <script type="text/javascript">
-  var json = {content:"random", user: "54fa0980d6afe4504ff05572", unique_handle: "handle_1", tags: ['1','2']};
-  $.post('api/snippets', json).done(
+  var json = {name:"random", user: "54fa0980d6afe4504ff05572", unique_handle: "handle_1", tags: ['1','2']};
+  $.post('/api/users/54ff5c703898ea1c7445dcae/groups', json).done(
       function(){
         console.log("Success");
       }

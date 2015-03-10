@@ -3,7 +3,7 @@ var UserModel = null;
 var SnippetModel = null;
 
 var groups = require('../helpers/groups.js');
-
+var constants = require('../helpers/constants.js');
 
 //dependency injection
 exports.setModels = function(User,Group,Snippet){
@@ -116,7 +116,7 @@ exports.create_group = function(Group,Snippet){
     }
 
     console.log("create group", createOptions);
-    exports.findOrCreateNewGroup(user, findOptions, createOptions,onSuccess,onFail);
+    groups.findOrCreateNewGroup(user, findOptions, createOptions,onSuccess,onFail);
 
   }
 }
