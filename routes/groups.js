@@ -17,22 +17,22 @@ var findGroupById = function(id, groups){
 }
 
 var assignSnippetCount = function(Snippet,Group,groups,userid,resposne, callback){
-  console.log('groups for',userid);
-  var agg =[
-            //{ $match : { user : userid } },
+  // console.log('groups for',userid);
+  // var agg =[
+  //           //{ $match : { user : userid } },
 
-            { $group: { _id: '$group', count: { $sum: 1 } } }
-           ];
+  //           { $group: { _id: '$group', count: { $sum: 1 } } }
+  //          ];
 
-  Snippet.aggregate(agg, function(err, results){
-    if (err) {
-      handleErrors(err,resposne);
-    }else{
-      callback.call();
-    }
+  // Snippet.aggregate(agg, function(err, results){
+  //   if (err) {
+  //     handleErrors(err,resposne);
+  //   }else{
+  //     callback.call();
+  //   }
 
-    console.log(results);
-  });
+  //   console.log(results);
+  // });
 }
 
 exports.list_groups = function(Group,Snippet){
@@ -41,9 +41,7 @@ exports.list_groups = function(Group,Snippet){
       if(error)  {
           handleErrors(error, res);
          }else{
-          //FIX this to support actual logged in users
-          var userid = req.session.user ? req.session.user.userid : '54fb97b211a8fdea326df321';
-          assignSnippetCount (Group,Snippet, groups, userid, res,function(){res.json(groups)});
+          res.json(groups);
          }
     });
 

@@ -57,6 +57,7 @@ app.get('/api/users', users.list_users(User));
 app.get('/api/users/:id', users.find_user(User));
 app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
 app.get('/api/users/:userId/groups', groups.find_user_groups(Group, Snippet));
+app.post('/api/users/:user_id/snippets', snippets.create_new_snippet(User, Snippet));
 
 //Snippet routes
 app.get('/api/groups/:groupId/snippets', snippets.list_snippets(User, Snippet));
