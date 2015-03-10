@@ -137,12 +137,12 @@ exports.create_new_snippet = function(User,Snippet){
 
     if(req.body.group){
       //group is resolved, create the snippet
-     createSnippetFromRequest(req, callbackSuccess,callbackError);
+     createSnippetFromRequest(req, res,callbackSuccess,callbackError);
     }else{
       //findOrCreateNewGroup = function(user, findOptions, createOptions,callbackSuccess,callbackError)
       var callbackSuccessGroupCreate = function(group){
         req.body.group = group._id;
-        createSnippetFromRequest(req, callbackSuccess,callbackError);
+        createSnippetFromRequest(req, res, callbackSuccess,callbackError);
       }
 
       groups.findOrCreateUncategorized(req.body.user, callbackSuccess,callbackError);
@@ -165,7 +165,7 @@ exports.search_snippet = function(User,Snippet){
   }
 }
 
-var createSnippetFromRequest = function(req,callbackSuccess,callbackError){
+var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
   console.log(req.body);
     var paramsIn = {
         content: req.body.content,
