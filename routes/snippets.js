@@ -46,7 +46,7 @@ exports.all_snippets = function(User,Snippet){
 exports.delete_snippet = function(User,Snippet){
   return function(req,res){
     Snippet.findOneAndRemove(
-      {_id: req.body._id}
+      {_id: req.params.id}
        ).exec(
       function(error, snippet){
         if(error){
