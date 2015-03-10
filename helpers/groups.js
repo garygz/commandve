@@ -31,7 +31,7 @@ exports.findOrCreateNewGroup = function(user, findOptions, createOptions,callbac
 
   var callbackSuccessFind = function(group){
     if(group == null){
-      createGroup(user, createOptionscallbackSuccess,callbackError);
+      createGroup(user, createOptions, callbackSuccess,callbackError);
     }
   }
   findGroup(user, findOptions, callbackSuccessFind,callbackError);
