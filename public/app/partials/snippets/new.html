@@ -1,7 +1,12 @@
 <div ng-controller="toggleController">
-  <button id ="toggle-groups" ng-click="toggleGroups() "class="btn btn-fab btn-raised btn-material-grey-800"><i class={{groupsButton}}></i></button>
+  <button ng-click="toggleGroups()" ng-show="groupsVisibilityFalse" class="toggle-groups btn btn-fab btn-raised btn-material-grey-800"><i class="mdi-navigation-chevron-left"></i></button>
 
-  <div style="display:{{groupsVisibility}}" class="collapsable-group-container center well">
+  <button id ="toggle-back" ng-click="toggleGroups()" ng-show="groupsVisibility" class="toggle-groups btn btn-fab btn-raised btn-material-grey-800"><i class="mdi-navigation-chevron-right"></i></button>
+
+  <div ng-show="groupsVisibility" class="center collapsable-group-container">
+    <div ng-repeat="group in groups" class ="thumbnail group-preview shadow-z-3">
+      <img src='{{group.image_url}}'>
+     </div>
   </div>
 
 </div>
@@ -16,8 +21,6 @@
 
       <ul class="nav navbar-nav"  id="ace-nav">
 
-
-
         <li class="dropdown">
           <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
               ng-bind="mode" aria-expanded="false">
@@ -30,8 +33,6 @@
             </li>
           </ul>
         </li>
-
-
 
         <li class="dropdown">
           <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
