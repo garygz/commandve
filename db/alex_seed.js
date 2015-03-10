@@ -17,7 +17,7 @@ var Snippet = require('./models/snippet')(mongoose);
 
 
 var user1;
- User.create({username: 'garygz911'+Date.now(), email:"garygz911"+Date.now()+"@gmail.com", password: "123"}, function(err,user){
+ User.findOne("54ff104a721d291df99a1087", function(err,user){
   console.log("create user", err?err:"", user);
   user1 = user;
   if (!err) createGroups();

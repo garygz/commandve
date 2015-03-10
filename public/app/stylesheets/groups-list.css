@@ -1,0 +1,41 @@
+.group-container {
+  padding: 0;
+  width: 224px;
+}
+
+.group-header {
+  margin: 10px;
+  padding: 0;
+  text-align: center;
+}
+
+.group-button-group {
+
+}
+
+.group-image {
+  padding: 0 !import;
+  width: 224px;
+  height: 100%;
+  margin-left: none !important;
+}
+
+.groups-toolbar {
+  position: absolute;
+  width:80%;
+}
+
+.groups-toolbar-paste-btn {
+  text-align: right;
+  float: right;
+  z-index: 10000;
+  font-size: 30px;
+  font-weight: 400;
+  left: 30px;
+  top: 10px;
+}
+
+.groups-toolbar-share-btn {
+  top: 9px;
+  left: 10px;
+}

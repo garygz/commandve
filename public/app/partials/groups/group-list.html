@@ -1,22 +1,35 @@
 
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
 
-<div ng-repeat="group in groupData.groups">
+<div ng-repeat="group in testGroups" style="{padding:none}">
   <div data-id="{{group._id}}"
-      class="panel panel-default group-panel col-md-2 margin-left-1"
+      class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
       ng-init="showButtons=false"
       ng-mouseover="showButtons=true"
       ng-mouseleave="showButtons=false"
       ng-class="{activegroup: showButtons}">
-    <div class="panel-header" >
-      <span class="button-group" ng-show="showButtons">
-        <button type="button" class="btn btn-default paste-button" ng-click="pasteSnippet()">Paste</button>
-      </span>
-    </div>
-    <div class="panel-body clickable" ng-dblclick="showGroup(group._id)">
-      <div>{{group.name}} <span class="pull-right"><span class="badge" ng-bind="group.content_count">{{group.content_count}}</span></span></div>
-      <div>{{group.description}}<div>
-    </div>
+    <div>
+      <div class="groups-toolbar" ng-show="showButtons">
 
+        <button ng-click="shareGroup(group)"
+                class="groups-toolbar-share-btn btn btn-fab btn-fab-mini btn-raised btn-material-light-blue">
+        <i class="mdi-social-share"></i></button>
+
+        <button ng-click="pasteSnippet()"
+                class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
+        <i class="mdi-content-content-paste"></i></button>
+      </div>
+      <img class= "group-image" src='{{group.image_url}}'>
+    </div>
+    <div class="panel-header">
+      <div ng-click="showGroup(group._id)" class="group-header">
+        {{group.name}}
+        <span class="pull-right">
+          <span class="badge" ng-bind="group.content_count">
+            {{group.content_count}}
+          </span>
+        </span>
+      </div>
+    </div>
   </div>
 </div>

@@ -4,12 +4,87 @@ angular.module('cmndvninja').controller('GroupController',
   ['$scope', '$location','$document', 'Group', 'Shared','Snippet',
   function($scope, $location,$document, Group, Shared, Snippet){
 
+  $.material.init()
   console.log('GroupController init', $location);
 
   $scope.groupData = {};
   $scope.$parent.userGroups = {};
   $scope.snippetCount = 0;
   $scope.snippetPastedText = "";
+
+
+  function createGroup (group) {
+    console.log('creating group:', group);
+    Group.post(group);
+  };
+
+  $scope.shareGroup = function (group) {
+    console.log('this group should be shared:', group)
+  }
+
+
+$scope.testGroups = [
+  {
+  _id: '1',
+  name: 'My Snippets',
+  content_count: 12,
+  description: 'Douglas Crawfords favorite code' ,
+  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+  },
+
+  {
+    _id: '2',
+   name: 'My Snippets',
+  content_count: 12,
+  description: 'Douglas Crawfords favorite code',
+  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+  },
+
+  {
+   _id: '3',
+    name: 'My Snippets',
+  content_count: 12,
+  description: 'Douglas Crawfords favorite code',
+  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+  },
+
+  {
+    _id: '4',
+   name: 'My Snippets',
+  content_count: 12,
+  description: 'Douglas Crawfords favorite code',
+  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+  },
+
+  { _id: '5',
+  name: 'My Snippets',
+  content_count: 12,
+  description: 'Douglas Crawfords favorite code',
+  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+  },
+
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   var hiddenInput = document.getElementById("hidden-input");
 
