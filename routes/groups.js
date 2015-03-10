@@ -1,3 +1,17 @@
+var GroupModel = null;
+var UserModel = null;
+var SnippetModel = null;
+
+var groups = require('../helpers/groups.js');
+
+//dependency injection
+exports.setModels = function(User,Group,Snippet){
+  UserModel = User;
+  GroupModel = Group;
+  SnippetModel = Snippet;
+  groups.setModels(User,Group,Snippet);
+}
+
 var handleErrors = function(err, res, msg){
   console.log(err.stack);
   msg = msg || 'Unable to process your request';
@@ -70,6 +84,38 @@ exports.find_user_groups = function(Group,Snippet){
           res.json(groups);
          }
     });
+
+  }
+}
+
+exports.create_group = function(Group,Snippet){
+  return function(req,res){
+    var onSuccess = function(group){
+      res.json(group);
+    }
+
+    var onFail = function(err){
+      handleErrors(err,res,"Failed to create a group");
+    }
+
+    var user = {_id : req.body.user}
+    var findOptions = {
+        user: user._id,
+        group_type: constants.GROUP_TYPE_UNCATEGORIZED
+    }
+    var createOptions = {
+      user: req.body.user,
+      group_type: constants.GROUP_TYPE_UNCATEGORIZED,
+      name: req.body.name,
+      description: req.body.description,
+    }
+
+    if(req.body.image_url){
+      createOptions.image_url = req.body.image_url;
+    }
+
+    console.log("create group", createOptions);
+    exports.findOrCreateNewGroup(user, findOptions, createOptions,onSuccess,onFail);
 
   }
 }
