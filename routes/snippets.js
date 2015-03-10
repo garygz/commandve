@@ -1,4 +1,8 @@
 "use strict";
+
+var constants = require('../helpers/constants');
+var groups = require('../helpers/groups');
+
 var GroupModel = null;
 var UserModel = null;
 var SnippetModel = null;
@@ -121,7 +125,58 @@ exports.find_user_snippets = function(User,Snippet){
 
 exports.create_new_snippet = function(User,Snippet){
   return function(req,res){
-    console.log(req.body);
+    var callbackError = function(err){
+        handleErrors(err,res, "Failed to save the snippet");
+    }
+
+    var callbackSuccess = function(snippet){
+       res.status(200).send();
+       update_snippet_count(snippet,1);
+    }
+
+    if(req.body.group){
+      //group is resolved, create the snippet
+     createSnippetFromRequest(req, callbackSuccess,callbackError);
+    }else{
+      //findOrCreateNewGroup = function(user, findOptions, createOptions,callbackSuccess,callbackError)
+      var callbackSuccessGroupCreate = function(group){
+        req.body.group = group._id;
+        createSnippetFromRequest(req, callbackSuccess,callbackError);
+      }
+
+      var user = {_id : req.body.user}
+      var findOptions = {
+          user: user._id,
+          type: constants.GROUP_TYPE_UNCATEGORIZED
+      }
+      var createOptions = {
+        user: user._id,
+        type: constants.GROUP_TYPE_UNCATEGORIZED,
+        name: constants.GROUP_NAME_UNCATEGORIZED
+      }
+
+      groups.findOrCreateNewGroup(user, findOptions, createOptions,callbackSuccessGroupCreate,callbackError);
+    }
+  }
+}
+
+exports.search_snippet = function(User,Snippet){
+  return function(req,res){
+    var searchQuery = getQueryParams(req);
+    console.log(searchQuery);
+    Snippet.find({ $text : { $search : searchQuery.query} }, function(error, snippets){
+        if(error){
+          handleErrors(error, res);
+        }else{
+          res.json(snippets);
+        }
+
+    });
+  }
+}
+
+var createSnippetFromRequest = function(req,callbackSuccess,callbackError){
+  console.log(req.body);
     var paramsIn = {
         content: req.body.content,
         user: req.body.user,
@@ -151,22 +206,6 @@ exports.create_new_snippet = function(User,Snippet){
       }
 
     });
-  }
-}
-
-exports.search_snippet = function(User,Snippet){
-  return function(req,res){
-    var searchQuery = getQueryParams(req);
-    console.log(searchQuery);
-    Snippet.find({ $text : { $search : searchQuery.query} }, function(error, snippets){
-        if(error){
-          handleErrors(error, res);
-        }else{
-          res.json(snippets);
-        }
-
-    });
-  }
 }
 
 var update_snippet_count = function(snippet,byValue){
