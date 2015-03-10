@@ -5,7 +5,8 @@ module.exports = function(mongoose){
     password: {type: String} ,//TODO not used for now as we utilize github
     token: {type: String},
     refreshToken: {type: String},
-    githubId: {type: String}
+    githubId: {type: String},
+    gists_url: {type: String}
   });
 
   return mongoose.model('User', UserSchema);
