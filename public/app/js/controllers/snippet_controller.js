@@ -4,9 +4,7 @@ angular.module('cmndvninja'). controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared',
   function($scope, $location, $route, Snippet, Shared){
 
-    $('#simple-dialog').modal()
-    $.material.ripples()
-
+    $scope.samples = ["group 1", "group 2", "group 3", "group 4", "group 5", "group 6", "group 7"]
     var getGroupId = function(){
       var url = $location.absUrl();
       var beg = url.indexOf("groups") + "groups/".length;

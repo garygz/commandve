@@ -29,8 +29,24 @@ Fix for Angular UI not displaying curors correctly
   width: 28vw;
 }
 
-#big-plus {
-  font-size: 40px;
+.collapsable-group-container {
+  width: 960px;
+  position: relative;
+  height: 100px;
+}
+
+#save {
+  font-size: 20px;
+}
+
+#add {
+  font-size: 20px;
+}
+
+#toggle-groups {
+  float: right;
+  margin-right: 40px;
+  z-index: 1;
 }
 
 .new-snippet-container {
@@ -64,3 +80,4 @@ Fix for Angular UI not displaying curors correctly
 .initiallyHidden {
   display: none;
 }
+
