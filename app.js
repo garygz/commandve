@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
 
+
 //require all routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -75,6 +76,8 @@ app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
 app.post('/login/', users.login_user(User));
 app.get('/logout/', users.logout_user(User));
 app.get('/signup/', users.signup_user(User));
+app.get('/auth/github/callback', users.authenticate_github(User));
+app.get('/auth/current', users.get_logged_in_user(User));
 
 
 // catch 404 and forward to error handler

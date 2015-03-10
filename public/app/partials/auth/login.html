@@ -1,11 +1,6 @@
 <!-- Need a way to hide the navbar when here  -->
-<div ng-controller="AuthController">
-	<form novalidate class="simple-form">
-    E-mail: <input type="email" ng-model="user.email" /><br />
-   	Password: <input type="password" ng-model="user.password" /><br />
-    <input type="submit" ng-click="login(user)" value="Log In" />
-  </form>
-  <div class='error initiallyHidden'>
-  	<h3>Incorrect Username or Password</h3>
-  </div>
+<div class="col-md-5 center">
+  <span>Please sign in with your GitHub account or <a href="http://github.com">sign up</a></span>
+  <a class="btn btn-block btn-social btn-lg btn-github well" ng-href="https://github.com/login/oauth/authorize?client_id={{clientId}}&scope=user:email,gist"><i class="fa fa-github"></i>Sign in with GitHub</a>
+
 </div>
