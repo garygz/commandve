@@ -196,7 +196,7 @@ var createSnippetFromRequest = function(req,callbackSuccess,callbackError){
       paramsIn.tags = req.body.tags;
     }
 
-    var snippet = Snippet(paramsIn);
+    var snippet = SnippetModel(paramsIn);
 
     snippet.save(function(err){
       if(err){
