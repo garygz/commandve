@@ -11,6 +11,7 @@ exports.setModels = function(User,Group,Snippet){
   UserModel = User;
   GroupModel = Group;
   SnippetModel = Snippet;
+  groups.setModels(Group,Snippet);
 }
 
 var handleErrors = function(err, res, msg){

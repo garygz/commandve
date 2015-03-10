@@ -28,6 +28,7 @@ var Group = require('./db/models/group')(mongoose);
 var Snippet = require('./db/models/snippet')(mongoose);
 
 snippets.setModels(User,Group,Snippet);
+users.setModels(User,Group,Snippet);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
