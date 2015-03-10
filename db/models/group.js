@@ -2,7 +2,7 @@ module.exports = function(mongoose){
   var GroupSchema = mongoose.Schema({
     name: {type: String, required: true},
     user: {type: mongoose.Schema.ObjectId, ref: 'User'},
-    image_url: {type: String},
+    image_url: {type: String, default: "app/img/default-group.png"},
     description: {type: String},
     created_at: {type: Date, default: Date.now },
     group_type: {type: String},
