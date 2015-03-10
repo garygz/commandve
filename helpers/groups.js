@@ -7,7 +7,7 @@ var GroupModel = null;
 var SnippetModel = null;
 
 //using dependency injection
-exports.setupModels = function(Group,Snippet){
+exports.setModels = function(Group,Snippet){
   GroupModel = Group;
   SnippetModel = Snippet;
 }

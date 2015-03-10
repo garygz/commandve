@@ -9,6 +9,9 @@ var groups = require('../helpers/groups.js');
 var CLIENT_ID = '9e8ff83bdb61dae15c5c';
 var CLIENT_SECRET = '13a3d9632063f5f9229c17e9b704d1c9ae620f1d';
 
+exports.setModels = function(User,Group,Snippet){
+  groups.setModels(Group,Snippet);
+}
 
 exports.list_users = function(User){
   return function(req,res){
