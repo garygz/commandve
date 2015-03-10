@@ -1,4 +1,13 @@
 "use strict";
+var GroupModel = null;
+var UserModel = null;
+var SnippetModel = null;
+
+exports.setModels = function(User,Group,Snippet){
+  UserModel = User;
+  GroupModel = Group;
+  SnippetModel = Snippet;
+}
 
 var handleErrors = function(err, res, msg){
   console.log(err.stack);
@@ -53,6 +62,7 @@ exports.delete_snippet = function(User,Snippet){
           handleErrors(error, res);
         }else{
           res.json(snippet);
+          update_snippet_count(snippet,-1);
         }
     });
   }
@@ -137,6 +147,7 @@ exports.create_new_snippet = function(User,Snippet){
         handleErrors(err,res, "Failed to save the snippet");
       }else{
         res.status(200).send();
+        update_snippet_count(snippet,1);
       }
 
     });
@@ -156,4 +167,15 @@ exports.search_snippet = function(User,Snippet){
 
     });
   }
+}
+
+var update_snippet_count = function(snippet,byValue){
+  var update = { $inc: { content_count: byValue }};
+  GroupModel.update({group:snippet.group._id},update, function(err,affectedCount){
+    if(err){
+      console.log('Failed to updated group content count', snippet);
+    }else{
+      console.log('Updated group content count', affectedCount, snippet);
+    }
+  });
 }

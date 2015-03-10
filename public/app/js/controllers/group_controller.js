@@ -33,7 +33,7 @@ angular.module('cmndvninja').controller('GroupController',
     newSnippet.content = $scope.snippetPastedText;
     newSnippet.groupId =$scope.groupId;
     newSnippet.group = $scope.groupId;
-    newSnippet.unique_handle = "Just added using CMD+V (" + Date.now()+")";
+    newSnippet.unique_handle = "Just added using CMD+V (" + Date.now().toDateString()+")";
     console.log("new group snippets",newSnippet);
 
     Snippet.post(newSnippet).$promise.then(function(group){
@@ -42,7 +42,7 @@ angular.module('cmndvninja').controller('GroupController',
             $scope.groupData.groups.forEach (
                   function(item){
                     if (item._id === newSnippet.groupId){
-                      item.snippetCount+=1;
+                      item.content_count+=1;
                     }
                   }
               );
