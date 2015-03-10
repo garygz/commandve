@@ -145,7 +145,7 @@ exports.create_new_snippet = function(User,Snippet){
         createSnippetFromRequest(req, res, callbackSuccess,callbackError);
       }
 
-      groups.findOrCreateUncategorized(req.body.user, callbackSuccess,callbackError);
+      groups.findOrCreateUncategorized(req.body.user, callbackSuccessGroupCreate,callbackError);
     }
   }
 }
@@ -199,6 +199,7 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
 }
 
 var update_snippet_count = function(snippet,byValue){
+  console.log('update count on group for',snippet);
   var update = { $inc: { content_count: byValue }};
   GroupModel.update({group:snippet.group._id},update, function(err,affectedCount){
     if(err){
