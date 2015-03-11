@@ -2,6 +2,7 @@
 
 var constants = require('../helpers/constants');
 var groups = require('../helpers/groups');
+var gitHub = require('../helpers/git-hub.js');
 
 var GroupModel = null;
 var UserModel = null;
@@ -75,8 +76,9 @@ exports.delete_snippet = function(User,Snippet){
 
 
 exports.edit_snippet = function(User,Snippet){
+
   return function(req,res){
-    console.log(req.body)
+     console.log('update snippet', req.body);
     Snippet.findOneAndUpdate(
       {_id: req.body._id},
       {
@@ -85,11 +87,14 @@ exports.edit_snippet = function(User,Snippet){
        tags:            req.body.tags
       }
        ).exec(
-      function(error, snippet){
+      function(error,snippet){
         if(error){
           handleErrors(error, res);
         }else{
           res.json(snippet);
+          if(snippet.githubId){
+            createOrUpdateSnippet(snippet);
+          }
         }
     });
   }
@@ -124,6 +129,7 @@ exports.find_user_snippets = function(User,Snippet){
 }
 
 
+
 exports.create_new_snippet = function(User,Snippet){
   return function(req,res){
     var callbackError = function(err){
@@ -131,8 +137,7 @@ exports.create_new_snippet = function(User,Snippet){
     }
 
     var callbackSuccess = function(snippet){
-       res.status(200).send();
-       update_snippet_count(snippet,1);
+       processSuccessSnipetOperation(res,snippet, true);
     }
 
     if(req.body.group){
@@ -192,13 +197,12 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
       if(err){
         handleErrors(err,res, "Failed to save the snippet");
       }else{
-        res.status(200).send();
-        update_snippet_count(snippet,1);
+        processSuccessSnipetOperation(res, snippet, true);
       }
 
     });
 }
-
+//TODO FIX THIS
 var update_snippet_count = function(snippet,byValue){
   console.log('update count on group for',snippet);
   var update = { $inc: { content_count: byValue }};
@@ -210,3 +214,46 @@ var update_snippet_count = function(snippet,byValue){
     }
   });
 }
+
+
+var createOrUpdateSnippet = function(snippet, isNew){
+    if(!isNew){
+      isNew = false;
+    }
+    var callbackSuccess = function(){
+      console.log("success: updated gist", snippet);
+    }
+
+    var callbackError = function(){
+      console.log("FAILED: to update gist", snippet);
+    }
+
+    SnippetModel.findOne({_id: snippet._id}).populate('user').populate('group').exec(
+
+      function(err,snippet){
+        console.log("resolve snippet", snippet, err);
+        if(!err){
+          if(isGroupGitHub(snippet.group)){
+            gitHub.updateGist(snippet,callbackSuccess,callbackError, isNew);
+          }
+        }else{
+          callbackError(err);
+        }
+      }
+    );
+}
+
+var isGroupGitHub = function(group){
+  return group.group_type === constants.GROUP_TYPE_GITHUB;
+}
+
+var processSuccessSnipetOperation = function(res,snippet, isNew){
+  console.log("New Snippet", isNew, snippet);
+  res.status(200).send();
+  update_snippet_count(snippet,1);
+  if(!isNew){
+    isNew = false;
+  }
+  createOrUpdateSnippet(snippet, isNew);
+}
+
