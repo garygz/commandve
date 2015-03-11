@@ -21,6 +21,14 @@ Fix for Angular UI not displaying curors correctly
   -ms-overflow-style;*/
 }
 
+.header-logo{
+  height: 40px;
+  width: 40px;
+  padding: 5px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
 .search-results{
   width:70vw;
 }
