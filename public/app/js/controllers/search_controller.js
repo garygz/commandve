@@ -7,5 +7,13 @@ angular.module("cmndvninja").controller("SearchController",
     console.log("Search Controller init");
     //read location query string and do search
     $scope.searchResults = Shared.searchResults;
+
+    $scope.goToSnippet = function(snippet){
+      console.log(snippet);
+    Shared.currentSearchedSnippetId = snippet._id;
+    Shared.currentGroupId = snippet.group;
+    $location.path('groups/'+ snippet.group + '/snippets');
+    }
+
   }
 ]);

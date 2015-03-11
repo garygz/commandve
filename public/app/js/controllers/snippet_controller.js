@@ -22,14 +22,23 @@ angular.module('cmndvninja').controller('SnippetController',
         content: ""
       };
       $scope.snippets.unshift($scope.currentSnippet);
-      console.log($scope.snippets)
+    };
+
+    $scope.selectSnippet = function (id) {
+      $scope.currentSnippet = findById($scope.snippets, id);
+      return $scope.currentSnippet;
     };
 
     function initialize () {
-      if ($scope.currentSnippet){
-        console.log('currentSnippet is defined')
-      }else {
-        $scope.newSnippet();
+      if (Shared.currentSearchedSnippetId) {
+        $scope.selectSnippet(Shared.currentSearchedSnippetId);
+      }
+      else{
+        if ($scope.currentSnippet){
+          console.log('currentSnippet is defined')
+        }else {
+          $scope.newSnippet();
+        }
       }
     }
 
@@ -43,14 +52,13 @@ angular.module('cmndvninja').controller('SnippetController',
     var groupId = getGroupId();
 
     getSnippets();
-    initialize();
 
     function getSnippets() { Snippet.query({groupId: groupId}).$promise.then(
       function(snippets){
         $scope.snippets = snippets;
         $scope.currentSnippet = $scope.snippets[0];
         markSnippetsAsSaved(snippets);
-        console.log($scope.snippets)
+        initialize();
         }
       );
       return $scope.snippets;
@@ -146,11 +154,6 @@ angular.module('cmndvninja').controller('SnippetController',
       }
       throw "throwing error from findById in SnippetController: couldn't find object with id: " + id;
     }
-
-    $scope.selectSnippet = function (id) {
-      $scope.currentSnippet = findById($scope.snippets, id);
-      return $scope.currentSnippet;
-    };
 
     $scope.formatFileName = function(str){
       function toTitleCase(str) {
