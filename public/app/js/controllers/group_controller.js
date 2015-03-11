@@ -104,7 +104,7 @@ Shared.groups = $scope.testGroups;
     newSnippet.content = $scope.snippetPastedText;
     newSnippet.groupId =$scope.groupId;
     newSnippet.group = $scope.groupId;
-    newSnippet.unique_handle = "Just added using CMD+V (" + Date.now().toDateString()+")";
+    newSnippet.unique_handle = "Just added using CMD+V (" + (new Date()).toDateString()+")";
     console.log("new group snippets",newSnippet);
 
     Snippet.post(newSnippet).$promise.then(function(group){
