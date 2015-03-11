@@ -10,7 +10,7 @@ angular.module("cmndvninja").controller("SearchController",
 
     $scope.goToSnippet = function(snippet){
       console.log(snippet);
-    Shared.currentSearchedSnippet = snippet;
+    Shared.currentSearchedSnippetId = snippet._id;
     Shared.currentGroupId = snippet.group;
     $location.path('groups/'+ snippet.group + '/snippets');
     }
