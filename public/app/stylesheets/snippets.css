@@ -106,3 +106,7 @@ h2 span.spacer {
   height: 498px;
   margin-top: none;
 }
+
+.hide-overflow {
+  overflow: hidden;
+}
