@@ -32,6 +32,17 @@
 /*  margin: -80px -324px;*/
 }
 
+.thumbnail-well {
+  position: absolute;
+  padding: 0;
+  margin-top: 10;
+  width: auto;
+  height: auto;
+  border: none;
+    width: 150px;
+  height: 150px;
+}
+
 .image {
    position: relative;
    width: 100%; /* for IE 6 */
@@ -92,6 +103,6 @@ h2 span.spacer {
 
 .minified-snippet-display {
   overflow: scroll;
-  height: 486px;
+  height: 498px;
   margin-top: none;
 }

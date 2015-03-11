@@ -1,17 +1,11 @@
-angular.module('cmndvninja'). controller('toggleController', ['$scope', '$timeout',
+angular.module('cmndvninja').controller('toggleController', ['$scope', '$timeout',
   function($scope, $timeout, $location, $route, Snippet, Shared){
 
-  $scope.groupsVisibility = false;
-  $scope.groupsVisibilityFalse = true;
-
-
-    $scope.groupsButton = "mdi-navigation-chevron-left";
+    $scope.groupsVisibility = false;
+    $scope.groupsVisibilityFalse = true;
 
     var changeGroupsVisibilityFalse = function () {
       $scope.groupsVisibilityFalse = true;
-    }
-    var consolelog = function(){
-      console.log('wetf')
     }
 
     $scope.toggleGroupsButton = function(){
@@ -24,16 +18,7 @@ angular.module('cmndvninja'). controller('toggleController', ['$scope', '$timeou
 
     }
 
-    // $scope.toggleVisibility = function(){
-    //   if ($scope.groupsVisibility === "none"){
-    //     $scope.groupsVisibility = "inherit"
-    //   }else{
-    //     $scope.groupsVisibility = "none"
-    //   }
-    // }
-
     $scope.toggleGroups = function () {
-      // $scope.toggleVisibility();
       $scope.toggleGroupsButton();
     }
 
