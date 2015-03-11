@@ -58,7 +58,7 @@
     </nav>
     <div class="minified-snippet-display col-sm-3">
       <div ng-repeat="snippet in snippets">
-        <div class="well hide-overflow" ng-show="snippet" ng-click="selectSnippet(snippet._id).$promise.then(initializeAceState())" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
+        <div class="well hide-overflow" ng-show="snippet" ng-click="selectSnippet(snippet._id).$promise.then(initializeAceState()); selectIfNewSnippet(snippet)" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
           <div class="mini-toolbar" ng-show="snippet.showToolbar">
             <button data-toggle="modal" data-target="#delete-modal" ng-click="stageDelete(snippet)"
             class="mini-toolbar-btn btn btn-fab btn-fab-mini btn-raised btn-danger">
