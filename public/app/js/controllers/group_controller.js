@@ -41,7 +41,7 @@ angular.module('cmndvninja').controller('GroupController',
     Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
       $scope.groupData.groups = groups;
       $scope.$parent.userGroups = groups;
-      //groups.forEach(function(item){item.snippetCount = item.snippetCount || 5});
+      groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
     });
   }
 
@@ -53,11 +53,9 @@ angular.module('cmndvninja').controller('GroupController',
     $location.path('groups/'+id + '/snippets');
   }
   $scope.firePasteSnippet = function($event){
+    console.log("fire paste event");
     $event.stopPropagation();
-       var evt = document.createEvent('KeyboardEvent');
-        evt.initKeyEvent("keypress", false, true, null, false, false,
-                         shift, false, keyCode(key), key.charCodeAt(0));
-        document.dispatchEvent(evt);
+
   }
 
   $scope.pasteSnippet = function($event){
@@ -72,22 +70,16 @@ angular.module('cmndvninja').controller('GroupController',
     Snippet.post(newSnippet).$promise.then(function(group){
       //animate
       //change count
-            $scope.groupData.groups.forEach (
-                  function(item){
-                    if (item._id === newSnippet.groupId){
-                      item.content_count+=1;
-                    }
-                  }
-              );
+      $scope.groupData.groups.forEach (
+            function(item){
+              if (item._id === newSnippet.groupId){
+                item.content_count+=1;
+              }
+            }
+        );
       });
     if($event)$event.stopPropagation();
-    // //console.log("Pasted Text", $scope.snippetPastedText);
-    // var pressEvent = document.createEvent ("KeyboardEvent");
-    // pressEvent.initKeyEvent ("keypress", true, true, window,
-    // true, false, false, false,
-    // 86, 0);
 
-    // hiddenInput.dispatchEvent(pressEvent);
   }
 
 

@@ -6,7 +6,8 @@ module.exports = function(mongoose){
     group: {type: mongoose.Schema.ObjectId, ref: 'Group'},
     unique_handle: {type: String, default: "New Snippet (" + (new Date()).toDateString() + ")",  required: true},
     githubId: {type: String},
-    githubFileName: {type: String}
+    githubFileName: {type: String},
+    editor_theme: {type: String}
   });
 
   SnippetSchema.index( { content: "text", tags: "text" } , { name: "SnippetIndex" })
