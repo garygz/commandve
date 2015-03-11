@@ -12,7 +12,7 @@
 </div>
 
 <div class="new-snippet-container center shadow-z-5">
-  <section ng-controller="AceController">
+<!--   <section ng-controller="AceController"> -->
 
     <nav class="navbar" id="minified-snippet-nav">
       <div class="navbar-header">
@@ -58,7 +58,7 @@
     </nav>
     <div class="minified-snippet-display col-sm-3">
       <div ng-repeat="snippet in snippets">
-        <div class="well hide-overflow" ng-show="snippet" ng-click="selectSnippet(snippet._id)" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
+        <div class="well hide-overflow" ng-show="snippet" ng-click="selectSnippet(snippet._id).$promise.then(initializeAceState())" ng-mouseover="hover(snippet)" ng-mouseout="hover(snippet)">
           <div class="mini-toolbar" ng-show="snippet.showToolbar">
             <button data-toggle="modal" data-target="#delete-modal" ng-click="stageDelete(snippet)"
             class="mini-toolbar-btn btn btn-fab btn-fab-mini btn-raised btn-danger">
@@ -78,7 +78,7 @@
       </input>
     </div>
     <div ui-ace="aceOption" ng-model="currentSnippet.content" ng-change="flagSnippet()" class='ace-editor shadow-z-3' id='editor'></div>
-  </section> <!-- end Ace Controller -->
+<!--   </section> end Ace Controller -->
 
 </div>
 

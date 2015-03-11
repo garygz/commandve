@@ -4,11 +4,9 @@ angular.module('cmndvninja').controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared','$timeout',
   function($scope, $location, $route, Snippet, Shared, $timeout){
 
-    // $.material.init();
     $scope.groups = Shared.groups;
     $scope.snippets = [];
     $scope.currentSnippet= {};
-
 
     $scope.newSnippet = function () {
       $scope.currentSnippet = {
@@ -39,6 +37,12 @@ angular.module('cmndvninja').controller('SnippetController',
         }else {
           $scope.newSnippet();
         }
+      }
+      if ($scope.currentSnippet.theme){
+        $scope.theme = $scope.currentSnippet.theme;
+      }
+      if ($scope.currentSnippet.tags[0]){
+        $scope.mode = $scope.currentSnippet.tags[0]
       }
     }
 
@@ -104,6 +108,7 @@ angular.module('cmndvninja').controller('SnippetController',
           createOrEditSnippet($scope.snippets[i]);
         }
       }
+      console.log($scope.snippets)
     };
 
     function createOrEditSnippet (snippet) {
@@ -155,23 +160,6 @@ angular.module('cmndvninja').controller('SnippetController',
       throw "throwing error from findById in SnippetController: couldn't find object with id: " + id;
     }
 
-    $scope.formatFileName = function(str){
-      function toTitleCase(str) {
-        return str.replace(/\w\S*/g, function(txt){
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-          }
-        );
-      }
-
-      function subUnderScoresForSpaces(str) {
-        return str.replace(/_/g, " ");
-      }
-
-      return toTitleCase(subUnderScoresForSpaces(str));
-
-    };
-
-
     $scope.hover = function (snippet){
       snippet.showToolbar = ! snippet.showToolbar;
     };
@@ -192,5 +180,76 @@ angular.module('cmndvninja').controller('SnippetController',
       $location.path('groups/'+id + '/snippets');
       Shared.currentGroupId = id;
     };
-  }
-]);
+
+  // snippet controller and ace controller are too interlinked
+  // to be two separate controllers... TODO make ACE a service //
+
+    var editor = ace.edit("editor");
+
+    $scope.themes = ['eclipse', 'clouds', 'solarized_dark', 'solarized_light', 'dawn', 'dreamweaver', 'github' ];
+    $scope.modes = ['Javascript', 'Ruby', 'XML', 'Python'];
+
+    $scope.initializeAceState = function() {
+      if ($scope.currentSnippet){
+        if ($scope.currentSnippet.theme) {
+          $scope.theme = $scope.currentSnippet.theme;
+        }else {
+        $scope.theme = $scope.themes[0];
+        }
+        if ($scope.currentSnippet.tags) {
+          $scope.mode = $scope.currentSnippet.tags[0];
+        }else {
+          $scope.mode = $scope.modes[0];
+        }
+      }else {
+        $scope.theme = $scope.themes[0];
+        $scope.mode = $scope.modes[0];
+      }
+    }
+
+    $scope.initializeAceState();
+
+    $scope.selectTheme = function(theme) {
+      $scope.theme = theme;
+      if ($scope.currentSnippet) {
+      $scope.currentSnippet.theme = theme;
+      }
+      editor.setTheme("ace/theme/" + theme);
+    };
+
+    $scope.selectTheme($scope.theme);
+
+    $scope.aceOption = {
+      mode: $scope.mode.toLowerCase(),
+      onLoad: function (_ace) {
+        $scope.modeChanged = function (mode) {
+          $scope.mode = mode;
+          $scope.currentSnippet.tags[0] = mode;
+          _ace.getSession().setMode("ace/mode/" + $scope.mode.toLowerCase());
+        };
+
+      }
+    };
+
+    $scope.formatFileName = function(str){
+      function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function(txt){
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+          }
+        );
+      }
+
+      function subUnderScoresForSpaces(str) {
+        return str.replace(/_/g, " ");
+      }
+
+      return toTitleCase(subUnderScoresForSpaces(str));
+
+    };
+
+    var session = editor.getSession();
+    session.setUseWrapMode(true);
+    session.setWrapLimitRange(80,80);
+
+
+}]);
