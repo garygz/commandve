@@ -34,10 +34,11 @@ var getQueryParams = function(req){
 exports.list_snippets = function(User,Snippet){
   return function(req,res){
     console.log(req.params)
-    Snippet.find({group: req.params.groupId}, function(error, snippets){
+    Snippet.find({group: req.params.groupId}).sort({updated_at: -1}).exec( function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{
+          console.log(snippets);
           res.json(snippets);
         }
     });
@@ -47,10 +48,11 @@ exports.list_snippets = function(User,Snippet){
 exports.all_snippets = function(User,Snippet){
   return function(req,res){
     console.log(req.params)
-    Snippet.find({}, function(error, snippets){
+    Snippet.find({}).sort({updated_at: -1}).exec(function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{
+
           res.json(snippets);
         }
     });
