@@ -170,11 +170,12 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
     var paramsIn = {
         content: req.body.content,
         user: req.body.user,
-        unique_handle: req.body.handle,
         tags: req.body.tags
     }
     if(req.body.unique_handle){
       paramsIn.unique_handle = req.body.unique_handle;
+    }else{
+      paramsIn.unique_handle = "New Snippet (" + (new Date()).toDateString() + ")"
     }
 
     if(req.body.group){

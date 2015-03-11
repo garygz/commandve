@@ -77,7 +77,7 @@
            <div >
               <form class="navbar-form col-md-5" role="search">
                 <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Search ..." ng-model="searchCriteria"
+                      <input type="text" id="app-search" class="form-control" placeholder="Search ..." ng-model="searchCriteria"
                       ng-keyup="isKeyEventEnter($event)?search(searchCriteria):null">
                       <span class="input-group-btn">
                         <button class="btn btn-default" type="button" ng-click="$parent.search(searchCriteria)"><i class="glyphicon glyphicon-search"></i></span></button>
