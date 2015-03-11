@@ -11,10 +11,6 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.$parent.userGroups = {};
   $scope.snippetCount = 0;
   $scope.snippetPastedText = "";
-  $scope.data = {};
-  $scope.formGroup = {
-    image_url: "shit"
-  };
 
   $scope.image_url = ""
 
@@ -38,49 +34,6 @@ angular.module('cmndvninja').controller('GroupController',
     console.log('this group should be shared:', group)
   }
 
-$scope.testGroups = [
-  {
-  _id: '1',
-  name: 'My Snippets',
-  content_count: 12,
-  description: 'Douglas Crawfords favorite code' ,
-  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-  },
-
-  {
-    _id: '2',
-   name: 'My Snippets',
-  content_count: 12,
-  description: 'Douglas Crawfords favorite code',
-  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-  },
-
-  {
-   _id: '3',
-    name: 'My Snippets',
-  content_count: 12,
-  description: 'Douglas Crawfords favorite code',
-  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-  },
-
-  {
-    _id: '4',
-   name: 'My Snippets',
-  content_count: 12,
-  description: 'Douglas Crawfords favorite code',
-  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-  },
-
-  { _id: '5',
-  name: 'My Snippets',
-  content_count: 12,
-  description: 'Douglas Crawfords favorite code',
-  image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-  },
-
-]
-
-
   var hiddenInput = document.getElementById("hidden-input");
 
   if($scope.$parent.user){
@@ -94,7 +47,7 @@ $scope.testGroups = [
 
   $scope.showGroup = function(id){
     console.log($scope.groupData);
-    Shared.groups = $scope.groupData;
+    Shared.groups = $scope.groupData.groups;
     Shared.currentGroupId = id;
     $location.path('groups/'+id + '/snippets');
   }
@@ -162,3 +115,47 @@ $scope.testGroups = [
   // document.addEventListener("mouseup", focusHiddenArea);
 
 }]);
+
+// For Posterity /////////////////////////////////////////////
+
+// $scope.testGroups = [
+//   {
+//   _id: '1',
+//   name: 'My Snippets',
+//   content_count: 12,
+//   description: 'Douglas Crawfords favorite code' ,
+//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+//   },
+
+//   {
+//     _id: '2',
+//    name: 'My Snippets',
+//   content_count: 12,
+//   description: 'Douglas Crawfords favorite code',
+//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+//   },
+
+//   {
+//    _id: '3',
+//     name: 'My Snippets',
+//   content_count: 12,
+//   description: 'Douglas Crawfords favorite code',
+//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+//   },
+
+//   {
+//     _id: '4',
+//    name: 'My Snippets',
+//   content_count: 12,
+//   description: 'Douglas Crawfords favorite code',
+//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+//   },
+
+//   { _id: '5',
+//   name: 'My Snippets',
+//   content_count: 12,
+//   description: 'Douglas Crawfords favorite code',
+//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
+//   },
+
+// ]

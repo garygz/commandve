@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('cmndvninja'). controller('SnippetController',
-  ['$scope', '$location', '$route','Snippet', 'Shared', '$timeout',
-  function($scope, $location, $route, Snippet, Shared,$timeout){
+  ['$scope', '$location', '$route','Snippet', 'Shared', 'Group','$timeout',
+  function($scope, $location, $route, Snippet, Shared, Group, $timeout){
 
-    $.material.init()
-
-    $scope.groups = Shared.groups
+    $.material.init();
+    $scope.groups = Shared.groups;
 
     var getGroupId = function(){
       var url = $location.absUrl();
@@ -16,6 +15,8 @@ angular.module('cmndvninja'). controller('SnippetController',
     };
 
     var groupId = getGroupId();
+
+    getSnippets();
 
     function getSnippets() { Snippet.query({groupId: groupId}).$promise.then(
       function(snippets){
@@ -29,7 +30,6 @@ angular.module('cmndvninja'). controller('SnippetController',
 
     function waitForChanges(snippet) {
       $scope.$watch(snippet, function(){
-        console.log("snippet with id", snippet._id, "was changed")
       })
     }
 
@@ -68,8 +68,6 @@ angular.module('cmndvninja'). controller('SnippetController',
       }
       return snippets
     };
-
-    getSnippets();
 
     $scope.newSnippet = function () {
       $scope.currentSnippet = {
@@ -177,6 +175,12 @@ angular.module('cmndvninja'). controller('SnippetController',
     $location.path('groups/'+id + '/snippets');
     Shared.currentGroupId = id;
   }
+
+  function loadUserGroups () {
+    Group.query
+
+  }
+
 
 
 
