@@ -7,7 +7,7 @@ module.exports = function(mongoose){
     unique_handle: {type: String, default: "New Snippet (" + (new Date()).toDateString() + ")",  required: true},
     githubId: {type: String},
     githubFileName: {type: String},
-    theme: {type: String},
+    theme: {type: String, default: 'Eclipse'},
     created_at: {type: Date, default: Date.now },
     updated_at: {type: Date, default: Date.now }
   });

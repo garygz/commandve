@@ -6,6 +6,7 @@
 
   <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)
    "style="{padding:none}">
+
     <div data-id="{{group._id}}"
         class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
         ng-mouseover="showButtons=true"
@@ -13,6 +14,8 @@
         ng-init="showButtons=true",
         ng-class="{activegroup: showButtons}">
       <div>
+
+
         <div class="groups-toolbar" ng-show="showButtons">
           <button ng-click="shareGroup(group)"
                   class="groups-toolbar-share-btn btn btn-fab
@@ -33,6 +36,7 @@
       </div>
       <div class="panel-header">
         <div class="group-header">
+          <div class="alert alert-success hide" role="alert" id="alert-success-{{group._id}}">New Snippet Created!</div>
           {{group.name}}
           <span class="pull-right">
             <span class="badge" ng-bind="group.content_count">

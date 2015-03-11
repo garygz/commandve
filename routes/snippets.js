@@ -77,32 +77,6 @@ exports.delete_snippet = function(User,Snippet){
 }
 
 
-exports.edit_snippet = function(User,Snippet){
-
-  return function(req,res){
-     console.log('update snippet', req.body);
-    Snippet.findOneAndUpdate(
-      {_id: req.body._id},
-      {
-       unique_handle:   req.body.unique_handle,
-       content:         req.body.content,
-       tags:            req.body.tags,
-       theme:           req.body.theme
-      }
-       ).exec(
-      function(error,snippet){
-        if(error){
-          handleErrors(error, res);
-        }else{
-          res.json(snippet);
-          if(snippet.githubId){
-            createOrUpdateSnippet(snippet);
-          }
-        }
-    });
-  }
-}
-
 exports.find_snippet = function(User,Snippet){
   return function(req,res){
     Snippet.findById(req.params.id).populate('user').exec(
@@ -158,6 +132,46 @@ exports.create_new_snippet = function(User,Snippet){
   }
 }
 
+exports.edit_snippet = function(User,Snippet){
+  return function(req,res){
+     var paramsIn = createSnippetMapFromRequest(req);
+
+
+    Snippet.findOne({_id: req.body._id}).exec(
+      function(error,snippet){
+
+        if(error){
+          handleErrors(error, res);
+        }else{
+
+          var callbackSuccess = function(){
+            res.json(snippet);
+            createOrUpdateGitsSnippet(snippet);
+          }
+          updateFieldsOnSnippet(snippet, paramsIn, callbackSuccess);
+        }
+    });
+  }
+}
+
+var updateFieldsOnSnippet = function(snippet, paramsIn, callbackSuccess){
+  snippet.content = paramsIn.content;
+  snippet.unique_handle = paramsIn.unique_handle;
+  snippet.theme = paramsIn.theme;
+  snippet.tags = snippet.tags;
+  snippet.group = snippet.group;
+  snippet.updated_at = new Date();
+  snippet.save(function(err){
+      if(err){
+        handleErrors(err,res, "Failed to save the snippet");
+      }else{
+        callbackSuccess();
+      }
+    }
+  );
+
+}
+
 exports.search_snippet = function(User,Snippet){
   return function(req,res){
     var searchQuery = getQueryParams(req);
@@ -172,15 +186,18 @@ exports.search_snippet = function(User,Snippet){
     });
   }
 }
-
-var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
-  console.log(req.body);
-    var paramsIn = {
+var createSnippetMapFromRequest = function(req){
+   var paramsIn = {
         content: req.body.content,
         user: req.body.user,
-        tags: req.body.tags,
-        theme: req.body.theme
+        tags: req.body.tags
     }
+    if(req.body.theme){
+      paramsIn.theme = req.body.theme;
+    }else{
+      paramsIn.theme = constants.DEFAULT_THEME;
+    }
+
     if(req.body.unique_handle){
       paramsIn.unique_handle = req.body.unique_handle;
     }else{
@@ -194,6 +211,15 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
     if(req.body.tags){
       paramsIn.tags = req.body.tags;
     }
+    console.log("Out parms", paramsIn);
+    return paramsIn;
+}
+
+var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
+
+    var paramsIn = createSnippetMapFromRequest(req);
+
+    console.log("create new snippet",  paramsIn);
 
     var snippet = SnippetModel(paramsIn);
 
@@ -208,24 +234,24 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
 }
 //TODO FIX THIS
 var update_snippet_count = function(snippet,byValue){
-  console.log('update count on group for',snippet);
-  var update = { $inc: { content_count: byValue }};
-  GroupModel.update({group:snippet.group._id},update, function(err,affectedCount){
-    if(err){
-      console.log('Failed to updated group content count', snippet);
-    }else{
-      console.log('Updated group content count', affectedCount, snippet);
-    }
-  });
+  // console.log('update count on group for',snippet);
+  // var update = { $inc: { content_count: byValue }};
+  // GroupModel.update({group:snippet.group._id},update, function(err,affectedCount){
+  //   if(err){
+  //     console.log('Failed to updated group content count', snippet);
+  //   }else{
+  //     console.log('Updated group content count', affectedCount, snippet);
+  //   }
+  // });
 }
 
 
-var createOrUpdateSnippet = function(snippet, isNew){
+var createOrUpdateGitsSnippet = function(snippet, isNew){
     if(!isNew){
       isNew = false;
     }
-    var callbackSuccess = function(){
-      console.log("success: updated gist", snippet);
+    var callbackSuccess = function(gist){
+      console.log("success: updated gist", gist);
     }
 
     var callbackError = function(){
@@ -258,6 +284,6 @@ var processSuccessSnipetOperation = function(res,snippet, isNew){
   if(!isNew){
     isNew = false;
   }
-  createOrUpdateSnippet(snippet, isNew);
+  createOrUpdateGitsSnippet(snippet, isNew);
 }
 
