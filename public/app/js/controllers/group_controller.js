@@ -80,7 +80,6 @@ $scope.testGroups = [
 
 ]
 
-Shared.groups = $scope.testGroups;
 
   var hiddenInput = document.getElementById("hidden-input");
 
@@ -94,8 +93,10 @@ Shared.groups = $scope.testGroups;
 
 
   $scope.showGroup = function(id){
-    $location.path('groups/'+id + '/snippets');
+    console.log($scope.groupData);
+    Shared.groups = $scope.groupData;
     Shared.currentGroupId = id;
+    $location.path('groups/'+id + '/snippets');
   }
   $scope.firePasteSnippet = function($event){
     $event.stopPropagation();

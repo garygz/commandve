@@ -22,7 +22,6 @@ angular.module('cmndvninja'). controller('AceController',
   $scope.aceOption = {
     mode: $scope.mode.toLowerCase(),
     onLoad: function (_ace) {
-
       $scope.modeChanged = function (mode) {
         $scope.mode = mode;
         _ace.getSession().setMode("ace/mode/" + $scope.mode.toLowerCase());
@@ -30,7 +29,9 @@ angular.module('cmndvninja'). controller('AceController',
 
     }
   }
-
+  var session = editor.getSession()
+  session.setUseWrapMode(true)
+  session.setWrapLimitRange(80,80)
 }]);
 
 
