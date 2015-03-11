@@ -22,7 +22,7 @@
 
 .group-image {
   padding: 0 !import;
-  width: 224px;
+  width: 100%; /*224px;*/
   height: 100%;
   margin-left: none !important;
 }
