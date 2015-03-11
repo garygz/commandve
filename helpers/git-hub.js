@@ -166,8 +166,10 @@ exports.updateGist = function(snippet, callbackSuccess,callbackError, isNew){
     var user = snippet.user;
     var data = createGitHubUpdateData(snippet);
     var options = getUpdateGitHubMap(user, data, snippet, isNew);
-
-    httpModule.httpPost(options,data,callbackSuccess,callbackError);
+    var onGistSuccess = function(){
+      callbackSuccess(data);
+    }
+    httpModule.httpPost(options,data,onGistSuccess,callbackError);
 }
 
 

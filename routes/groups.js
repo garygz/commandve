@@ -24,30 +24,44 @@ var findGroupById = function(id, groups){
       return null;
   }
   for(var i=0;i<groups.length;i++){
-    if(groups[i]._id === id){
+
+    if(groups[i]._id.equals(id)){
       return groups[i];
     }
   }
   return null;
 }
 
-var assignSnippetCount = function(Snippet,Group,groups,userid,resposne, callback){
-  // console.log('groups for',userid);
-  // var agg =[
-  //           //{ $match : { user : userid } },
+var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
 
-  //           { $group: { _id: '$group', count: { $sum: 1 } } }
-  //          ];
+  var agg = [
+    {$group: {
+      _id: "$group",
+      total: {$sum: 1}
+    }}
+  ];
 
-  // Snippet.aggregate(agg, function(err, results){
-  //   if (err) {
-  //     handleErrors(err,resposne);
-  //   }else{
-  //     callback.call();
-  //   }
+  SnippetModel.aggregate(agg, function(err, logs){
+    if (err){
+        callbackError();
+    }else{
+      console.log(logs);
+        for(var i = 0;i<logs.length;i++){
+          var groupElemnt = logs[i];
+          console.log(groupElemnt);
+          var groupId = groupElemnt._id;
+          var foundGroup = findGroupById(groupId, groups);
 
-  //   console.log(results);
-  // });
+          if(foundGroup){
+            foundGroup.content_count = groupElemnt.total;
+            foundGroup.save();
+          }
+        }
+        callbackSuccess(groups);
+    }
+
+    console.log(logs);
+  });
 }
 
 exports.list_groups = function(Group,Snippet){
@@ -78,11 +92,14 @@ exports.find_group = function(Group,Snippet){
 
 exports.find_user_groups = function(Group,Snippet){
   return function(req,res){
-    Group.find({user: req.params.userId}, function(error, groups){
+    Group.find({user: req.params.userId}).sort({created_at: -1}).exec(function(error, groups){
       if(error)  {
           handleErrors(error, res);
          }else{
-          res.json(groups);
+          var onSuccess = function(){res.json(groups);}
+          var onFail = function(err){handleErrors(err, res, "Failed to get group counts")}
+          calcGroupSnippetCount(groups, onSuccess, onFail);
+
          }
     });
 
@@ -128,7 +145,8 @@ exports.create_group = function(Group,Snippet){
   }
 }
 
-
+//TODO update using findOne and save
+//otherwise all fields get overwritten
 exports.update_group = function(Group,Snippet){
   return function(req,res){
     var onSuccess = function(group){

@@ -11,7 +11,7 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.$parent.userGroups = {};
   $scope.snippetCount = 0;
   $scope.snippetPastedText = "";
-
+  $scope.showAlert = false;
   $scope.image_url = ""
 
 
@@ -75,11 +75,15 @@ angular.module('cmndvninja').controller('GroupController',
             function(item){
               if (item._id === newSnippet.groupId){
                 item.content_count+=1;
+                $("#alert-success-"+newSnippet.groupId).removeClass('hide');
+                setInterval(function(){ $("#alert-success-"+newSnippet.groupId).addClass('hide');}, 3000);
               }
             }
         );
       });
-    if($event)$event.stopPropagation();
+
+
+      if($event)$event.stopPropagation();
 
   }
 

@@ -263,7 +263,7 @@ angular.module('cmndvninja').controller('SnippetController',
         );
       }
       function subUnderScoresForSpaces(str) {
-        return str.replace(/_/g, " ");
+        return str!=null?str.replace(/_/g, " "):"";
       }
 
       return toTitleCase(subUnderScoresForSpaces(str));

@@ -13,6 +13,8 @@
         ng-init="showButtons=true",
         ng-class="{activegroup: showButtons}">
       <div>
+        <div class="alert alert-success hide" role="alert" id="alert-success-{{group._id}}">New Snippet Created!</div>
+
         <div class="groups-toolbar" ng-show="showButtons">
           <button ng-click="shareGroup(group)"
                   class="groups-toolbar-share-btn btn btn-fab

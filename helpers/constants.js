@@ -9,3 +9,4 @@ exports.GROUP_DESCR_GITHUB = "Gist group exposes your GitHub gists and automatic
 exports.GROUP_DESCR_UNCATEGORIZED = "Contains all snippets found on the web.";
 
 exports.GIT_GIST_ID_PLACEHOLDER = "{/gist_id}";
+exports.DEFAULT_THEME = "Eclipse";
