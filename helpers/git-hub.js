@@ -3,6 +3,7 @@
 var httpModule = require('./https-helper')
 var urlParser  = require("url");
 var querystring = require('querystring');
+var constants = require('constants');
 
 var GroupModel = null;
 var UserModel = null;
@@ -149,7 +150,8 @@ var getGistFirstFileContent = function(user, group, gist,callbackSuccess,callbac
                         group: group._id,
                         user: user._id
                       };
-
+          snippet.tags = [];
+          snippet.tags.push("HTML");
           callbackSuccess(snippet);
         },
         callbackError);
