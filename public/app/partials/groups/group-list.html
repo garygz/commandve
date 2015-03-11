@@ -2,7 +2,7 @@
 
 <div id="group-list-wrapper">
 
-  <button type="button" ng-click=""class="btn btn-default"
+  <button type="button" ng-click="" class="btn btn-default"
   data-toggle="modal" data-target="#new-group-modal">New Group</button>
 
   <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)
@@ -53,19 +53,19 @@
         <h2 class="modal-title">Create a group</h2>
       </div>
   <div class="new-group-inputs">
-    <input type="text" ng-model="formGroup.name" class="form-control floating-label" placeholder="Title">
+    <input id="name_box" type="text" ng-model="formGroup.name" class="form-control floating-label" placeholder="Title"></input>
     <br>
     <br>
-    <textarea class="form-control floating-label" ng-model="formGroup.description" placeholder="Description"></textarea>
+    <textarea id="description_box" class="form-control floating-label" ng-model="formGroup.description" placeholder="Description"></textarea>
     <br>
     <br>
-    <input type="text" ng-model="formGroup.image_url" class="form-control floating-label"
-    data-hint="A thumbnail will be generated" placeholder="Image url">
+    <input id="image_url_box" type="text" ng-model="image_url" class="form-control floating-label"
+    data-hint="A thumbnail will be generated" placeholder="Image url"></input>
   </div>
 
   <div class="modal-footer">
     <div class="centered">
-      <button class="input-center btn btn-default" data-dismiss="modal">Create</button>
+      <button ng-click="createGroup(image_url)" class="input-center btn btn-default" data-dismiss="modal">Create</button>
     </div>
   </div>
 </div>

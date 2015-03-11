@@ -11,18 +11,28 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.$parent.userGroups = {};
   $scope.snippetCount = 0;
   $scope.snippetPastedText = "";
-  $scope.formGroup = {};
+  $scope.data = {};
+  $scope.formGroup = {
+    image_url: "shit"
+  };
 
-  function createGroup () {
+  $scope.image_url = ""
+
+
+  $scope.createGroup = function () {
+    var image_url = $('#image_url_box').val()
+    var description = $('#description_box').val()
+    var name = $('#name_box').val()
     var group = {
-      name: $scope.formGroup.name,
-      description: $scope.formGroup.description,
-      image_url: $scope.formGroup.description,
-      user: Shared.userId
+      name: name,
+      description: description,
+      image_url: image_url,
+      userId: Shared.userId
     }
     console.log('creating group:', group);
     Group.post(group);
   };
+
 
   $scope.shareGroup = function (group) {
     console.log('this group should be shared:', group)
