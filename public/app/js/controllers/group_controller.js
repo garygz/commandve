@@ -71,12 +71,13 @@ angular.module('cmndvninja').controller('GroupController',
     Snippet.post(newSnippet).$promise.then(function(group){
       //animate
       //change count
+      $("#alert-success-"+newSnippet.groupId).removeClass('hide');
       $scope.groupData.groups.forEach (
             function(item){
               if (item._id === newSnippet.groupId){
                 item.content_count+=1;
-                $("#alert-success-"+newSnippet.groupId).removeClass('hide');
-                setInterval(function(){ $("#alert-success-"+newSnippet.groupId).addClass('hide');}, 3000);
+
+                setTimeout(function(){ $("#alert-success-"+newSnippet.groupId).addClass('hide');}, 3000);
               }
             }
         );
