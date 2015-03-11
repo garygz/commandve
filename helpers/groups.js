@@ -20,8 +20,8 @@ exports.setModels = function(User,Group,Snippet){
 
 exports.findOrCreateGitHubGroup = function(user,callbackSuccess,callbackError){
   var callbackSuccessNew = function(group){
-      callbackSuccess();
-      //gitHubGroups.importGists(group,user);
+      callbackSuccess(group);
+      gitHubGroups.importGists(user,group);
   }
   var onFail = function(err){
     callbackError();
@@ -31,7 +31,7 @@ exports.findOrCreateGitHubGroup = function(user,callbackSuccess,callbackError){
     if(group == null){
       createGitHubGroup(user,callbackSuccessNew,onFail);
     }else{
-       callbackSuccess();
+       callbackSuccess(group);
     }
   }
   findGitHubGroup(user,callbackSuccessFind,onFail);
@@ -103,6 +103,7 @@ var createGroup = function(user,options,callbackSuccess,callbackError){
 
 var findGitHubGroup = function(user,callbackSuccess,callbackError){
   var condition = {group_type:constants.GROUP_TYPE_GITHUB, user: user._id};
+
   findGroup(user,condition,callbackSuccess,callbackError);
 }
 

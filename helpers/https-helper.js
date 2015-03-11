@@ -40,7 +40,8 @@ exports.httpGet = function(options, callbackSuccess, callbackError){
 
 
 
-exports.httpPost = function(options, data,callbackSuccess, callbackError){
+exports.httpPost = function(options, dataOut,callbackSuccess, callbackError){
+  console.log("HTTP POST IN", options, dataOut);
   try{
     var postReq = https.request(options, function (http_res) {
       console.log('Response is '+http_res.statusCode);
@@ -68,7 +69,7 @@ exports.httpPost = function(options, data,callbackSuccess, callbackError){
       });
     });
     // post the data
-    postReq.write(data);
+    postReq.write(dataOut);
     postReq.end();
 
   }catch(e){
