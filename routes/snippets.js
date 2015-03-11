@@ -34,23 +34,25 @@ var getQueryParams = function(req){
 exports.list_snippets = function(User,Snippet){
   return function(req,res){
     console.log(req.params)
-    Snippet.find({group: req.params.groupId}, function(error, snippets){
+    Snippet.find({group: req.params.groupId}).sort({updated_at: -1}).exec( function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{
+          console.log(snippets);
           res.json(snippets);
         }
     });
   }
 }
-
+//TODO linit this to admins only
 exports.all_snippets = function(User,Snippet){
   return function(req,res){
     console.log(req.params)
-    Snippet.find({}, function(error, snippets){
+    Snippet.find({}).sort({updated_at: -1}).exec(function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{
+
           res.json(snippets);
         }
     });
@@ -118,7 +120,7 @@ exports.find_snippet = function(User,Snippet){
 
 exports.find_user_snippets = function(User,Snippet){
   return function(req,res){
-    Snippet.find({user: req.params.user_id}, function(error, snippets){
+    Snippet.find({user: req.params.user_id}).sort({updated_at: -1}).exec(function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{
