@@ -7,7 +7,9 @@ module.exports = function(mongoose){
     unique_handle: {type: String, default: "New Snippet (" + (new Date()).toDateString() + ")",  required: true},
     githubId: {type: String},
     githubFileName: {type: String},
-    theme: {type: String}
+    theme: {type: String},
+    created_at: {type: Date, default: Date.now },
+    updated_at: {type: Date, default: Date.now }
   });
 
   SnippetSchema.index( { content: "text", tags: "text" } , { name: "SnippetIndex" })

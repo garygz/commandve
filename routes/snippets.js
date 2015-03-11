@@ -43,7 +43,7 @@ exports.list_snippets = function(User,Snippet){
     });
   }
 }
-
+//TODO linit this to admins only
 exports.all_snippets = function(User,Snippet){
   return function(req,res){
     console.log(req.params)
@@ -118,7 +118,7 @@ exports.find_snippet = function(User,Snippet){
 
 exports.find_user_snippets = function(User,Snippet){
   return function(req,res){
-    Snippet.find({user: req.params.user_id}, function(error, snippets){
+    Snippet.find({user: req.params.user_id}).sort({updated_at: -1}).exec(function(error, snippets){
         if(error){
           handleErrors(error, res);
         }else{

@@ -91,6 +91,7 @@ exports.find_user_groups = function(Group,Snippet){
 
 exports.create_group = function(Group,Snippet){
   return function(req,res){
+
     var onSuccess = function(group){
       res.json(group);
     }
@@ -99,13 +100,19 @@ exports.create_group = function(Group,Snippet){
       handleErrors(err,res,"Failed to create a group");
     }
 
-    var user = {_id : req.body.user}
+    var user = {_id : req.params.user_id}
+
+    if(!user._id){
+      res.status(400).status("Missing user id");
+      return;
+    }
     var findOptions = {
         user: user._id,
+        name: req.body.name,
         group_type: constants.GROUP_TYPE_UNCATEGORIZED
     }
     var createOptions = {
-      user: req.body.user,
+      user: user._id,
       group_type: constants.GROUP_TYPE_UNCATEGORIZED,
       name: req.body.name,
       description: req.body.description,
