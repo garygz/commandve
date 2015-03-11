@@ -27,6 +27,7 @@ angular.module('cmndvninja').controller('GroupController',
     }
     console.log('creating group:', group);
     Group.post(group);
+    $scope.groupData.groups.push(group);
   };
 
 

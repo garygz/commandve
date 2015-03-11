@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cmndvninja'). controller('ProfileController',
+angular.module('cmndvninja').controller('ProfileController',
   ['$scope', '$location', 'User', 'Shared', 'userSnippets',
   function($scope, $location, User, Shared, userSnippets){
 
