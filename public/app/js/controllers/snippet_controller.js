@@ -173,7 +173,10 @@ angular.module('cmndvninja'). controller('SnippetController',
       }
     }
 
-
+  $scope.showGroup = function(id){
+    $location.path('groups/'+id + '/snippets');
+    Shared.currentGroupId = id;
+  }
 
 
 

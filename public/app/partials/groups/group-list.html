@@ -1,35 +1,73 @@
-
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
+<div id="group-list-wrapper">
 
-<div ng-repeat="group in testGroups" style="{padding:none}">
-  <div data-id="{{group._id}}"
-      class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
-      ng-init="showButtons=false"
-      ng-mouseover="showButtons=true"
-      ng-mouseleave="showButtons=false"
-      ng-class="{activegroup: showButtons}">
-    <div>
-      <div class="groups-toolbar" ng-show="showButtons">
+  <button type="button" ng-click="" class="btn btn-default"
+  data-toggle="modal" data-target="#new-group-modal">New Group</button>
 
-        <button ng-click="shareGroup(group)"
-                class="groups-toolbar-share-btn btn btn-fab btn-fab-mini btn-raised btn-material-light-blue">
-        <i class="mdi-social-share"></i></button>
+  <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)
+   "style="{padding:none}">
+    <div data-id="{{group._id}}"
+        class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
+        ng-init="showButtons=false"
+        ng-mouseover="showButtons=true"
+        ng-mouseleave="showButtons=false"
+        ng-class="{activegroup: showButtons}">
+      <div>
+        <div class="groups-toolbar" ng-show="showButtons">
+          <button ng-click="shareGroup(group)"
+                  class="groups-toolbar-share-btn btn btn-fab
+                  btn-fab-mini btn-raised btn-material-light-blue">
+          <i class="mdi-social-share"></i></button>
 
-        <button ng-click="pasteSnippet()"
-                class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
-        <i class="mdi-content-content-paste"></i></button>
+          <button ng-click="pasteSnippet()"
+                  class="groups-toolbar-paste-btn btn btn-fab
+                  btn-fab-mini btn-raised btn-material-grey-200">
+
+          <button ng-click="pasteSnippet()"
+                  class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
+          <i class="mdi-content-content-paste"></i></button>
+        </div>
+        <img class= "group-image" src='{{group.image_url}}'>
       </div>
-      <img class= "group-image" src='{{group.image_url}}'>
-    </div>
-    <div class="panel-header">
-      <div ng-click="showGroup(group._id)" class="group-header">
-        {{group.name}}
-        <span class="pull-right">
-          <span class="badge" ng-bind="group.content_count">
-            {{group.content_count}}
+      <div class="panel body" ng-show="showButtons">
+        {{group.description}}
+      </div>
+      <div class="panel-header">
+        <div class="group-header">
+          {{group.name}}
+          <span class="pull-right">
+            <span class="badge" ng-bind="group.content_count">
+              {{group.content_count}}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<div id="new-group-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="centered modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 class="modal-title">Create a group</h2>
+      </div>
+  <div class="new-group-inputs">
+    <input id="name_box" type="text" ng-model="formGroup.name" class="form-control floating-label" placeholder="Title"></input>
+    <br>
+    <br>
+    <textarea id="description_box" class="form-control floating-label" ng-model="formGroup.description" placeholder="Description"></textarea>
+    <br>
+    <br>
+    <input id="image_url_box" type="text" ng-model="image_url" class="form-control floating-label"
+    data-hint="A thumbnail will be generated" placeholder="Image url"></input>
+  </div>
+
+  <div class="modal-footer">
+    <div class="centered">
+      <button ng-click="createGroup(image_url)" class="input-center btn btn-default" data-dismiss="modal">Create</button>
+    </div>
+  </div>
+</div>
+

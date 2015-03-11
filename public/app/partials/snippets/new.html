@@ -1,11 +1,11 @@
 <div ng-controller="toggleController">
   <button ng-click="toggleGroups()" ng-show="groupsVisibilityFalse" class="toggle-groups btn btn-fab btn-raised btn-material-grey-800"><i class="mdi-navigation-chevron-left"></i></button>
 
-  <button id ="toggle-back" ng-click="toggleGroups()" ng-show="groupsVisibility" class="toggle-groups btn btn-fab btn-raised btn-material-grey-800"><i class="mdi-navigation-chevron-right"></i></button>
+  <button id="toggle-back" ng-click="toggleGroups()" ng-show="groupsVisibility" class="toggle-groups btn btn-fab btn-raised btn-material-grey-800"><i class="mdi-navigation-chevron-right"></i></button>
 
   <div ng-show="groupsVisibility" class="center collapsable-group-container">
     <div ng-repeat="group in groups" class ="thumbnail group-preview shadow-z-3">
-      <img src='{{group.image_url}}'>
+      <img src='{{group.image_url}}' ng-click="showGroup(group._id)">
      </div>
   </div>
 
@@ -48,7 +48,7 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="javascript:void(0)" ng-click="saveAllSnippets()"><i id="save" class="mdi-content-save"></i>
+        <li><a href="javascript:void(0)" data-toggle="modal" data-target="#save-modal" ng-click="saveAllSnippets()"><i id="save" class="mdi-content-save"></i>
           </a>
         </li>
         <li>
@@ -100,6 +100,26 @@
     </div>
   </div>
 </div>
+
+<div id="save-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="center-modal modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Save</h3>
+      </div>
+      <div class="modal-body">
+        <p>All of your snippets in this group have been saved.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal">Ok, thanks</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 
 

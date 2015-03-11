@@ -11,12 +11,28 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.$parent.userGroups = {};
   $scope.snippetCount = 0;
   $scope.snippetPastedText = "";
+  $scope.data = {};
+  $scope.formGroup = {
+    image_url: "shit"
+  };
+
+  $scope.image_url = ""
 
 
-  function createGroup (group) {
+  $scope.createGroup = function () {
+    var image_url = $('#image_url_box').val()
+    var description = $('#description_box').val()
+    var name = $('#name_box').val()
+    var group = {
+      name: name,
+      description: description,
+      image_url: image_url,
+      userId: Shared.userId
+    }
     console.log('creating group:', group);
     Group.post(group);
   };
+
 
   $scope.shareGroup = function (group) {
     console.log('this group should be shared:', group)
@@ -66,26 +82,6 @@ $scope.testGroups = [
 
 Shared.groups = $scope.testGroups;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   var hiddenInput = document.getElementById("hidden-input");
 
   if($scope.$parent.user){
@@ -108,7 +104,7 @@ Shared.groups = $scope.testGroups;
     newSnippet.content = $scope.snippetPastedText;
     newSnippet.groupId =$scope.groupId;
     newSnippet.group = $scope.groupId;
-    newSnippet.unique_handle = "Just added using CMD+V (" + Date.now().toDateString()+")";
+    newSnippet.unique_handle = "Just added using CMD+V (" + (new Date()).toDateString()+")";
     console.log("new group snippets",newSnippet);
 
     Snippet.post(newSnippet).$promise.then(function(group){
