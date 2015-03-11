@@ -1,5 +1,4 @@
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
-
 <div id="group-list-wrapper">
 
   <button type="button" ng-click="" class="btn btn-default"
@@ -24,6 +23,8 @@
                   class="groups-toolbar-paste-btn btn btn-fab
                   btn-fab-mini btn-raised btn-material-grey-200">
 
+          <button ng-click="pasteSnippet()"
+                  class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
           <i class="mdi-content-content-paste"></i></button>
         </div>
         <img class= "group-image" src='{{group.image_url}}'>
