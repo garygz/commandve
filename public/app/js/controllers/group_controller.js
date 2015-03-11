@@ -23,7 +23,8 @@ angular.module('cmndvninja').controller('GroupController',
       name: name,
       description: description,
       image_url: image_url,
-      userId: Shared.userId
+      userId: Shared.userId,
+      user: Shared.userId
     }
     console.log('creating group:', group);
     Group.post(group);

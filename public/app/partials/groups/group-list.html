@@ -8,9 +8,9 @@
    "style="{padding:none}">
     <div data-id="{{group._id}}"
         class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
-        ng-init="showButtons=false"
         ng-mouseover="showButtons=true"
         ng-mouseleave="showButtons=false"
+        ng-init="showButtons=true",
         ng-class="{activegroup: showButtons}">
       <div>
         <div class="groups-toolbar" ng-show="showButtons">
@@ -25,7 +25,7 @@
                   class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
           <i class="mdi-content-content-paste"></i></button>
         </div>
-        <img class= "group-image" src='{{group.image_url}}'>
+        <img class="group-image" ng-src="{{group.image_url}}" ng-show='true'>
       </div>
       <div class="panel-body" ng-show="showButtons">
         {{group.description}}
@@ -69,4 +69,5 @@
     </div>
   </div>
 </div>
+
 
