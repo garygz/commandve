@@ -1,7 +1,7 @@
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
 <div id="group-list-wrapper">
 
-  <button type="button" ng-click="" class="btn btn-default"
+  <button type="button"  class="btn btn-default"
   data-toggle="modal" data-target="#new-group-modal">New Group</button>
 
   <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)
@@ -19,11 +19,9 @@
                   btn-fab-mini btn-raised btn-material-light-blue">
           <i class="mdi-social-share"></i></button>
 
-          <button ng-click="pasteSnippet()"
-                  class="groups-toolbar-paste-btn btn btn-fab
-                  btn-fab-mini btn-raised btn-material-grey-200">
 
-          <button ng-click="pasteSnippet()"
+
+          <button ng-click="firePasteSnippet($event);"
                   class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
           <i class="mdi-content-content-paste"></i></button>
         </div>

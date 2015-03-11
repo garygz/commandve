@@ -97,8 +97,15 @@ Shared.groups = $scope.testGroups;
     $location.path('groups/'+id + '/snippets');
     Shared.currentGroupId = id;
   }
+  $scope.firePasteSnippet = function($event){
+    $event.stopPropagation();
+       var evt = document.createEvent('KeyboardEvent');
+        evt.initKeyEvent("keypress", false, true, null, false, false,
+                         shift, false, keyCode(key), key.charCodeAt(0));
+        document.dispatchEvent(evt);
+  }
 
-  $scope.pasteSnippet = function(){
+  $scope.pasteSnippet = function($event){
     var newSnippet = {};
     newSnippet.user = $scope.$parent.user._id;
     newSnippet.content = $scope.snippetPastedText;
@@ -118,7 +125,7 @@ Shared.groups = $scope.testGroups;
                   }
               );
       });
-
+    if($event)$event.stopPropagation();
     // //console.log("Pasted Text", $scope.snippetPastedText);
     // var pressEvent = document.createEvent ("KeyboardEvent");
     // pressEvent.initKeyEvent ("keypress", true, true, window,
