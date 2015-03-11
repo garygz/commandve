@@ -6,7 +6,7 @@ angular.module('cmndvninja').controller('SnippetController',
 
     $scope.groups = Shared.groups;
     $scope.snippets = [];
-    $scope.currentSnippet= {};
+    $scope.currentSnippet = {};
 
     $scope.newSnippet = function () {
       $scope.currentSnippet = {
@@ -23,9 +23,16 @@ angular.module('cmndvninja').controller('SnippetController',
     };
 
     $scope.selectSnippet = function (id) {
+      console.log($scope.snippets);
       $scope.currentSnippet = findById($scope.snippets, id);
       return $scope.currentSnippet;
     };
+
+    $scope.selectIfNewSnippet = function (snippet){
+      if (! snippet._id) {
+        $scope.currentSnippet = snippet;
+      }
+    }
 
     function initialize () {
       if (Shared.currentSearchedSnippetId) {
@@ -63,6 +70,7 @@ angular.module('cmndvninja').controller('SnippetController',
         $scope.currentSnippet = $scope.snippets[0];
         markSnippetsAsSaved(snippets);
         initialize();
+        $scope.initializeAceState();
         }
       );
       return $scope.snippets;
@@ -130,7 +138,19 @@ angular.module('cmndvninja').controller('SnippetController',
       Snippet.remove(map);
 
       $scope.snippets.splice($scope.snippets.getIndexBy("_id", $scope.snippetToDelete._id), 1);
+
+      loadNextSnippet();
     };
+
+    function loadNextSnippet(){
+      if ($scope.snippets.length > 0) {
+        console.log('snippets is more than one:', $scope.snippets[0])
+        $scope.currentSnippet = $scope.snippets[0];
+      }else {
+        $scope.newSnippet();
+        $scope.initializeAceState();
+      }
+    }
 
     function createSnippet (snippet) {
       snippet.groupId = groupId;
@@ -187,7 +207,16 @@ angular.module('cmndvninja').controller('SnippetController',
     var editor = ace.edit("editor");
 
     $scope.themes = ['eclipse', 'clouds', 'solarized_dark', 'solarized_light', 'dawn', 'dreamweaver', 'github' ];
-    $scope.modes = ['Javascript', 'Ruby', 'XML', 'Python'];
+    $scope.modes = ['Javascript', 'Ruby', 'XML', 'Python', 'HTML'];
+
+
+    $scope.selectTheme = function(theme) {
+      $scope.theme = theme;
+      if ($scope.currentSnippet) {
+      $scope.currentSnippet.theme = theme;
+      }
+      editor.setTheme("ace/theme/" + theme);
+    };
 
     $scope.initializeAceState = function() {
       if ($scope.currentSnippet){
@@ -205,19 +234,14 @@ angular.module('cmndvninja').controller('SnippetController',
         $scope.theme = $scope.themes[0];
         $scope.mode = $scope.modes[0];
       }
+      editor.setTheme("ace/theme/" + $scope.theme);
+      editor.getSession().setMode("ace/mode/" + $scope.mode.toLowerCase());
     }
 
     $scope.initializeAceState();
 
-    $scope.selectTheme = function(theme) {
-      $scope.theme = theme;
-      if ($scope.currentSnippet) {
-      $scope.currentSnippet.theme = theme;
-      }
-      editor.setTheme("ace/theme/" + theme);
-    };
 
-    $scope.selectTheme($scope.theme);
+    // $scope.selectTheme($scope.theme);
 
     $scope.aceOption = {
       mode: $scope.mode.toLowerCase(),
@@ -238,18 +262,15 @@ angular.module('cmndvninja').controller('SnippetController',
           }
         );
       }
-
       function subUnderScoresForSpaces(str) {
         return str.replace(/_/g, " ");
       }
 
       return toTitleCase(subUnderScoresForSpaces(str));
-
     };
 
     var session = editor.getSession();
     session.setUseWrapMode(true);
     session.setWrapLimitRange(80,80);
-
 
 }]);

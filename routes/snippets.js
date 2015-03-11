@@ -82,7 +82,8 @@ exports.edit_snippet = function(User,Snippet){
       {
        unique_handle:   req.body.unique_handle,
        content:         req.body.content,
-       tags:            req.body.tags
+       tags:            req.body.tags,
+       theme:           req.body.theme
       }
        ).exec(
       function(error, snippet){
@@ -170,7 +171,8 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
     var paramsIn = {
         content: req.body.content,
         user: req.body.user,
-        tags: req.body.tags
+        tags: req.body.tags,
+        theme: req.body.theme
     }
     if(req.body.unique_handle){
       paramsIn.unique_handle = req.body.unique_handle;
