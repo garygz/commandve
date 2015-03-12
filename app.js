@@ -77,6 +77,7 @@ app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
 app.post('/api/users/:user_id/groups', groups.create_group(Group,Snippet));
 app.post('/api/users/:user_id/groups/:id', groups.update_group(Group,Snippet));
+app.delete('/api/users/:user_id/groups/:id', groups.delete_group(User, Group));
 
 //login routes
 app.post('/login/', users.login_user(User));

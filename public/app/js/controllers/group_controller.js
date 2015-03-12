@@ -14,6 +14,29 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.showAlert = false;
   $scope.image_url = ""
 
+  $scope.deleteGroup = function($event, group) {
+    group.userId = Shared.userId;
+    group.user = Shared.userId;
+    group.id = group._id
+    console.log('the group you tried to delete is:', group);
+    Group.remove(group);
+    removeGroupFromDom(group);
+    if($event)$event.stopPropagation()
+  }
+  
+  /*TODO add to helper (also defined in snippetcontroller) */
+  Array.prototype.getIndexBy = function (name, value) {
+    for (var i = 0; i < this.length; i++) {
+      if (this[i][name] == value) {
+          return i;
+      }
+    }
+  };
+
+  function removeGroupFromDom(group) {
+    var groups = $scope.groupData.groups
+    groups.splice(groups.getIndexBy("_id", group._id), 1);
+  }
 
   $scope.createGroup = function () {
     var image_url = $('#image_url_box').val()
@@ -26,11 +49,26 @@ angular.module('cmndvninja').controller('GroupController',
       userId: Shared.userId,
       user: Shared.userId
     }
-    console.log('creating group:', group);
-    Group.post(group);
-    $scope.groupData.groups.push(group);
+    console.log('creating group:', group); /*TODO: push the returned JSON
+                                            object back into $scope.groups
+                                            instead of getting them all 
+                                            back again */
+    Group.post(group).$promise.then(function(){
+      getGroups();}
+    );
+    // insertDefaultPicture(group);
+    // $scope.groupData.groups.push(group);
   };
 
+  /* This overrides the default picture setting on the server side.
+  It's necessary because otherwise pictures don't show up until the page
+  reloads */
+
+  function insertDefaultPicture(obj) {
+    if (!obj.image_url) {
+      obj.image_url = 'app/img/default-code-image.png';
+    }
+  }
 
   $scope.shareGroup = function (group) {
     console.log('this group should be shared:', group)
@@ -38,14 +76,44 @@ angular.module('cmndvninja').controller('GroupController',
 
   var hiddenInput = document.getElementById("hidden-input");
 
-  if($scope.$parent.user){
-    Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
-      $scope.groupData.groups = groups;
-      $scope.$parent.userGroups = groups;
-      groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
-    });
+  /* TODO make this a function */
+  function getGroups(){
+    if($scope.$parent.user){
+      Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
+        $scope.groupData.groups = groups;
+        $scope.$parent.userGroups = groups;
+        setDefaultGroups();
+        groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
+      });
+    }
   }
 
+  getGroups();
+
+  function setDefaultGroups () {
+    var groups = $scope.groupData.groups;
+    for (var i = 0; i < groups.length; i++){
+      switch(groups[i].group_type) {
+        case 'external':
+          groups[i].defaultGroup = false;
+          break
+        case 'sublime':
+          groups[i].defaultGroup = true;
+          break
+        // case 'external':  /* TODO: Give 'from web' a different type */
+        //   groups[i].defaultGroup = true;
+        //   break
+        case 'github-gist':
+          groups[i].defaultGroup = true;
+          break
+      }
+      if (groups[i].name === "Found On The Web") {
+        groups[i].defaultGroup = true;
+      }
+    }
+
+    console.log($scope.groupData.groups);
+  }
 
   $scope.showGroup = function(id){
     console.log($scope.groupData);
@@ -114,47 +182,5 @@ angular.module('cmndvninja').controller('GroupController',
   // document.addEventListener("mouseup", focusHiddenArea);
 
 }]);
-
-// For Posterity /////////////////////////////////////////////
-
-// $scope.testGroups = [
-//   {
-//   _id: '1',
-//   name: 'My Snippets',
-//   content_count: 12,
-//   description: 'Douglas Crawfords favorite code' ,
-//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-//   },
-
-//   {
-//     _id: '2',
-//    name: 'My Snippets',
-//   content_count: 12,
-//   description: 'Douglas Crawfords favorite code',
-//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-//   },
-
-//   {
-//    _id: '3',
-//     name: 'My Snippets',
-//   content_count: 12,
-//   description: 'Douglas Crawfords favorite code',
-//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-//   },
-
-//   {
-//     _id: '4',
-//    name: 'My Snippets',
-//   content_count: 12,
-//   description: 'Douglas Crawfords favorite code',
-//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-//   },
-
-//   { _id: '5',
-//   name: 'My Snippets',
-//   content_count: 12,
-//   description: 'Douglas Crawfords favorite code',
-//   image_url: 'http://upload.wikimedia.org/wikipedia/commons/b/b7/Html-source-code.png'
-//   },
 
 // ]

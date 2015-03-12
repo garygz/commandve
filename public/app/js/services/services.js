@@ -1,4 +1,4 @@
-angular.module('cmndvninja').factory('User', ['$resource', function($resource){
+  angular.module('cmndvninja').factory('User', ['$resource', function($resource){
   return $resource('/api/users/:id', {id: '@_id'},
   {
     query: {method:'GET', isArray:true},
@@ -29,7 +29,7 @@ angular.module('cmndvninja').factory('Group', ['$resource', 'Shared', function($
     query: {method:'GET', isArray:true},
     getOne: {method:'GET', isArray:false},
     post: {method:'POST'},
-    update: {method:'PUT' },
+    update: {method:'PUT'},
     remove: {method:'DELETE'}
   });
 
