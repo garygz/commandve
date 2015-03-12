@@ -151,7 +151,7 @@ var getGistFirstFileContent = function(user, group, gist,callbackSuccess,callbac
                         user: user._id
                       };
           snippet.tags = [];
-          snippet.tags.push("HTML");
+          snippet.tags.push("Javascript");
           callbackSuccess(snippet);
         },
         callbackError);
