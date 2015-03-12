@@ -23,10 +23,15 @@
           <i class="mdi-social-share"></i></button>
 
 
-
           <button ng-click="firePasteSnippet($event);"
                   class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-material-grey-200">
           <i class="mdi-content-content-paste"></i></button>
+
+
+          <button ng-show="!group.defaultGroup" ng-click="deleteGroup($event, group);"
+                  class="groups-toolbar-paste-btn btn btn-fab btn-fab-mini btn-raised btn-danger">
+
+          <i class="mdi-action-delete"></i></button>
         </div>
         <img class="group-image" ng-src="{{group.image_url}}" ng-show='true'>
       </div>

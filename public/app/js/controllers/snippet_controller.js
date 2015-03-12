@@ -5,8 +5,6 @@ angular.module('cmndvninja').controller('SnippetController',
   function($scope, $location, $route, Snippet, Shared, $timeout){
 
     $scope.groups = Shared.groups;
-    $scope.snippets = [];
-    $scope.currentSnippet = {};
 
     $scope.newSnippet = function () {
       $scope.currentSnippet = {
@@ -20,11 +18,12 @@ angular.module('cmndvninja').controller('SnippetController',
         content: ""
       };
       $scope.snippets.unshift($scope.currentSnippet);
+      $scope.initializeAceState();
     };
 
-    $scope.selectSnippet = function (id) {
+    $scope.selectSnippet = function (snippet) {
       console.log($scope.snippets);
-      $scope.currentSnippet = findById($scope.snippets, id);
+      $scope.currentSnippet = snippet;
       return $scope.currentSnippet;
     };
 
@@ -37,10 +36,11 @@ angular.module('cmndvninja').controller('SnippetController',
     function initialize () {
       if (Shared.currentSearchedSnippetId) {
         $scope.selectSnippet(Shared.currentSearchedSnippetId);
+        Shared.currentSearchedSnippedId = false;
       }
       else{
         if ($scope.currentSnippet){
-          console.log('currentSnippet is defined')
+          console.log('currentSnippet is defined as', $scope.currentSnippet)
         }else {
           $scope.newSnippet();
         }
@@ -48,8 +48,8 @@ angular.module('cmndvninja').controller('SnippetController',
       if ($scope.currentSnippet.theme){
         $scope.theme = $scope.currentSnippet.theme;
       }
-      if ($scope.currentSnippet.tags[0]){
-        $scope.mode = $scope.currentSnippet.tags[0]
+      if ($scope.currentSnippet.tags.length > 0){
+        $scope.mode = $scope.currentSnippet.tags[0];
       }
     }
 
@@ -71,6 +71,8 @@ angular.module('cmndvninja').controller('SnippetController',
         markSnippetsAsSaved(snippets);
         initialize();
         $scope.initializeAceState();
+        console.log($scope.snippets);
+        console.log('current snippet:', $scope.currentSnippet);
         }
       );
       return $scope.snippets;
@@ -82,7 +84,7 @@ angular.module('cmndvninja').controller('SnippetController',
 
     function markOneSnippetAsSaved(snippet) {
       snippet.saved = true;
-      snippet.new = false;
+      snippet.isNew = false;
     }
 
     function typeOf(value) {
@@ -135,20 +137,19 @@ angular.module('cmndvninja').controller('SnippetController',
     $scope.deleteSnippet = function () {
       var map = {groupId: $scope.snippetToDelete.group,
                 id: $scope.snippetToDelete._id};
-      Snippet.remove(map);
 
       $scope.snippets.splice($scope.snippets.getIndexBy("_id", $scope.snippetToDelete._id), 1);
-
       loadNextSnippet();
+      Snippet.remove(map);
     };
 
     function loadNextSnippet(){
       if ($scope.snippets.length > 0) {
         console.log('snippets is more than one:', $scope.snippets[0])
         $scope.currentSnippet = $scope.snippets[0];
+        $scope.initializeAceState();
       }else {
         $scope.newSnippet();
-        $scope.initializeAceState();
       }
     }
 
@@ -225,7 +226,8 @@ angular.module('cmndvninja').controller('SnippetController',
         }else {
         $scope.theme = $scope.themes[0];
         }
-        if ($scope.currentSnippet.tags) {
+        if ($scope.currentSnippet.tags.length > 0) {
+          console.log('mode should change to', $scope.currentSnippet.tags[0])
           $scope.mode = $scope.currentSnippet.tags[0];
         }else {
           $scope.mode = $scope.modes[0];

@@ -181,3 +181,19 @@ exports.update_group = function(Group,Snippet){
 
   }
 }
+
+exports.delete_group = function(User, Group) {
+  return function(req, res){
+    Group.findOneAndRemove(
+      {_id: req.params.id}
+    ).exec(
+      function(error, group){
+        if(error){
+          handleErrors(error, res);
+        }else{
+          res.json(group);
+        }
+      }
+    );
+  }
+}

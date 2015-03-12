@@ -158,7 +158,7 @@ var updateFieldsOnSnippet = function(snippet, paramsIn, callbackSuccess){
   snippet.content = paramsIn.content;
   snippet.unique_handle = paramsIn.unique_handle;
   snippet.theme = paramsIn.theme;
-  snippet.tags = snippet.tags;
+  snippet.tags = paramsIn.tags;
   snippet.group = snippet.group;
   snippet.updated_at = new Date();
   snippet.save(function(err){
