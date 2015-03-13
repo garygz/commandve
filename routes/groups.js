@@ -45,23 +45,23 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
     if (err){
         callbackError();
     }else{
-      groups.forEach(function(item){item.content_count == 0;})
+      groups.forEach(function(item){item.content_count = 0;)});
       console.log(logs);
-        for(var i = 0;i<logs.length;i++){
-          var groupElemnt = logs[i];
-          console.log(groupElemnt);
-          var groupId = groupElemnt._id;
-          var foundGroup = findGroupById(groupId, groups);
+      for(var i = 0;i<logs.length;i++){
+        var groupElemnt = logs[i];
+        console.log(groupElemnt);
+        var groupId = groupElemnt._id;
+        var foundGroup = findGroupById(groupId, groups);
 
-          if(foundGroup){
-            foundGroup.content_count = groupElemnt.total;
-          }
+        if(foundGroup){
+          foundGroup.content_count = groupElemnt.total;
         }
-        groups.forEach(function(item){item.save();})
-        callbackSuccess(groups);
+      }
+      groups.forEach(function(item){item.save();})
+      callbackSuccess(groups);
     }
 
-    console.log("groups count",groups);
+
   });
 }
 
