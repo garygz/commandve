@@ -45,6 +45,7 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
     if (err){
         callbackError();
     }else{
+      groups.forEach(function(item){item.content_count == 0;})
       console.log(logs);
         for(var i = 0;i<logs.length;i++){
           var groupElemnt = logs[i];
@@ -54,9 +55,9 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
 
           if(foundGroup){
             foundGroup.content_count = groupElemnt.total;
-            foundGroup.save();
           }
         }
+        groups.forEach(function(item){item.save();})
         callbackSuccess(groups);
     }
 
