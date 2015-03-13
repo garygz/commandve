@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Code snippet editing and curation web app",
-  "main": "./bin/www.js",
+  "main": "./bin/www",
   "scripts": {
     "start": "node ./bin/www"
   },
