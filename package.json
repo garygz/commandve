@@ -2,8 +2,10 @@
   "name": "CmdVNinja",
   "version": "1.0.0",
   "private": true,
+  "description": "Code snippet editing and curation web app",
+  "main": "./bin/www.js",
   "scripts": {
-    "start": "sudo node ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.12.0",
@@ -13,5 +15,10 @@
     "jade": "~1.9.2",
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/garygz/commandve.git"
+  },
+  "license": "MIT"
 }
