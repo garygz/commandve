@@ -12,16 +12,8 @@ var nconf = require('nconf');
 nconf.argv().env();
 // Then load configuration from a designated file.
 nconf.file({ file: 'config.json' });
-// Provide default values for settings not provided above.
-nconf.defaults({
-    'http': {
-        'port': 3000
-    },
-    'db' :{
-      'url':'mongodb://localhost/test'
-    }
-});
 
+var dbUrl = process.env.MONGOLAB_URI || nconf.get('db:url') ||'mongodb://localhost/test';
 
 //require all routes
 var routes = require('./routes/index');
@@ -30,8 +22,8 @@ var snippets = require('./routes/snippets');
 var groups = require('./routes/groups');
 
 var app = express();
-
-mongoose.connect(nconf.get('db:url'));
+dbUrl = nconf.get('db:url')
+mongoose.connect();
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

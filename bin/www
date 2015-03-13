@@ -15,12 +15,6 @@ nconf.argv().env();
 nconf.file({ file: 'config.json' });
 // Provide default values for settings not provided above.
 var port = process.env.PORT || nconf.get('http:port') ||3000;
-nconf.defaults({
-    'db' :{
-      'url':'mongodb://localhost/test'
-    }
-});
-
 
 /**
  * Get port from environment and store in Express.
