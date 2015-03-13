@@ -61,7 +61,7 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
         callbackSuccess(groups);
     }
 
-    console.log(logs);
+    console.log("groups count",groups);
   });
 }
 
