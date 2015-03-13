@@ -45,7 +45,7 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
     if (err){
         callbackError();
     }else{
-      groups.forEach(function(item){item.content_count = 0;)});
+      groups.forEach(function(item){item.content_count = 0;});
       console.log(logs);
       for(var i = 0;i<logs.length;i++){
         var groupElemnt = logs[i];
