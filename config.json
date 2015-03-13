@@ -1,7 +1,4 @@
 {
-  "http":{
-    "port":80
-  },
   "db":{
     "url":"mongodb://localhost/test"
   }
