@@ -22,8 +22,8 @@ var snippets = require('./routes/snippets');
 var groups = require('./routes/groups');
 
 var app = express();
-dbUrl = nconf.get('db:url')
-mongoose.connect();
+
+mongoose.connect(dbUrl);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
