@@ -13,7 +13,7 @@ nconf.argv().env();
 // Then load configuration from a designated file.
 nconf.file({ file: 'config.json' });
 
-var dbUrl = process.env.MONGOLAB_URI || nconf.get('db:url') ||'mongodb://localhost/test';
+var dbUrl = process.env.MONGOLAB_URI  || nconf.get('db:url') ||'mongodb://localhost/test';
 
 //require all routes
 var routes = require('./routes/index');
