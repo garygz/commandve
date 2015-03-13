@@ -1,0 +1,7 @@
+{
+  "name": "CmdVNinja",
+  "description": "Code snippet editing and curation web app",
+  "repository": "https://github.com/garygz/commandve.git",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "static"]
+}

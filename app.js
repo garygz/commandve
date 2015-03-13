@@ -6,6 +6,21 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var nconf = require('nconf');
+
+// First consider commandline arguments and environment variables, respectively
+nconf.argv().env();
+// Then load configuration from a designated file.
+nconf.file({ file: 'config.json' });
+// Provide default values for settings not provided above.
+nconf.defaults({
+    'http': {
+        'port': 3000
+    },
+    'db' :{
+      'url':'mongodb://localhost/test'
+    }
+});
 
 
 //require all routes
@@ -16,7 +31,8 @@ var groups = require('./routes/groups');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(nconf.get('db:url'));
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
