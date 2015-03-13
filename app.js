@@ -13,7 +13,7 @@ nconf.argv().env();
 // Then load configuration from a designated file.
 nconf.file({ file: 'config.json' });
 
-var dbUrl = process.env.MONGOLAB_URI  || nconf.get('db:url') ||'mongodb://localhost/test';
+var dbUrl = process.env.MONGOLAB_URI || nconf.get('db:url') ||'mongodb://localhost/test';
 
 //require all routes
 var routes = require('./routes/index');
@@ -22,8 +22,8 @@ var snippets = require('./routes/snippets');
 var groups = require('./routes/groups');
 
 var app = express();
-dbUrl = nconf.get('db:url')
-mongoose.connect();
+
+mongoose.connect(dbUrl);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
