@@ -6,14 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
-var nconf = require('nconf');
+var constants = require('./helpers/constants');
 
-// First consider commandline arguments and environment variables, respectively
-nconf.argv().env();
-// Then load configuration from a designated file.
-nconf.file({ file: 'config.json' });
-
-var dbUrl = process.env.MONGOLAB_URI || nconf.get('db:url') ||'mongodb://localhost/test';
+var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/test';
 
 //require all routes
 var routes = require('./routes/index');
@@ -38,6 +33,12 @@ var Snippet = require('./db/models/snippet')(mongoose);
 snippets.setModels(User,Group,Snippet);
 users.setModels(User,Group,Snippet);
 groups.setModels(User,Group,Snippet);
+
+if (app.get('env') === 'development'){
+  users.setGitHubOAuth(constants.DEV_CLIENT_ID, constants.DEV_CLIENT_SECRET);
+}else{
+  users.setGitHubOAuth(constants.PROD_CLIENT_ID, constants.PROD_CLIENT_SECRET);
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -93,6 +94,9 @@ app.get('/logout/', users.logout_user(User));
 app.get('/signup/', users.signup_user(User));
 app.get('/auth/github/callback', users.authenticate_github(User));
 app.get('/auth/current', users.get_logged_in_user(User));
+if (app.get('env') === 'development'){
+    app.get('/local/auth/github/callback', users.authenticate_github());
+}
 
 
 // catch 404 and forward to error handler
@@ -106,6 +110,8 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
+console.log("Running in",app.get('env'),"mode");
+
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     console.log(err.stack);

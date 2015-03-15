@@ -8,8 +8,16 @@ angular.module('cmndvninja'). controller('UserController',
   $scope.data = {};
   //for test only
   //setup after login
-  $scope.clientId = "9e8ff83bdb61dae15c5c";
-  $scope.user = null;//{username: "garygz76812736", _id:"54fcd6a07e409d9a82a4bec8"}
+  $scope.clientId = null;//Get it from the server "9e8ff83bdb61dae15c5c";
+  $scope.user = null;
+
+  Auth.login({clientId:1}).$promise.then(function(resource){
+    console.log("clientId", resource);
+    $scope.clientId = resource.clientId;
+  },
+  function(reason){
+    console.log('failed to get client id: ' + reason);
+  });
 
   var promise = Auth.login().$promise;
   promise.then(function(user){
