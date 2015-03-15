@@ -22,7 +22,7 @@ angular.module('cmndvninja').controller('SnippetController',
     };
 
     $scope.selectSnippet = function (snippet) {
-      console.log($scope.snippets);
+      if(Shared.loggingEnabled) console.log($scope.snippets);
       $scope.currentSnippet = snippet;
       return $scope.currentSnippet;
     };
@@ -40,7 +40,7 @@ angular.module('cmndvninja').controller('SnippetController',
       }
       else{
         if ($scope.currentSnippet){
-          console.log('currentSnippet is defined as', $scope.currentSnippet)
+          if(Shared.loggingEnabled) console.log('currentSnippet is defined as', $scope.currentSnippet)
         }else {
           $scope.newSnippet();
         }
@@ -71,8 +71,8 @@ angular.module('cmndvninja').controller('SnippetController',
         markSnippetsAsSaved(snippets);
         initialize();
         $scope.initializeAceState();
-        console.log($scope.snippets);
-        console.log('current snippet:', $scope.currentSnippet);
+        if(Shared.loggingEnabled) console.log($scope.snippets);
+        if(Shared.loggingEnabled) console.log('current snippet:', $scope.currentSnippet);
         }
       );
       return $scope.snippets;
@@ -118,7 +118,7 @@ angular.module('cmndvninja').controller('SnippetController',
           createOrEditSnippet($scope.snippets[i]);
         }
       }
-      console.log($scope.snippets)
+      if(Shared.loggingEnabled) console.log($scope.snippets)
     };
 
     function createOrEditSnippet (snippet) {
@@ -145,7 +145,7 @@ angular.module('cmndvninja').controller('SnippetController',
 
     function loadNextSnippet(){
       if ($scope.snippets.length > 0) {
-        console.log('snippets is more than one:', $scope.snippets[0])
+        if(Shared.loggingEnabled) console.log('snippets is more than one:', $scope.snippets[0])
         $scope.currentSnippet = $scope.snippets[0];
         $scope.initializeAceState();
       }else {
@@ -227,7 +227,7 @@ angular.module('cmndvninja').controller('SnippetController',
         $scope.theme = $scope.themes[0];
         }
         if ($scope.currentSnippet.tags.length > 0) {
-          console.log('mode should change to', $scope.currentSnippet.tags[0])
+          if(Shared.loggingEnabled) console.log('mode should change to', $scope.currentSnippet.tags[0])
           $scope.mode = $scope.currentSnippet.tags[0];
         }else {
           $scope.mode = $scope.modes[0];

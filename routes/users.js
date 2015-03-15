@@ -5,13 +5,22 @@ var querystring = require('querystring');
 var groups = require('../helpers/groups.js');
 
 
-//todo read from confog file
-var CLIENT_ID = '9e8ff83bdb61dae15c5c';
-var CLIENT_SECRET = '13a3d9632063f5f9229c17e9b704d1c9ae620f1d';
+var CLIENT_ID     = null;
+var CLIENT_SECRET = null;
+var APP_MODE      = null;
+var ENABLE_CLIENT_SIDE_LOGGING = false;
 
 exports.setModels = function(User,Group,Snippet){
   groups.setModels(User,Group,Snippet);
   users.setModels(User,Group,Snippet);
+}
+
+exports.setGitHubOAuth = function(clientId, clientSecret, appMode){
+  CLIENT_ID = clientId;
+  CLIENT_SECRET = clientSecret;
+  APP_MODE = appMode;
+  //REMOVE false this for TEST ONLY
+  ENABLE_CLIENT_SIDE_LOGGING = "false"//(APP_MODE === 'development').toString();
 }
 
 exports.list_users = function(User){
@@ -84,7 +93,7 @@ exports.signup_user = function(User){
 }
 
 
-exports.authenticate_github = function(User, http){
+exports.authenticate_github = function(){
   return function(req,res){
     var code = req.query.code;
 
@@ -149,9 +158,17 @@ exports.authenticate_github = function(User, http){
 };
 
 
-exports.get_logged_in_user = function(User){
+exports.get_logged_in_user = function(){
   return function(req,res){
-    if (req.session.user){
+    console.log("login", req.query);
+    if (req.query.mode){
+      var clientIdJson = {
+        clientId: CLIENT_ID,
+        mode: APP_MODE,
+        log: ENABLE_CLIENT_SIDE_LOGGING,
+      }
+      res.json(clientIdJson);
+    }else if (req.session.user){
       res.json(req.session.user);
     }else{
       res.status(404).send();
@@ -220,4 +237,6 @@ var handleErrors = function(err, res, msg){
   msg = msg || 'Unable to process your request';
   res.status(500).send(msg);
 };
+
+
 
