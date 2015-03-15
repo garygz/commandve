@@ -42,6 +42,21 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
       controller: 'AuthController'
     })
 
+    $routeProvider.when('/suggest', {
+      templateUrl: 'app/partials/users/suggest.html',
+      controller: 'AuthController' // This might need to be user controller instead or might just make things easier
+    })
+
+    $routeProvider.when('/downloads', {
+      templateUrl: 'app/partials/users/downloads.html',
+      controller: 'AuthController' // This might need to be user controller instead or might just make things easier
+    })
+
+    $routeProvider.when('/aboutus', {
+      templateUrl: 'app/partials/users/aboutus.html',
+      controller: 'AuthController' // This might need to be user controller instead or might just make things easier
+    })
+
     $routeProvider.otherwise({redirectTo: '/groups'});
 
 }]);
