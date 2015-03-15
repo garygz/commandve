@@ -5,7 +5,7 @@ angular.module('cmndvninja').controller('GroupController',
   function($scope, $location,$document, Group, Shared, Snippet){
 
   $.material.init()
-  console.log('GroupController init', $location);
+  //console.log('GroupController init', $location);
 
   $scope.groupData = {};
   $scope.$parent.userGroups = {};
@@ -18,12 +18,12 @@ angular.module('cmndvninja').controller('GroupController',
     group.userId = Shared.userId;
     group.user = Shared.userId;
     group.id = group._id
-    console.log('the group you tried to delete is:', group);
+    if(Shared.loggingEnabled) console.log('the group you tried to delete is:', group);
     Group.remove(group);
     removeGroupFromDom(group);
     if($event)$event.stopPropagation()
   }
-  
+
   /*TODO add to helper (also defined in snippetcontroller) */
   Array.prototype.getIndexBy = function (name, value) {
     for (var i = 0; i < this.length; i++) {
@@ -49,9 +49,9 @@ angular.module('cmndvninja').controller('GroupController',
       userId: Shared.userId,
       user: Shared.userId
     }
-    console.log('creating group:', group); /*TODO: push the returned JSON
+    if(Shared.loggingEnabled) console.log('creating group:', group); /*TODO: push the returned JSON
                                             object back into $scope.groups
-                                            instead of getting them all 
+                                            instead of getting them all
                                             back again */
     Group.post(group).$promise.then(function(){
       getGroups();}
@@ -71,7 +71,7 @@ angular.module('cmndvninja').controller('GroupController',
   }
 
   $scope.shareGroup = function (group) {
-    console.log('this group should be shared:', group)
+    if(Shared.loggingEnabled) console.log('this group should be shared:', group)
   }
 
   var hiddenInput = document.getElementById("hidden-input");
@@ -112,17 +112,17 @@ angular.module('cmndvninja').controller('GroupController',
       }
     }
 
-    console.log($scope.groupData.groups);
+    if(Shared.loggingEnabled) console.log($scope.groupData.groups);
   }
 
   $scope.showGroup = function(id){
-    console.log($scope.groupData);
+    if(Shared.loggingEnabled) console.log($scope.groupData);
     Shared.groups = $scope.groupData.groups;
     Shared.currentGroupId = id;
     $location.path('groups/'+id + '/snippets');
   }
   $scope.firePasteSnippet = function($event){
-    console.log("fire paste event");
+    if(Shared.loggingEnabled) console.log("fire paste event");
     $event.stopPropagation();
 
   }
@@ -134,7 +134,7 @@ angular.module('cmndvninja').controller('GroupController',
     newSnippet.groupId =$scope.groupId;
     newSnippet.group = $scope.groupId;
     newSnippet.unique_handle = "Just added using CMD+V (" + (new Date()).toDateString()+")";
-    console.log("new group snippets",newSnippet);
+    if(Shared.loggingEnabled) console.log("new group snippets",newSnippet);
 
     Snippet.post(newSnippet).$promise.then(function(group){
       //animate
@@ -167,9 +167,9 @@ angular.module('cmndvninja').controller('GroupController',
   // };
 
    document.addEventListener("paste", function(e) {
-          console.log("Paste event", e);
+          if(Shared.loggingEnabled) console.log("Paste event", e);
           var text = e.clipboardData.getData("text/plain");
-          console.log("Paste event", text);
+          if(Shared.loggingEnabled) console.log("Paste event", text);
           $scope.snippetPastedText = text;
           var activeGroup = $('.activegroup');
           $scope.groupId = activeGroup.data("id");

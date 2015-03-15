@@ -7,15 +7,20 @@ var groups = require('../helpers/groups.js');
 
 var CLIENT_ID     = null;
 var CLIENT_SECRET = null;
+var APP_MODE      = null;
+var ENABLE_CLIENT_SIDE_LOGGING = false;
 
 exports.setModels = function(User,Group,Snippet){
   groups.setModels(User,Group,Snippet);
   users.setModels(User,Group,Snippet);
 }
 
-exports.setGitHubOAuth = function(clientId, clientSecret){
+exports.setGitHubOAuth = function(clientId, clientSecret, appMode){
   CLIENT_ID = clientId;
   CLIENT_SECRET = clientSecret;
+  APP_MODE = appMode;
+  //REMOVE false this for TEST ONLY
+  ENABLE_CLIENT_SIDE_LOGGING = "false"//(APP_MODE === 'development').toString();
 }
 
 exports.list_users = function(User){
@@ -88,7 +93,7 @@ exports.signup_user = function(User){
 }
 
 
-exports.authenticate_github = function(User, http){
+exports.authenticate_github = function(){
   return function(req,res){
     var code = req.query.code;
 
@@ -153,12 +158,14 @@ exports.authenticate_github = function(User, http){
 };
 
 
-exports.get_logged_in_user = function(User){
+exports.get_logged_in_user = function(){
   return function(req,res){
     console.log("login", req.query);
-    if (req.query.clientId){
+    if (req.query.mode){
       var clientIdJson = {
-        clientId: CLIENT_ID
+        clientId: CLIENT_ID,
+        mode: APP_MODE,
+        log: ENABLE_CLIENT_SIDE_LOGGING,
       }
       res.json(clientIdJson);
     }else if (req.session.user){

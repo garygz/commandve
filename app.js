@@ -10,6 +10,8 @@ var constants = require('./helpers/constants');
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/test';
 
+
+
 //require all routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -17,6 +19,8 @@ var snippets = require('./routes/snippets');
 var groups = require('./routes/groups');
 
 var app = express();
+
+console.log("Running in",app.get('env'),"mode");
 
 mongoose.connect(dbUrl);
 
@@ -35,9 +39,9 @@ users.setModels(User,Group,Snippet);
 groups.setModels(User,Group,Snippet);
 
 if (app.get('env') === 'development'){
-  users.setGitHubOAuth(constants.DEV_CLIENT_ID, constants.DEV_CLIENT_SECRET);
+  users.setGitHubOAuth(constants.DEV_CLIENT_ID, constants.DEV_CLIENT_SECRET, app.get('env'));
 }else{
-  users.setGitHubOAuth(constants.PROD_CLIENT_ID, constants.PROD_CLIENT_SECRET);
+  users.setGitHubOAuth(constants.PROD_CLIENT_ID, constants.PROD_CLIENT_SECRET, app.get('env'));
 }
 
 // view engine setup
@@ -94,9 +98,7 @@ app.get('/logout/', users.logout_user(User));
 app.get('/signup/', users.signup_user(User));
 app.get('/auth/github/callback', users.authenticate_github(User));
 app.get('/auth/current', users.get_logged_in_user(User));
-if (app.get('env') === 'development'){
-    app.get('/local/auth/github/callback', users.authenticate_github());
-}
+
 
 
 // catch 404 and forward to error handler
@@ -110,7 +112,6 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-console.log("Running in",app.get('env'),"mode");
 
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
