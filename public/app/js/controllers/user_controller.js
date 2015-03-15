@@ -10,6 +10,17 @@ angular.module('cmndvninja'). controller('UserController',
   $scope.clientId = null;//Get it from the server "9e8ff83bdb61dae15c5c";
   $scope.user = null;
 
+  var isLoginRequiredForPage = function(){
+    if ($location.path().indexOf('aboutus')>-1 ||
+        $location.path().indexOf('downloads')>-1 ||
+        $location.path().indexOf('getstarted')>-1
+        ){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
   Auth.login({mode:1}).$promise.then(function(resource){
 
     $scope.clientId = resource.clientId;
@@ -29,7 +40,10 @@ angular.module('cmndvninja'). controller('UserController',
     $location.path('/');
   }, function(reason) {
       console.log('login failed: ' + reason);
-      $location.path('/login');
+      if(isLoginRequiredForPage()){
+        $location.path('/login');
+      }
+
   });
 
 
