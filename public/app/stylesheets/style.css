@@ -51,3 +51,8 @@ Fix for Angular UI not displaying curors correctly
   margin-left: 10%;
 }
 
+.aboutus-img{
+  max-width: 45%;
+  max-height: 30%;
+}
+

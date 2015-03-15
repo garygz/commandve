@@ -57,6 +57,11 @@ angular.module('cmndvninja'). config(['$routeProvider',function($routeProvider) 
       controller: 'AuthController' // This might need to be user controller instead or might just make things easier
     })
 
+    $routeProvider.when('/getstarted', {
+      templateUrl: 'app/partials/users/getstarted.html',
+      controller: 'AuthController' // This might need to be user controller instead or might just make things easier
+    })
+
     $routeProvider.otherwise({redirectTo: '/groups'});
 
 }]);
