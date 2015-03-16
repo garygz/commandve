@@ -33,14 +33,21 @@ var findGroupById = function(id, groups){
 }
 
 var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
+  if(groups === null || groups.length === 0){
+    return;
+  }
 
   var agg = [
+   {$match: {
+            user: groups[0].user
+    }},
+
     {$group: {
       _id: "$group",
       total: {$sum: 1}
     }}
   ];
-
+  console.log("aggregate groups by", agg);
   SnippetModel.aggregate(agg, function(err, logs){
     if (err){
         callbackError();
@@ -49,7 +56,7 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
       console.log(logs);
       for(var i = 0;i<logs.length;i++){
         var groupElemnt = logs[i];
-        console.log(groupElemnt);
+
         var groupId = groupElemnt._id;
         var foundGroup = findGroupById(groupId, groups);
 
