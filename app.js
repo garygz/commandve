@@ -7,10 +7,9 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var constants = require('./helpers/constants');
+var MongoStore = require('connect-mongo')(session);
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/test';
-
-
 
 //require all routes
 var routes = require('./routes/index');
@@ -48,12 +47,7 @@ if (app.get('env') === 'development'){
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(session({
-  // genid: function(req) {
-  //   return genuuid() // use UUIDs for session IDs
-  // },
-  secret: 'X717197123987123'//TODO change this to a long key
-}))
+
 
 
 // uncomment after placing your favicon in /public
@@ -64,6 +58,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/ace_editor',  express.static(__dirname + '/ace_editor'));
+app.use(session({
+    secret: 'X717197123987123',//TODO change this to a long key
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: true,
+    saveUninitialized: true
+}));
 
 
 
