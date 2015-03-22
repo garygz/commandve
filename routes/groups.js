@@ -157,13 +157,7 @@ exports.create_group = function(Group,Snippet){
 //otherwise all fields get overwritten
 exports.update_group = function(Group,Snippet){
   return function(req,res){
-    var onSuccess = function(group){
-      res.status(200).send("group created");
-    }
 
-    var onFail = function(err){
-      handleErrors(err,res,"Failed to update a group");
-    }
 
     var user = {_id : req.body.user}
     var findOptions = {
@@ -175,7 +169,22 @@ exports.update_group = function(Group,Snippet){
     }
 
     if(req.body.image_url){
-      createOptions.image_url = req.body.image_url;
+      updateOptions.image_url = req.body.image_url;
+    }
+
+    var onSuccess = function(){
+      Group.findOne(findOptions, function(err, group){
+        if(err){
+          onFail(err);
+        }else{
+          res.json(group);
+        }
+      });
+
+    }
+
+    var onFail = function(err){
+      handleErrors(err,res,"Failed to update a group");
     }
 
     console.log("update group", updateOptions);
@@ -192,6 +201,7 @@ exports.update_group = function(Group,Snippet){
 
 exports.delete_group = function(User, Group) {
   return function(req, res){
+    //TODO remove all snippets for a group first
     Group.findOneAndRemove(
       {_id: req.params.id}
     ).exec(

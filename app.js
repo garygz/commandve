@@ -81,13 +81,13 @@ app.put('/api/groups/:groupId/snippets/:id', snippets.edit_snippet(User, Snippet
 app.delete('/api/groups/:groupId/snippets/:id', snippets.delete_snippet(User, Snippet));
 
 //search routes
-app.get('/api/search', snippets.search_snippet(User, Snippet));
+app.get('/api/search/users/:id', snippets.search_snippet(User, Snippet));
 
 //group routes
 app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
 app.post('/api/users/:user_id/groups', groups.create_group(Group,Snippet));
-app.post('/api/users/:user_id/groups/:id', groups.update_group(Group,Snippet));
+app.put('/api/users/:user_id/groups/:id', groups.update_group(Group,Snippet));
 app.delete('/api/users/:user_id/groups/:id', groups.delete_group(User, Group));
 
 //login routes
