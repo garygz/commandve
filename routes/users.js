@@ -10,7 +10,14 @@ var CLIENT_SECRET = null;
 var APP_MODE      = null;
 var ENABLE_CLIENT_SIDE_LOGGING = false;
 
+var GroupModel = null;
+var UserModel = null;
+var SnippetModel = null;
+
 exports.setModels = function(User,Group,Snippet){
+  UserModel = User;
+  GroupModel = Group;
+  SnippetModel = Snippet;
   groups.setModels(User,Group,Snippet);
   users.setModels(User,Group,Snippet);
 }
@@ -81,6 +88,7 @@ exports.logout_user = function(User){
 //deprecated - we will use giyhub for now
 exports.signup_user = function(User){
   return function(req,res){
+    console.log("create user", req.body);
     User.create({username: req.body.username, email:req.body.email, password: req.body.password}, function(error, user){
         if(error)  {
           handleErrors(error, res);
@@ -175,6 +183,49 @@ exports.get_logged_in_user = function(){
     }
 
   }
+}
+
+exports.delete_user = function(User){
+    return function(req, res){
+      var id = req.params.user_id;
+      var removeParm = {user:id};
+      console.log("delete user", id);
+      if(!id){
+        res.status(400).send();
+      }
+
+      var deleteUser = function(err){
+        UserModel.remove(removeParm, function(err){
+          if(err){
+            handleErrors(err,res);
+          }else{
+            res.status(200).send();
+          }
+        });
+
+      };
+      var deleteAllGroups = function(){
+          GroupModel.remove(removeParm, function(err){
+            if(err){
+              handleErrors(err,res);
+            }else{
+              deleteUser();
+            }
+          });
+      };
+
+      var deleteAllSnippets = function(){
+        SnippetModel.remove(removeParm, function(err){
+          if(err){
+            handleErrors(err,res);
+          }else{
+            deleteAllGroups();
+          }
+        })
+      };
+
+      deleteAllSnippets();
+    };
 }
 
 var getGitHubProfile = function(urlEncodedToken, callbackSuccess, callbackError){

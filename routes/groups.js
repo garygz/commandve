@@ -100,7 +100,7 @@ exports.find_group = function(Group,Snippet){
 
 exports.find_user_groups = function(Group,Snippet){
   return function(req,res){
-    Group.find({user: req.params.userId}).sort({created_at: -1}).exec(function(error, groups){
+    Group.find({user: req.params.user_id}).sort({created_at: -1}).exec(function(error, groups){
       if(error)  {
           handleErrors(error, res);
          }else{
