@@ -56,12 +56,15 @@ angular.module('cmndvninja'). controller('UserController',
     // console.log("search for",searchCriteria);
 
     if(searchCriteria && searchCriteria.trim().length>0){
-       SearchItem.query({query:searchCriteria, limit: 50, type: "webapp"}).$promise.then(
-        function(searchResults){
-          if(Shared.loggingEnabled) console.log("search results", searchResults);
-          $scope.searchResults = searchResults;
-          $location.path("/search");
-       });
+       SearchItem.query(
+            {query:searchCriteria, limit: 50,
+            type: "webapp",id:$scope.user._id})
+       .$promise.then(
+          function(searchResults){
+            if(Shared.loggingEnabled) console.log("search results", searchResults);
+            $scope.searchResults = searchResults;
+            $location.path("/search");
+         });
     }
 
   }

@@ -37,7 +37,7 @@ angular.module('cmndvninja').factory('Group', ['$resource', 'Shared', function($
 }]);
 
 angular.module('cmndvninja').factory('SearchItem', ['$resource', function($resource){
-  SearchItem = $resource('/api/search', {}, {
+  SearchItem = $resource('/api/search/users/:id', {id: '@_id'}, {
     query: {method:'GET', isArray:true},
     getOne: {method:'GET', isArray:false},
     post: {method:'POST'},

@@ -48,9 +48,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 
-
-
-// uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -71,8 +68,9 @@ app.use(session({
 app.get('/api/users', users.list_users(User));
 app.get('/api/users/:id', users.find_user(User));
 app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
-app.get('/api/users/:userId/groups', groups.find_user_groups(Group, Snippet));
+app.get('/api/users/:user_id/groups', groups.find_user_groups(Group, Snippet));
 app.post('/api/users/:user_id/snippets', snippets.create_new_snippet(User, Snippet));
+app.delete('/api/users/:user_id', users.delete_user(User));
 
 //Snippet routes
 app.get('/api/groups/:groupId/snippets', snippets.list_snippets(User, Snippet));
@@ -83,19 +81,20 @@ app.put('/api/groups/:groupId/snippets/:id', snippets.edit_snippet(User, Snippet
 app.delete('/api/groups/:groupId/snippets/:id', snippets.delete_snippet(User, Snippet));
 
 //search routes
-app.get('/api/search', snippets.search_snippet(User, Snippet));
+app.get('/api/search/users/:id', snippets.search_snippet(User, Snippet));
 
 //group routes
 app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
 app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
 app.post('/api/users/:user_id/groups', groups.create_group(Group,Snippet));
-app.post('/api/users/:user_id/groups/:id', groups.update_group(Group,Snippet));
+app.put('/api/users/:user_id/groups/:id', groups.update_group(Group,Snippet));
 app.delete('/api/users/:user_id/groups/:id', groups.delete_group(User, Group));
 
 //login routes
 app.post('/login/', users.login_user(User));
 app.get('/logout/', users.logout_user(User));
-app.get('/signup/', users.signup_user(User));
+app.post('/signup/', users.signup_user(User));
+
 app.get('/auth/github/callback', users.authenticate_github(User));
 app.get('/auth/current', users.get_logged_in_user(User));
 

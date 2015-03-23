@@ -206,8 +206,7 @@ var createGitHubUpdateData = function(snippet){
                                       .replace(/&/g, "\\&")
                                       .replace(/\r/g, "\\r")
                                       .replace(/\t/g, "\\t");
-                                      // .replace(/\b/g, "\\b")
-                                      // .replace(/\f/g, "\\f");
+
   var data = '{'+
   '"description": "'+snippet.unique_handle+'",'+
   '"files": {'+
