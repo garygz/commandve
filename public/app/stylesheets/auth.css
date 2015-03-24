@@ -1,7 +1,7 @@
 #ninja-tall {
   display: block;
   margin: auto;  
-  width: 300px;
+  max-width: 30%;
 }
 
 #instruction {

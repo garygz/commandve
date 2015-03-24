@@ -29,12 +29,17 @@ exports.MISC_IMAGE = "app/img/misc-code-image.png";
 
 exports.TAG_DEFAULT = "HTML";
 
-//Production
-exports.PROD_CLIENT_ID = '9e8ff83bdb61dae15c5c';
-exports.PROD_CLIENT_SECRET = '13a3d9632063f5f9229c17e9b704d1c9ae620f1d';
+//Production GITHUB
+exports.PROD_CLIENT_ID = nconf.get("github:production:client_id");
+exports.PROD_CLIENT_SECRET = nconf.get("github:production:client_secret");
 
-exports.DEV_CLIENT_ID = 'cbe43cc5ac94c0d0f55b'
-exports.DEV_CLIENT_SECRET = 'f19c8d822376c59a28d4730523f40e4d2061c516';
+//DEVELOPMENT GITHUB
+exports.DEV_CLIENT_ID = nconf.get("github:development:client_id");
+exports.DEV_CLIENT_SECRET = nconf.get("github:development:client_secret");
+
+//DEVELOPMENT/PRODUCTION GOOGLE
+exports.GOOGLE_CLIENT_ID = nconf.get("google:client_id");
+exports.GOOGLE_CLIENT_SECRET = nconf.get("google:client_secret");
 
 
 

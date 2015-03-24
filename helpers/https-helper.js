@@ -31,7 +31,7 @@ exports.httpGet = function(options, callbackSuccess, callbackError){
     console.log('http get',options);
     try{
       var httpProcessDataCallBack = processData(callbackSuccess,callbackError);
-      https.get(options, httpProcessDataCallBack(httpRes));
+      https.get(options, httpProcessDataCallBack);
     }catch(e){
       console.log(e.stack);
       callbackError(e);
@@ -44,7 +44,7 @@ exports.httpPost = function(options, dataOut,callbackSuccess, callbackError){
   console.log("HTTP POST IN", options, dataOut);
   try{
     var httpProcessDataCallBack = processData(callbackSuccess,callbackError);
-    https.request(options, httpProcessDataCallBack(httpRes));
+    var postReq = https.request(options, httpProcessDataCallBack);
     // post the data
     postReq.write(dataOut);
     postReq.end();

@@ -136,7 +136,7 @@ var getGistFirstFileContent = function(user, group, gist,callbackSuccess,callbac
       }
   }
   if (firstFile){
-      console.log("gist first file", firstFile);
+     console.log("gist first file", firstFile);
      var options = getGitHubConnectionForRawMap(user, firstFile.raw_url);
 
       httpModule.httpGet(options,

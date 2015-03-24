@@ -6,7 +6,9 @@ module.exports = function(mongoose){
     token: {type: String},
     refreshToken: {type: String},
     githubId: {type: String},
-    gists_url: {type: String}
+    gists_url: {type: String},
+    usertype: {type: String, default:"github"},
+    googleId: {type:String}
   });
 
   return mongoose.model('User', UserSchema);

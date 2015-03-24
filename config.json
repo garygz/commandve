@@ -1,3 +1,33 @@
 {
+  "google":{
+      "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+      "client_secret":"XUdszS_mUmtfDYE4M-emoCqr",
+      "token_uri":"https://accounts.google.com/o/oauth2/token",
+      "client_email":"174402990814-354kgilo1kkkoo0dvs72or118pljmb04@developer.gserviceaccount.com",
+      "redirect_uris":[
+         "https://cmdvninja.herokuapp.com/oauth2callback",
+         "http://localhost:3000/oauth2callback"
+      ],
+      "client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/174402990814-354kgilo1kkkoo0dvs72or118pljmb04@developer.gserviceaccount.com",
+      "client_id":"174402990814-354kgilo1kkkoo0dvs72or118pljmb04.apps.googleusercontent.com",
+      "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+      "javascript_origins":[
+         "https://cmdvninja.herokuapp.com/",
+         "http://localhost:3000/"
+      ]
+   },
+
+   "github":{
+      "production":{
+        "client_id":"9e8ff83bdb61dae15c5c",
+        "client_secret":"13a3d9632063f5f9229c17e9b704d1c9ae620f1d"
+      },
+      "development" :{
+        "client_id":"cbe43cc5ac94c0d0f55b",
+        "client_secret": "f19c8d822376c59a28d4730523f40e4d2061c516"
+      }
+
+   }
+
 
 }
