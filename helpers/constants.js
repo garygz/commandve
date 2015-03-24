@@ -41,5 +41,8 @@ exports.DEV_CLIENT_SECRET = nconf.get("github:development:client_secret");
 exports.GOOGLE_CLIENT_ID = nconf.get("google:client_id");
 exports.GOOGLE_CLIENT_SECRET = nconf.get("google:client_secret");
 
+exports.PROD_GOOGLE_REDIRECT_URI = nconf.get("google:redirect_uri:production");
+exports.DEV_GOOGLE_REDIRECT_URI = nconf.get("google:redirect_uri:development");
+
 
 

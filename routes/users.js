@@ -24,7 +24,7 @@ exports.setModels = function(User,Group,Snippet){
   users.setModels(User,Group,Snippet);
 }
 
-exports.setGitHubOAuth = function(clientId, clientSecret, appMode, googleClientId, googleClientSecret){
+exports.setGitHubOAuth = function(clientId, clientSecret, appMode, googleClientId, googleClientSecret,googleRedirectURL){
   CLIENT_ID = clientId;
   CLIENT_SECRET = clientSecret;
   APP_MODE = appMode;
@@ -32,6 +32,7 @@ exports.setGitHubOAuth = function(clientId, clientSecret, appMode, googleClientI
   ENABLE_CLIENT_SIDE_LOGGING = "false";//(APP_MODE === 'development').toString();
   GOOGLE_CLIENT_ID = googleClientId;
   GOOGLE_CLIENT_SECRET = googleClientSecret;
+  google.setRedirectURL(googleRedirectURL);
 }
 
 exports.list_users = function(User){

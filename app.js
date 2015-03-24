@@ -40,9 +40,20 @@ groups.setModels(User,Group,Snippet);
 var isEnvDev = app.get('env') === 'development';
 
 if (isEnvDev){
-  users.setGitHubOAuth(constants.DEV_CLIENT_ID, constants.DEV_CLIENT_SECRET, app.get('env'), constants.GOOGLE_CLIENT_ID,constants.GOOGLE_CLIENT_SECRET);
+  users.setGitHubOAuth(constants.DEV_CLIENT_ID,
+                      constants.DEV_CLIENT_SECRET,
+                      app.get('env'),
+                      constants.GOOGLE_CLIENT_ID,
+                      constants.GOOGLE_CLIENT_SECRET,
+                      constants.DEV_GOOGLE_REDIRECT_URI);
+
 }else{
-  users.setGitHubOAuth(constants.PROD_CLIENT_ID, constants.PROD_CLIENT_SECRET, app.get('env'),  constants.GOOGLE_CLIENT_ID,constants.GOOGLE_CLIENT_SECRET);
+  users.setGitHubOAuth(constants.PROD_CLIENT_ID,
+                        constants.PROD_CLIENT_SECRET,
+                        app.get('env'),
+                        constants.GOOGLE_CLIENT_ID,
+                        constants.GOOGLE_CLIENT_SECRET,
+                        constants.PROD_GOOGLE_REDIRECT_URI);
 }
 
 // view engine setup
