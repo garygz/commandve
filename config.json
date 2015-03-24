@@ -4,10 +4,10 @@
       "client_secret":"XUdszS_mUmtfDYE4M-emoCqr",
       "token_uri":"https://accounts.google.com/o/oauth2/token",
       "client_email":"174402990814-354kgilo1kkkoo0dvs72or118pljmb04@developer.gserviceaccount.com",
-      "redirect_uris":[
-         "https://cmdvninja.herokuapp.com/oauth2callback",
-         "http://localhost:3000/oauth2callback"
-      ],
+      "redirect_uri":{
+        "production": "https://cmdvninja.herokuapp.com/oauth2callback",
+        "development": "http://localhost:3000/oauth2callback"
+      },
       "client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/174402990814-354kgilo1kkkoo0dvs72or118pljmb04@developer.gserviceaccount.com",
       "client_id":"174402990814-354kgilo1kkkoo0dvs72or118pljmb04.apps.googleusercontent.com",
       "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
