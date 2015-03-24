@@ -11,6 +11,7 @@ var APP_MODE      = null;
 var ENABLE_CLIENT_SIDE_LOGGING = false;
 var GOOGLE_CLIENT_ID = null;
 var GOOGLE_CLIENT_SECRET = null;
+var GOOGLE_REDIRECT_URL = null;
 
 var GroupModel = null;
 var UserModel = null;
@@ -32,7 +33,7 @@ exports.setGitHubOAuth = function(clientId, clientSecret, appMode, googleClientI
   ENABLE_CLIENT_SIDE_LOGGING = "false";//(APP_MODE === 'development').toString();
   GOOGLE_CLIENT_ID = googleClientId;
   GOOGLE_CLIENT_SECRET = googleClientSecret;
-  google.setRedirectURL(googleRedirectURL);
+  GOOGLE_REDIRECT_URL = google.setRedirectURL(googleRedirectURL);
 }
 
 exports.list_users = function(User){
@@ -206,7 +207,7 @@ exports.get_logged_in_user = function(){
     if (req.query.mode){
       var clientIdJson = {
         clientId: CLIENT_ID,
-        googleAuthURL: google.getAuthUrl(),
+        googleAuthURL: GOOGLE_REDIRECT_URL,
         mode: APP_MODE,
         log: ENABLE_CLIENT_SIDE_LOGGING
       }
