@@ -1,14 +1,16 @@
-var express = require('express');
-var httpHelper = require('../helpers/https-helper.js')
-var users = require('../helpers/users.js')
-var querystring = require('querystring');
-var groups = require('../helpers/groups.js');
+var httpHelper = require('../helpers/https-helper.js'),
+    users = require('../helpers/users.js'),
+    querystring = require('querystring'),
+    groups = require('../helpers/groups.js'),
+    google = require('../helpers/googleplus');
 
 
 var CLIENT_ID     = null;
 var CLIENT_SECRET = null;
 var APP_MODE      = null;
 var ENABLE_CLIENT_SIDE_LOGGING = false;
+var GOOGLE_CLIENT_ID = null;
+var GOOGLE_CLIENT_SECRET = null;
 
 var GroupModel = null;
 var UserModel = null;
@@ -22,12 +24,14 @@ exports.setModels = function(User,Group,Snippet){
   users.setModels(User,Group,Snippet);
 }
 
-exports.setGitHubOAuth = function(clientId, clientSecret, appMode){
+exports.setGitHubOAuth = function(clientId, clientSecret, appMode, googleClientId, googleClientSecret){
   CLIENT_ID = clientId;
   CLIENT_SECRET = clientSecret;
   APP_MODE = appMode;
   //REMOVE false this for TEST ONLY
-  ENABLE_CLIENT_SIDE_LOGGING = "false"//(APP_MODE === 'development').toString();
+  ENABLE_CLIENT_SIDE_LOGGING = "false";//(APP_MODE === 'development').toString();
+  GOOGLE_CLIENT_ID = googleClientId;
+  GOOGLE_CLIENT_SECRET = googleClientSecret;
 }
 
 exports.list_users = function(User){
@@ -85,7 +89,7 @@ exports.logout_user = function(User){
   }
 }
 
-//deprecated - we will use giyhub for now
+//deprecated - we will use github for now
 exports.signup_user = function(User){
   return function(req,res){
     console.log("create user", req.body);
@@ -100,6 +104,35 @@ exports.signup_user = function(User){
   }
 }
 
+exports.authenticate_google = function(){
+    return function(req,res) {
+      console.log("google code",req.query);
+
+      //this is the final step after a user logged in
+      var onCreateGroup = function(){
+        res.redirect('/');
+      }
+      var onCreateUserSuccess = function(user){
+          groups.findOrCreateDefaultGroupsForGoogle(user,onCreateGroup,onFail);
+          req.session.user = user;
+      };
+
+      var onResolveUser = function(tokens,userProfile){
+        var userJSON = users.convertFromGoogleToUser(userProfile,tokens);
+        users.findOrCreateUser(userJSON, onCreateUserSuccess,onFail);
+
+      }
+      var onFail = function(err){
+        handleErrors(err,res);
+      }
+
+      var onObtainTokens = function(tokens){
+        google.getUser(tokens,onResolveUser, onFail);
+      }
+
+      google.getTokens(req.query.code, onObtainTokens,onFail);
+    }
+}
 
 exports.authenticate_github = function(){
   return function(req,res){
@@ -172,8 +205,9 @@ exports.get_logged_in_user = function(){
     if (req.query.mode){
       var clientIdJson = {
         clientId: CLIENT_ID,
+        googleAuthURL: google.getAuthUrl(),
         mode: APP_MODE,
-        log: ENABLE_CLIENT_SIDE_LOGGING,
+        log: ENABLE_CLIENT_SIDE_LOGGING
       }
       res.json(clientIdJson);
     }else if (req.session.user){

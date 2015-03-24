@@ -24,6 +24,7 @@ angular.module('cmndvninja'). controller('UserController',
   Auth.login({mode:1}).$promise.then(function(resource){
 
     $scope.clientId = resource.clientId;
+    $scope.googleAuthURL = resource.googleAuthURL;
     Shared.appMode = resource.mode;
     Shared.loggingEnabled = resource.log === "true";
     if(Shared.loggingEnabled) console.log("appMode", resource);

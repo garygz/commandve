@@ -37,10 +37,12 @@ snippets.setModels(User,Group,Snippet);
 users.setModels(User,Group,Snippet);
 groups.setModels(User,Group,Snippet);
 
-if (app.get('env') === 'development'){
-  users.setGitHubOAuth(constants.DEV_CLIENT_ID, constants.DEV_CLIENT_SECRET, app.get('env'));
+var isEnvDev = app.get('env') === 'development';
+
+if (isEnvDev){
+  users.setGitHubOAuth(constants.DEV_CLIENT_ID, constants.DEV_CLIENT_SECRET, app.get('env'), constants.GOOGLE_CLIENT_ID,constants.GOOGLE_CLIENT_SECRET);
 }else{
-  users.setGitHubOAuth(constants.PROD_CLIENT_ID, constants.PROD_CLIENT_SECRET, app.get('env'));
+  users.setGitHubOAuth(constants.PROD_CLIENT_ID, constants.PROD_CLIENT_SECRET, app.get('env'),  constants.GOOGLE_CLIENT_ID,constants.GOOGLE_CLIENT_SECRET);
 }
 
 // view engine setup
@@ -65,7 +67,8 @@ app.use(session({
 
 
 //User routes
-app.get('/api/users', users.list_users(User));
+
+if(isEnvDev) app.get('/api/users', users.list_users(User));
 app.get('/api/users/:id', users.find_user(User));
 app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
 app.get('/api/users/:user_id/groups', groups.find_user_groups(Group, Snippet));
@@ -74,7 +77,7 @@ app.delete('/api/users/:user_id', users.delete_user(User));
 
 //Snippet routes
 app.get('/api/groups/:groupId/snippets', snippets.list_snippets(User, Snippet));
-app.get('/api/snippets', snippets.all_snippets(User, Snippet));
+if(isEnvDev) app.get('/api/snippets', snippets.all_snippets(User, Snippet));
 // app.get('/api/groups/:groupId/snippets/:id', snippets.find_snippet(User, Snippet));
 app.post('/api/groups/:groupId/snippets', snippets.create_new_snippet(User, Snippet));
 app.put('/api/groups/:groupId/snippets/:id', snippets.edit_snippet(User, Snippet));
@@ -96,8 +99,9 @@ app.get('/logout/', users.logout_user(User));
 app.post('/signup/', users.signup_user(User));
 
 app.get('/auth/github/callback', users.authenticate_github(User));
-app.get('/auth/current', users.get_logged_in_user(User));
+app.get('/oauth2callback', users.authenticate_google(User));
 
+app.get('/auth/current', users.get_logged_in_user(User));
 
 
 // catch 404 and forward to error handler

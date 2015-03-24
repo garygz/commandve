@@ -97,6 +97,16 @@ exports.findOrCreateDefaultGroups = function(user,callbackSuccess,callbackError)
   syncJob.syncUpJobs([job1, job2, job3], callbackSuccess,callbackError);
 }
 
+exports.findOrCreateDefaultGroupsForGoogle = function(user,callbackSuccess,callbackError){
+
+
+  var job1 = function(onSuccess, onError){
+    exports.findOrCreateUncategorized(user._id,onSuccess,onError);
+  }
+
+  syncJob.syncUpJobs([job1], callbackSuccess,callbackError);
+}
+
 var findGroup = function(user,condition, callbackSuccess,callbackError){
   condition.user = (typeof user._id) == "string"? mongooseIds.castToObjectId(user._id): user._id;
   console.log("look for group", condition);
