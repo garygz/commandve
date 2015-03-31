@@ -33,7 +33,7 @@ angular.module('cmndvninja').controller('GroupController',
     }
   };
 
-  function removeGroupFromDom(group) {
+  var removeGroupFromDom = function(group) {
     var groups = $scope.groupData.groups
     groups.splice(groups.getIndexBy("_id", group._id), 1);
   }
@@ -49,10 +49,11 @@ angular.module('cmndvninja').controller('GroupController',
       userId: Shared.userId,
       user: Shared.userId
     }
-    if(Shared.loggingEnabled) console.log('creating group:', group); /*TODO: push the returned JSON
-                                            object back into $scope.groups
-                                            instead of getting them all
-                                            back again */
+    if(Shared.loggingEnabled) console.log('creating group:', group);
+    /*TODO: push the returned JSON
+      object back into $scope.groups
+      instead of getting them all
+      back again */
     Group.post(group).$promise.then(function(){
       getGroups();}
     );
@@ -64,7 +65,7 @@ angular.module('cmndvninja').controller('GroupController',
   It's necessary because otherwise pictures don't show up until the page
   reloads */
 
-  function insertDefaultPicture(obj) {
+  var insertDefaultPicture = function(obj) {
     if (!obj.image_url) {
       obj.image_url = 'app/img/default-code-image.png';
     }
@@ -76,20 +77,69 @@ angular.module('cmndvninja').controller('GroupController',
 
   var hiddenInput = document.getElementById("hidden-input");
 
-  /* TODO make this a function */
-  function getGroups(){
+  var getGroups = function(){
     if($scope.$parent.user){
       Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
         $scope.groupData.groups = groups;
         $scope.$parent.userGroups = groups;
+        //let angular load the view
+        setTimeout(positionGroups,100);
         setDefaultGroups();
         groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
       });
     }
   }
 
+  var positionGroups = function(){
+    var vw = $( window ).width();
+    //assume standard width of 230
+    //TODO move constants to top
+    var standardSize = 230,
+        marginBetweenGroups = 8,
+        //obtain from New Group element
+        topOffset = $("#newGroupButton").offset().top + $("#newGroupButton").height() + 24,
+        topMargin = 8,
+        previousRowHeights = [],
+        currentRowHeights = [],
+        topPosition = topOffset,
+        leftMargin = $("#newGroupButton").offset().left,
+        leftOffset = 0,
+        elementsPerRow = Math.floor((vw - leftMargin)/(standardSize)),
+        column = 0;
+
+
+    $(".group-panel").each(function(index){
+      console.log($(this));
+      if(column === elementsPerRow){
+        //next row
+        previousRowHeights = currentRowHeights;
+        currentRowHeights = [];
+        leftOffset = leftMargin;
+        column = 0;
+      }
+
+      leftOffset = standardSize*column+marginBetweenGroups + leftMargin;
+
+      if(previousRowHeights[column]){
+        topPosition = previousRowHeights[column] + topMargin;
+      }
+
+      currentRowHeights.push($(this).height() + topPosition);
+
+      $(this).offset({top: topPosition , left: leftOffset});
+      column++;
+
+      if(Shared.loggingEnabled) console.log('position column:',column,$(this).position());
+    });
+  }
+
+  $( window ).resize(function() {
+    positionGroups();
+  });
+
   getGroups();
 
+  //TODO set the property on the server side
   function setDefaultGroups () {
     var groups = $scope.groupData.groups;
     for (var i = 0; i < groups.length; i++){
@@ -156,16 +206,6 @@ angular.module('cmndvninja').controller('GroupController',
 
   }
 
-
-
-
-  // var focusHiddenArea = function() {
-  //     // In order to ensure that the browser will fire clipboard events, we always need to have something selected
-  //   hiddenInput.value = ' ';
-  //   hiddenInput.focus();
-  //   //hiddenInput.select();
-  // };
-
    document.addEventListener("paste", function(e) {
           if(Shared.loggingEnabled) console.log("Paste event", e);
           var text = e.clipboardData.getData("text/plain");
@@ -178,8 +218,6 @@ angular.module('cmndvninja').controller('GroupController',
           //e.preventDefault();
       });
 
-  // // Keep the hidden text area selected
-  // document.addEventListener("mouseup", focusHiddenArea);
 
 }]);
 
