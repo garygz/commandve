@@ -8,6 +8,11 @@
 .group-container {
   padding: 0;
   width: 224px;
+
+}
+
+.group-panel{
+  position: absolute;
 }
 
 .group-header {

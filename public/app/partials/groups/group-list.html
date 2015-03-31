@@ -1,19 +1,18 @@
 <input id="hidden-input" class="hidden" type="text" value="" ng-model="snippetPastedText"/>
 <div id="group-list-wrapper">
 
-  <button type="button"  class="btn btn-default"
+  <button type="button"  class="btn btn-default pull-left" id="newGroupButton"
   data-toggle="modal" data-target="#new-group-modal">New Group</button>
 
-  <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)
-   "style="{padding:none}">
+  <div ng-repeat="group in groupData.groups" ng-click="showGroup(group._id)" class="group-panel">
 
     <div data-id="{{group._id}}"
-        class="panel panel-default group-panel col-md-2 margin-left-1 group-container"
+        class="panel panel-default col-md-2 margin-left-1 group-container"
         ng-mouseover="showButtons=true"
         ng-mouseleave="showButtons=false"
         ng-init="showButtons=false",
         ng-class="{activegroup: showButtons}">
-      <div>
+      <div><!-- start group -->
 
 
         <div class="groups-toolbar" ng-show="showButtons">
@@ -35,7 +34,7 @@
         </div>
         <img class="group-image" ng-src="{{group.image_url}}" ng-show='true'>
       </div>
-      <div class="panel-body" ng-show="showButtons">
+      <div class="panel-body">
         {{group.description}}
       <hr>
       </div>
@@ -50,7 +49,7 @@
           </span>
         </div>
       </div>
-    </div>
+    </div><!-- end group -->
   </div>
 </div>
 
