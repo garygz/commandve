@@ -83,7 +83,7 @@ angular.module('cmndvninja').controller('GroupController',
       Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
         $scope.groupData.groups = groups;
         $scope.$parent.userGroups = groups;
-        setTimeout($scope.positionGroups,200);
+        setTimeout(positionGroups,200);
         setDefaultGroups();
         groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
       });
