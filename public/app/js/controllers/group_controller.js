@@ -14,6 +14,7 @@ angular.module('cmndvninja').controller('GroupController',
   $scope.showAlert = false;
   $scope.image_url = ""
 
+
   $scope.deleteGroup = function($event, group) {
     group.userId = Shared.userId;
     group.user = Shared.userId;
@@ -82,22 +83,21 @@ angular.module('cmndvninja').controller('GroupController',
       Group.query({userId:$scope.$parent.user._id}).$promise.then(function(groups){
         $scope.groupData.groups = groups;
         $scope.$parent.userGroups = groups;
-        //let angular load the view
-        setTimeout(positionGroups,100);
+        setTimeout($scope.positionGroups,200);
         setDefaultGroups();
         groups.forEach(function(item){item.snippetCount = item.snippetCount || 0});
       });
     }
   }
 
-  var positionGroups = function(){
+  $scope.positionGroups = function(){
     var vw = $( window ).width();
     //assume standard width of 230
     //TODO move constants to top
     var standardSize = 230,
         marginBetweenGroups = 8,
         //obtain from New Group element
-        topOffset = $("#newGroupButton").offset().top + $("#newGroupButton").height() + 24,
+        topOffset = $("#newGroupButton").offset().top + $("#newGroupButton").outerHeight() + 24,
         topMargin = 8,
         previousRowHeights = [],
         currentRowHeights = [],
@@ -109,7 +109,7 @@ angular.module('cmndvninja').controller('GroupController',
 
 
     $(".group-panel").each(function(index){
-      console.log($(this));
+
       if(column === elementsPerRow){
         //next row
         previousRowHeights = currentRowHeights;
@@ -123,14 +123,15 @@ angular.module('cmndvninja').controller('GroupController',
       if(previousRowHeights[column]){
         topPosition = previousRowHeights[column] + topMargin;
       }
-
+      console.log($(this).height());
       currentRowHeights.push($(this).height() + topPosition);
 
       $(this).offset({top: topPosition , left: leftOffset});
       column++;
 
-      if(Shared.loggingEnabled) console.log('position column:',column,$(this).position());
     });
+
+
   }
 
   $( window ).resize(function() {
