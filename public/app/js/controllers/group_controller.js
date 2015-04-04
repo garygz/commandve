@@ -90,7 +90,7 @@ angular.module('cmndvninja').controller('GroupController',
     }
   }
 
-  $scope.positionGroups = function(){
+  var positionGroups = function(){
     var vw = $( window ).width();
     //assume standard width of 230
     //TODO move constants to top
