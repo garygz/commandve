@@ -1,17 +1,8 @@
-var GroupModel = null;
-var UserModel = null;
-var SnippetModel = null;
-
-//dependency injection
-exports.setModels = function(User,Group,Snippet){
-  UserModel = User;
-  GroupModel = Group;
-  SnippetModel = Snippet;
-}
+var appConfig = require('./app-config');
 
 exports.findUser = function(findCondition, callbackSuccess, callbackError){
   console.log("find user", findCondition);
-  UserModel.findOne(findCondition, function(error, user){
+	appConfig.getUserModel().findOne(findCondition, function(error, user){
 
      if(error)  {
           console.log("find user error", error);
@@ -22,7 +13,7 @@ exports.findUser = function(findCondition, callbackSuccess, callbackError){
          callbackSuccess(user);
       }
   });
-}
+};
 
 exports.convertFromGoogleToUser = function(googleProfile, tokens){
   return {
@@ -32,11 +23,11 @@ exports.convertFromGoogleToUser = function(googleProfile, tokens){
     usertype: "google",
     googleId: googleProfile.id
   }
-}
+};
 
 exports.createUser = function(createArgs, callbackSuccess, callbackError){
    console.log("create user", createArgs);
-   UserModel.create(createArgs, function(error, user){
+   appConfig.getUserModel().create(createArgs, function(error, user){
         if(error)  {
          callbackError(error);
         }else{
@@ -44,7 +35,7 @@ exports.createUser = function(createArgs, callbackSuccess, callbackError){
         }
 
   });
-}
+};
 
 exports.findOrCreateUser = function(profile, callbackSuccess, callbackError){
   console.log("findOrCreate", profile);
@@ -68,9 +59,9 @@ exports.findOrCreateUser = function(profile, callbackSuccess, callbackError){
       callbackSuccess(user);
     }else{
       //create user
-      exports.createUser(profile, callbackSuccess, callbackError);
+      exports.createUser(createOptions, callbackSuccess, callbackError);
     }
   });
-}
+};
 
 

@@ -15,9 +15,9 @@ var scopes = [
   //,'https://www.googleapis.com/auth/calendar'
 ];
 
-exports.setRedirectURL = function(newURL){
-  redirectURL = newURL;
-  oauth2Client = new OAuth2(constants.GOOGLE_CLIENT_ID, constants.GOOGLE_CLIENT_SECRET, redirectURL);
+exports.setRedirectURL = function(config){
+  redirectURL = config.googleRedirectURL;
+  oauth2Client = new OAuth2(config.googleClientId, config.googleClientSecret, redirectURL);
   url = oauth2Client.generateAuthUrl({
     access_type: 'online', // 'online' (default) or 'offline' (gets refresh_token)
     scope: scopes // If you only need one scope you can pass it as string

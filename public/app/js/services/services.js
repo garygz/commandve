@@ -1,4 +1,4 @@
-  angular.module('cmndvninja').factory('User', ['$resource', function($resource){
+angular.module('cmndvninja').factory('User', ['$resource', function($resource){
   return $resource('/api/users/:id', {id: '@_id'},
   {
     query: {method:'GET', isArray:true},
@@ -44,6 +44,7 @@ angular.module('cmndvninja').factory('SearchItem', ['$resource', function($resou
     update: {method:'PUT' },
     remove: {method:'DELETE'}
   });
+
   return SearchItem;
 }]);
 
