@@ -1,3 +1,8 @@
+/**
+ * Route which handles CRUD operations related to snippet groups
+ * Use of Promises is on TODO list
+ */
+
 var groups = require('../helpers/groups.js'),
     appConfig = require('../helpers/app-config'),
     constants = require('../helpers/constants.js');

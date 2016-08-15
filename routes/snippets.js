@@ -74,7 +74,7 @@ exports.createNewSnippet = function(req,res){
     };
 
     var callbackSuccess = function(snippet){
-      processSuccessSnipetOperation(res,snippet, true);
+      processSuccessSnippetOperation(res,snippet, true);
     };
 
     if(req.body.group){
@@ -206,7 +206,7 @@ var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
       if(err){
         handleErrors(err,res, "Failed to save the snippet");
       }else{
-        processSuccessSnipetOperation(res, snippet, true);
+        processSuccessSnippetOperation(res, snippet, true);
       }
 
     });
@@ -243,7 +243,7 @@ var isGroupGitHub = function(group){
   return group.group_type === constants.GROUP_TYPE_GITHUB;
 };
 
-var processSuccessSnipetOperation = function(res,snippet, isNew){
+var processSuccessSnippetOperation = function(res, snippet, isNew){
   console.log("New Snippet", isNew, snippet);
   res.status(200).send();
 
