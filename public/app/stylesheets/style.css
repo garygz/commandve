@@ -29,8 +29,17 @@ Fix for Angular UI not displaying curors correctly
   margin-left: 10px;
 }
 
-.search-results{
-  width:70vw;
+.search-result{
+  height: 30em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 15px;
+}
+
+.search-result-header {
+  font-style: italic;
+  margin-top: 4px;
+  font-weight: bold;
 }
 
 .search-groups{
@@ -58,4 +67,10 @@ Fix for Angular UI not displaying curors correctly
 
 .margin-top-1{
   margin-top: 1%;
+}
+
+.instructions {
+  background: whitesmoke;
+  margin: 4px;
+  padding: 8px;
 }

@@ -1,13 +1,8 @@
 "use strict";
 
 describe('Snippets controller', function(){
-  var nconf = require('nconf');
-  // First consider commandline arguments and environment variables, respectively
-  nconf.argv().env();
-  // Then load configuration from a designated file.
-  nconf.file({ file: './tests/test_config.json' });
 
-  var testDomain = nconf.get('test:domain'),
+  var testDomain = "http://localhost:3000",
       request   = require('request'),
       constants = require('../../helpers/constants'),
       userJSON  = null,
