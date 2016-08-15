@@ -1,118 +1,106 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var session = require('express-session');
-var constants = require('./helpers/constants');
-var MongoStore = require('connect-mongo')(session);
+'use strict';
 
-var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/test';
+/**
+ * Initialize the application, create models
+ * and inject them into routes
+ * Secure session manager is initialized with MongoDB
+ * which supports it natively
+ */
 
-//require all routes
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var snippets = require('./routes/snippets');
-var groups = require('./routes/groups');
-
-var app = express();
+var express = require('express'),
+	path = require('path'),
+	favicon = require('serve-favicon'),
+	logger = require('morgan'),
+	cookieParser = require('cookie-parser'),
+	bodyParser = require('body-parser'),
+	mongoose = require('mongoose'),
+	session = require('express-session'),
+	MongoStore = require('connect-mongo')(session),
+	appConfig = require('./helpers/app-config'),
+	//require all routes
+	userRouter = require('./routes/users'),
+	snippetRouter = require('./routes/snippets'),
+	groupRouter = require('./routes/groups'),
+	app = express(),
+	nconf = require('nconf'),
+	environmentMode = app.get('env'),
+	isEnvDev = environmentMode === 'development';
 
 console.log("Running in",app.get('env'),"mode");
 
-mongoose.connect(dbUrl);
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
-  //success - db is ready
+appConfig.init({
+	mongoose: mongoose,
+ 	environmentMode: environmentMode,
+	userRouter: userRouter,
+	session: session
 });
 
-var User = require('./db/models/user')(mongoose);
-var Group = require('./db/models/group')(mongoose);
-var Snippet = require('./db/models/snippet')(mongoose);
+appConfig.injectDependencies({
+		mongoose: mongoose,
+		routes: [userRouter,snippetRouter,groupRouter]
+});
 
-snippets.setModels(User,Group,Snippet);
-users.setModels(User,Group,Snippet);
-groups.setModels(User,Group,Snippet);
+// view engine setup for default error handling
+app.set('views', path.join(__dirname, 'views'))
+		.set('view engine', 'jade');
 
-var isEnvDev = app.get('env') === 'development';
-
-if (isEnvDev){
-  users.setGitHubOAuth(constants.DEV_CLIENT_ID,
-                      constants.DEV_CLIENT_SECRET,
-                      app.get('env'),
-                      constants.GOOGLE_CLIENT_ID,
-                      constants.GOOGLE_CLIENT_SECRET,
-                      constants.DEV_GOOGLE_REDIRECT_URI);
-
-}else{
-  users.setGitHubOAuth(constants.PROD_CLIENT_ID,
-                        constants.PROD_CLIENT_SECRET,
-                        app.get('env'),
-                        constants.GOOGLE_CLIENT_ID,
-                        constants.GOOGLE_CLIENT_SECRET,
-                        constants.PROD_GOOGLE_REDIRECT_URI);
-}
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-
-app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/ace_editor',  express.static(__dirname + '/ace_editor'));
-app.use(session({
-    secret: 'X717197123987123',//TODO change this to a long key
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    resave: true,
-    saveUninitialized: true
-}));
+//setup favorite icon handler
+app.use(favicon(__dirname + '/public/favicon.ico'))
+	.use(logger('dev'))
+	.use(bodyParser.json())
+	.use(bodyParser.urlencoded({ extended: false }))
+	.use(cookieParser())
+	.use(express.static(path.join(__dirname, 'public')))
+	.use('/ace_editor',  express.static(__dirname + '/ace_editor'))
+	.use(session({
+			secret: 'X717197123987123',//TODO change this to a long key
+			store: new MongoStore({ mongooseConnection: mongoose.connection }),
+			resave: true,
+			saveUninitialized: true
+	}));
 
 
 
 //User routes
 
-if(isEnvDev) app.get('/api/users', users.list_users(User));
-app.get('/api/users/:id', users.find_user(User));
-app.get('/api/users/:user_id/snippets', snippets.find_user_snippets(User, Snippet));
-app.get('/api/users/:user_id/groups', groups.find_user_groups(Group, Snippet));
-app.post('/api/users/:user_id/snippets', snippets.create_new_snippet(User, Snippet));
-app.delete('/api/users/:user_id', users.delete_user(User));
+if(isEnvDev) {
+	app.get('/api/users', userRouter.listUsers);
+}
+
+app.get('/api/users/:id', userRouter.findUser);
+app.get('/api/users/:user_id/snippets', snippetRouter.findUserSnippets);
+app.get('/api/users/:user_id/groups', groupRouter.findUserGroups);
+app.post('/api/users/:user_id/snippets', snippetRouter.createNewSnippet);
+app.delete('/api/users/:user_id', userRouter.deleteUser);
 
 //Snippet routes
-app.get('/api/groups/:groupId/snippets', snippets.list_snippets(User, Snippet));
-if(isEnvDev) app.get('/api/snippets', snippets.all_snippets(User, Snippet));
-// app.get('/api/groups/:groupId/snippets/:id', snippets.find_snippet(User, Snippet));
-app.post('/api/groups/:groupId/snippets', snippets.create_new_snippet(User, Snippet));
-app.put('/api/groups/:groupId/snippets/:id', snippets.edit_snippet(User, Snippet));
-app.delete('/api/groups/:groupId/snippets/:id', snippets.delete_snippet(User, Snippet));
+if(isEnvDev) app.get('/api/snippets', snippetRouter.getAllSnippets);
+
+app.get('/api/groups/:groupId/snippets', snippetRouter.listSnippets);
+app.post('/api/groups/:groupId/snippets', snippetRouter.createNewSnippet);
+app.put('/api/groups/:groupId/snippets/:id', snippetRouter.editSnippet);
+app.delete('/api/groups/:groupId/snippets/:id', snippetRouter.deleteSnippet);
 
 //search routes
-app.get('/api/search/users/:id', snippets.search_snippet(User, Snippet));
+app.get('/api/search/users/:id', snippetRouter.findSnippet);
 
 //group routes
-app.get('/api/users/:user_id/groups', groups.list_groups(Group,Snippet));
-app.get('/api/users/:user_id/groups/:id', groups.find_group(Group,Snippet));
-app.post('/api/users/:user_id/groups', groups.create_group(Group,Snippet));
-app.put('/api/users/:user_id/groups/:id', groups.update_group(Group,Snippet));
-app.delete('/api/users/:user_id/groups/:id', groups.delete_group(User, Group));
+app.get('/api/users/:user_id/groups', groupRouter.listGroups);
+app.get('/api/users/:user_id/groups/:id', groupRouter.findGroups);
+app.post('/api/users/:user_id/groups', groupRouter.createGroup);
+app.put('/api/users/:user_id/groups/:id', groupRouter.updateGroup);
+app.delete('/api/users/:user_id/groups/:id', groupRouter.deleteGroup);
 
 //login routes
-app.post('/login/', users.login_user(User));
-app.get('/logout/', users.logout_user(User));
-app.post('/signup/', users.signup_user(User));
+app.post('/login/', userRouter.loginUser);
+app.get('/logout/', userRouter.logoutUser);
+app.post('/signup/', userRouter.signupUser);
 
-app.get('/auth/github/callback', users.authenticate_github(User));
-app.get('/oauth2callback', users.authenticate_google(User));
+//oAuth callbacks
+app.get('/auth/github/callback', userRouter.authenticateGithub);
+app.get('/oauth2callback', userRouter.authenticateGoogle);
 
-app.get('/auth/current', users.get_logged_in_user(User));
+app.get('/auth/current', userRouter.getLoggedInUser);
 
 
 // catch 404 and forward to error handler
@@ -124,8 +112,10 @@ app.use(function(req, res, next) {
 
 // error handlers
 
-// development error handler
-// will print stacktrace
+/*
+ development error handler
+ will print stacktrace
+*/
 
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
@@ -138,8 +128,11 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
+
+/*
+ production error handler
+ no stacktraces leaked to user
+ */
 app.use(function(err, req, res, next) {
   console.log(err.stack);
   res.status(err.status || 500);
@@ -148,7 +141,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
 
 module.exports = app;

@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * User controller supports search and login functionality for a specific user
+ */
+
 angular.module('cmndvninja'). controller('UserController',
   ['$scope', '$location', 'User', 'Shared', 'Auth',
   function($scope, $location, User, Shared, Auth){
@@ -7,7 +11,7 @@ angular.module('cmndvninja'). controller('UserController',
   $scope.data = {};
   //for test only
   //setup after login
-  $scope.clientId = null;//Get it from the server "9e8ff83bdb61dae15c5c";
+  $scope.clientId = null;
   $scope.user = null;
 
   var isLoginRequiredForPage = function(){
@@ -19,7 +23,7 @@ angular.module('cmndvninja'). controller('UserController',
     }else{
       return true;
     }
-  }
+  };
 
   Auth.login({mode:1}).$promise.then(function(resource){
 
@@ -34,10 +38,11 @@ angular.module('cmndvninja'). controller('UserController',
   });
 
   var promise = Auth.login().$promise;
+
   promise.then(function(user){
     if(Shared.loggingEnabled) console.log("user logged in");
     $scope.user = user;
-    Shared.userId = user._id
+    Shared.userId = user._id;
     $location.path('/');
   }, function(reason) {
       console.log('login failed: ' + reason);

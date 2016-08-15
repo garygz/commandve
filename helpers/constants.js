@@ -1,11 +1,4 @@
-var nconf = require('nconf');
 
-// First consider commandline arguments and environment variables, respectively
-nconf.argv().env();
-// Then load configuration from a designated file.
-nconf.file({ file: 'config.json' });
-
-//TODO READ THEM FROM CONFIG FILE
 exports.GROUP_TYPE_GITHUB = "github-gist";
 exports.GROUP_NAME_GITHUB = "My GitHub Gists";
 
@@ -29,20 +22,6 @@ exports.MISC_IMAGE = "app/img/misc-code-image.png";
 
 exports.TAG_DEFAULT = "HTML";
 
-//Production GITHUB
-exports.PROD_CLIENT_ID = nconf.get("github:production:client_id");
-exports.PROD_CLIENT_SECRET = nconf.get("github:production:client_secret");
-
-//DEVELOPMENT GITHUB
-exports.DEV_CLIENT_ID = nconf.get("github:development:client_id");
-exports.DEV_CLIENT_SECRET = nconf.get("github:development:client_secret");
-
-//DEVELOPMENT/PRODUCTION GOOGLE
-exports.GOOGLE_CLIENT_ID = nconf.get("google:client_id");
-exports.GOOGLE_CLIENT_SECRET = nconf.get("google:client_secret");
-
-exports.PROD_GOOGLE_REDIRECT_URI = nconf.get("google:redirect_uri:production");
-exports.DEV_GOOGLE_REDIRECT_URI = nconf.get("google:redirect_uri:development");
 
 
 

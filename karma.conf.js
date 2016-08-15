@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'test-main.js',
       {pattern: 'node_modules/angular/**/*.js', include: true},
+      {pattern: 'node_modules/request/**/*.js', include: true},
       {pattern: 'public/app/js/**/*.js', included: true},
       {pattern: 'tests/**/*.js', included: true}
     ],

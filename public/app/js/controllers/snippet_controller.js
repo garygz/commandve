@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Snippet CRUD controller
+ *
+ */
+
 angular.module('cmndvninja').controller('SnippetController',
   ['$scope', '$location', '$route','Snippet', 'Shared','$timeout',
   function($scope, $location, $route, Snippet, Shared, $timeout){
@@ -31,9 +36,9 @@ angular.module('cmndvninja').controller('SnippetController',
       if (! snippet._id) {
         $scope.currentSnippet = snippet;
       }
-    }
+    };
 
-    function initialize () {
+    var initialize = function  () {
       if (Shared.currentSearchedSnippetId) {
         $scope.selectSnippet(Shared.currentSearchedSnippetId);
         Shared.currentSearchedSnippedId = false;
@@ -51,7 +56,7 @@ angular.module('cmndvninja').controller('SnippetController',
       if ($scope.currentSnippet.tags.length > 0){
         $scope.mode = $scope.currentSnippet.tags[0];
       }
-    }
+    };
 
     var getGroupId = function(){
       var url = $location.absUrl();
@@ -60,49 +65,36 @@ angular.module('cmndvninja').controller('SnippetController',
       return url.slice(beg, end);
     };
 
-    var groupId = getGroupId();
-
-    getSnippets();
-
-    function getSnippets() { Snippet.query({groupId: groupId}).$promise.then(
-      function(snippets){
-        $scope.snippets = snippets;
-        $scope.currentSnippet = $scope.snippets[0];
-        markSnippetsAsSaved(snippets);
-        initialize();
-        $scope.initializeAceState();
-        if(Shared.loggingEnabled) console.log($scope.snippets);
-        if(Shared.loggingEnabled) console.log('current snippet:', $scope.currentSnippet);
+    var getSnippets = function () {
+      Snippet.query({groupId: groupId}).$promise.then(
+        function(snippets){
+          $scope.snippets = snippets;
+          $scope.currentSnippet = $scope.snippets[0];
+          markSnippetsAsSaved(snippets);
+          initialize();
+          $scope.initializeAceState();
+          if(Shared.loggingEnabled) console.log($scope.snippets);
+          if(Shared.loggingEnabled) console.log('current snippet:', $scope.currentSnippet);
         }
       );
       return $scope.snippets;
-    }
+    };
+
+    var groupId = getGroupId();
+
+    getSnippets();
 
     $scope.flagSnippet = function(){
       $scope.currentSnippet.saved = false;
     };
 
-    function markOneSnippetAsSaved(snippet) {
+    var markOneSnippetAsSaved = function markOneSnippetAsSaved(snippet) {
       snippet.saved = true;
       snippet.isNew = false;
-    }
+    };
 
-    function typeOf(value) {
-      var s = typeof value;
-      if (s === 'object') {
-          if (value) {
-              if (value instanceof Array) {
-                  s = 'array';
-              }
-          } else {
-              s = 'null';
-          }
-      }
-      return s;
-    }
-
-    function markSnippetsAsSaved(snippets) {
-      if (typeOf(snippets) === "array") {
+    var markSnippetsAsSaved = function (snippets) {
+      if ( snippets instanceof Array) {
         for (var i = 0; i < snippets.length; i++) {
           markOneSnippetAsSaved(snippets[i]);
         }
@@ -110,7 +102,7 @@ angular.module('cmndvninja').controller('SnippetController',
           throw 'in markSnippetsAsSaved, snippets is not an array';
       }
       return snippets;
-    }
+    };
 
     $scope.saveAllSnippets = function (){
       for (var i = 0; i < $scope.snippets.length; i++) {
@@ -121,14 +113,14 @@ angular.module('cmndvninja').controller('SnippetController',
       if(Shared.loggingEnabled) console.log($scope.snippets)
     };
 
-    function createOrEditSnippet (snippet) {
+    var createOrEditSnippet = function  (snippet) {
       snippet.user = Shared.userId;
       if (snippet.isNew) {
         createSnippet(snippet);
       } else {
         editSnippet(snippet);
       }
-    }
+    };
 
     $scope.stageDelete = function (snippet) {
       $scope.snippetToDelete = snippet;
@@ -138,12 +130,12 @@ angular.module('cmndvninja').controller('SnippetController',
       var map = {groupId: $scope.snippetToDelete.group,
                 id: $scope.snippetToDelete._id};
 
-      $scope.snippets.splice($scope.snippets.getIndexBy("_id", $scope.snippetToDelete._id), 1);
+      $scope.snippets.splice(getIndexBy($scope.snippets, "_id", $scope.snippetToDelete._id), 1);
       loadNextSnippet();
       Snippet.remove(map);
     };
 
-    function loadNextSnippet(){
+    var loadNextSnippet = function (){
       if ($scope.snippets.length > 0) {
         if(Shared.loggingEnabled) console.log('snippets is more than one:', $scope.snippets[0])
         $scope.currentSnippet = $scope.snippets[0];
@@ -151,20 +143,20 @@ angular.module('cmndvninja').controller('SnippetController',
       }else {
         $scope.newSnippet();
       }
-    }
+    };
 
-    function createSnippet (snippet) {
+    var createSnippet =  function  (snippet) {
       snippet.groupId = groupId;
       Snippet.post(snippet);
-    }
+    };
 
-    function editSnippet (snippet) {
+    var editSnippet = function (snippet) {
       snippet.groupId = groupId;
       snippet.group = groupId;
       Snippet.update(snippet);
-    }
+    };
 
-    Array.prototype.getIndexBy = function (name, value) {
+    var getIndexBy = function (name, value) {
     for (var i = 0; i < this.length; i++) {
         if (this[i][name] == value) {
             return i;
@@ -172,14 +164,14 @@ angular.module('cmndvninja').controller('SnippetController',
       }
     };
 
-    function findById(source, id) {
+    var findById = function (source, id) {
       for (var i = 0; i < source.length; i++) {
         if (source[i]._id === id) {
         return source[i];
         }
       }
       throw "throwing error from findById in SnippetController: couldn't find object with id: " + id;
-    }
+    };
 
     $scope.hover = function (snippet){
       snippet.showToolbar = ! snippet.showToolbar;
@@ -238,7 +230,7 @@ angular.module('cmndvninja').controller('SnippetController',
       }
       editor.setTheme("ace/theme/" + $scope.theme);
       editor.getSession().setMode("ace/mode/" + $scope.mode.toLowerCase());
-    }
+    };
 
     $scope.initializeAceState();
 
