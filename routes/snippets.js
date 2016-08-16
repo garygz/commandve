@@ -9,87 +9,80 @@ var constants = require('../helpers/constants'),
 		utils = require('../helpers/utils');
 
 exports.listSnippets = function(req,res){
-    console.log(req.params);
-    var promise = appConfig.getSnippetModel().find({group: req.params.groupId}).sort({updated_at: -1}).exec();
-
-		utils.resolvePromiseAndRespond(promise, res);
+	console.log(req.params);
+	var promise = appConfig.getSnippetModel().find({group: req.params.groupId}).sort({updated_at: -1}).exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 //TODO limit this to admins only
 exports.getAllSnippets = function(req, res){
-    console.log(req.params);
-    var promise = appConfig.getSnippetModel().find({}).sort({updated_at: -1}).exec();
-
-		utils.resolvePromiseAndRespond(promise, res);
+	console.log(req.params);
+	var promise = appConfig.getSnippetModel().find({}).sort({updated_at: -1}).exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.deleteSnippet = function(req,res){
-    var promise = appConfig.getSnippetModel().findOneAndRemove({_id: req.params.id}).exec();
-
-		utils.resolvePromiseAndRespond(promise, res);
+	var promise = appConfig.getSnippetModel().findOneAndRemove({_id: req.params.id}).exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.findSnippet = function(req,res){
-    var promise = appConfig.getSnippetModel().findById(req.params.id).populate('user').exec();
-
-		utils.resolvePromiseAndRespond(promise, res);
+	var promise = appConfig.getSnippetModel().findById(req.params.id).populate('user').exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.findUserSnippets = function(req,res){
-    var promise = appConfig.getSnippetModel().find({user: req.params.user_id}).sort({updated_at: -1}).exec();
-
-		utils.resolvePromiseAndRespond(promise, res);
+	var promise = appConfig.getSnippetModel().find({user: req.params.user_id}).sort({updated_at: -1}).exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.createNewSnippet = function(req,res){
-		if ( req.body._id) {
-			exports.editSnippet(req, res);
-			return;
-		}
+	if ( req.body._id) {
+		exports.editSnippet(req, res);
+		return;
+	}
 
-    var callbackError = utils.createErrorHandler(res, "Failed to save the snippet");
+	var callbackError = utils.createErrorHandler(res, "Failed to save the snippet");
 
-    var callbackSuccess = function(snippet){
-      processSuccessSnippetOperation(res,snippet, true);
-    };
+	var callbackSuccess = function(snippet){
+		processSuccessSnippetOperation(res,snippet, true);
+	};
 
-    if(req.body.group){
-      //group is resolved, create the snippet
-      createSnippetFromRequest(req, res,callbackSuccess,callbackError);
-    }else{
-      //findOrCreateNewGroup = function(user, findOptions, createOptions,callbackSuccess,callbackError)
-      var callbackSuccessGroupCreate = function(group){
-        req.body.group = group._id;
-        createSnippetFromRequest(req, res, callbackSuccess,callbackError);
-      };
+	if(req.body.group){
+		//group is resolved, create the snippet
+		createSnippetFromRequest(req, res,callbackSuccess,callbackError);
+	}else{
+		//findOrCreateNewGroup = function(user, findOptions, createOptions,callbackSuccess,callbackError)
+		var callbackSuccessGroupCreate = function(group){
+			req.body.group = group._id;
+			createSnippetFromRequest(req, res, callbackSuccess,callbackError);
+		};
 
-      groups.findOrCreateUncategorized(req.body.user, callbackSuccessGroupCreate,callbackError);
-    }
+		groups.findOrCreateUncategorized(req.body.user, callbackSuccessGroupCreate,callbackError);
+	}
 };
 
 exports.editSnippet = function(req,res){
-    var paramsIn = createSnippetMapFromRequest(req),
-				onFailure = utils.createErrorHandler(res,"Failed to save the snippet"),
-				promise;
+	var paramsIn = createSnippetMapFromRequest(req),
+			onFailure = utils.createErrorHandler(res,"Failed to save the snippet"),
+			promise;
 
-		var onSuccess = function (snippet) {
-			var callbackSuccess = function(){
-				res.json(snippet);
-				createOrUpdateGitsSnippet(snippet);
-			};
-			updateSnippetAndSave(snippet, paramsIn, callbackSuccess,onFailure);
+	var onSuccess = function (snippet) {
+		var callbackSuccess = function(){
+			res.json(snippet);
+			createOrUpdateGitsSnippet(snippet);
 		};
+		updateSnippetAndSave(snippet, paramsIn, callbackSuccess,onFailure);
+	};
 
-    promise = appConfig.getSnippetModel().findOne({_id: req.body._id}).exec();
-
-		promise.then(onSuccess, onFailure);
+	promise = appConfig.getSnippetModel().findOne({_id: req.body._id}).exec();
+	promise.then(onSuccess, onFailure);
 };
 
 exports.findSnippet = function(req,res){
-    var searchQuery = getQueryParams(req),
-				promise = appConfig.getSnippetModel().find({user: req.params.id, $text : { $search : searchQuery.query} }).exec();
-
-		utils.resolvePromiseAndRespond(promise, res);
+	var searchQuery = getQueryParams(req),
+			promise = appConfig.getSnippetModel().find({user: req.params.id, $text : { $search : searchQuery.query} }).exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 //Private
