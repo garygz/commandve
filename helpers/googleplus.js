@@ -5,7 +5,7 @@ var google = require('googleapis'),
     url = null,
     oauth2Client = null,
     OAuth2 = google.auth.OAuth2;
-  ;
+
 
 
 // generate a url that asks permissions for Google+ and Google Calendar scopes
@@ -15,16 +15,16 @@ var scopes = [
   //,'https://www.googleapis.com/auth/calendar'
 ];
 
-exports.setRedirectURL = function(newURL){
-  redirectURL = newURL;
-  oauth2Client = new OAuth2(constants.GOOGLE_CLIENT_ID, constants.GOOGLE_CLIENT_SECRET, redirectURL);
+exports.setRedirectURL = function(config){
+  redirectURL = config.googleRedirectURL;
+  oauth2Client = new OAuth2(config.googleClientId, config.googleClientSecret, redirectURL);
   url = oauth2Client.generateAuthUrl({
     access_type: 'online', // 'online' (default) or 'offline' (gets refresh_token)
     scope: scopes // If you only need one scope you can pass it as string
   });
   console.log("set google redirect", url);
   return url;
-}
+};
 
 exports.setTokens = function(tokens){
   oauth2Client.setCredentials(tokens);

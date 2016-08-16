@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Controls the search bar
+ */
+
 angular.module("cmndvninja").controller("SearchController",
 ['$scope', '$location', '$route','SearchItem','Shared',
 

@@ -1,29 +1,8 @@
-<h4>Search Results</h4>
+<h4 class="col-md-3 margin-left-1">Search Results</h4>
 <!-- search-panel  -->
-<div class="search-results pull-left" >
-  <div ng-repeat="searchItem in $parent.searchResults" ng-model="$parent.searchResults">
-      <div class="overflow-hidden panel panel-default col-md-3 margin-left-1">
-        <div class="panel-body" ng-click="goToSnippet(searchItem)">
-          <div>{{searchItem.unique_handle}}</div>
-          <hr/>
-          <div>{{searchItem.content}}</div>
-        </div>
-    </div>
-  </div>
-
+<div class="pull-left" >
+    <search-result ng-repeat="searchItem in $parent.searchResults" item-data="searchItem" ng-click="goToSnippet(searchItem)"></search-result>
 </div>
-<!-- Groups -->
-<!-- <div class="search-panel search-groups pull-right">
-  <div ng-repeat="group in $parent.userGroups">
 
-      <div class="panel panel-default row margin-right-2 droppable">
-        <div class="panel-body clickable" ng-click="showGroup(group._id)">
-          <div>{{group.name}}</div>
-          <div>{{group.description}}<div>
-        </div>
-      </div>
-
-  </div>
-</div> -->
 
 

@@ -1,3 +1,7 @@
+/**
+ * Controls popup group panel
+ */
+
 angular.module('cmndvninja').controller('toggleController', ['$scope', '$timeout',
   function($scope, $timeout, $location, $route, Snippet, Shared){
 
@@ -6,7 +10,7 @@ angular.module('cmndvninja').controller('toggleController', ['$scope', '$timeout
 
     var changeGroupsVisibilityFalse = function () {
       $scope.groupsVisibilityFalse = true;
-    }
+    };
 
     $scope.toggleGroupsButton = function(){
       $scope.groupsVisibility = !$scope.groupsVisibility;
@@ -16,7 +20,7 @@ angular.module('cmndvninja').controller('toggleController', ['$scope', '$timeout
         $scope.groupsVisibilityFalse = false;
       }
 
-    }
+    };
 
     $scope.toggleGroups = function () {
       $scope.toggleGroupsButton();
