@@ -129,7 +129,7 @@ angular.module('cmndvninja').controller('GroupController',
 
 		var positionGroups = function(){
 
-			if (!$("#newGroupButton")) {
+			if (!($("#newGroupButton") && $("#newGroupButton").offset())) {
 				return;
 			}
 

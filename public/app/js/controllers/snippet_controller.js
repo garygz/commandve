@@ -203,25 +203,26 @@ angular.module('cmndvninja').controller('SnippetController',
 		};
 
 		var markSnippetsAsSaved = function (snippets) {
-			if ( snippets instanceof Array) {
+			if ( snippets ) {
 				for (var i = 0; i < snippets.length; i++) {
 					markOneSnippetAsSaved(snippets[i]);
 				}
-			} else {
-				throw 'in markSnippetsAsSaved, snippets is not an array';
 			}
+
 			return snippets;
 		};
 
 		var createSnippet =  function  (snippet) {
       snippet.groupId = groupId;
-      Snippet.post(snippet);
+		  Snippet.post(snippet);
+			markOneSnippetAsSaved(snippet);
     };
 
     var editSnippet = function (snippet) {
       snippet.groupId = groupId;
       snippet.group = groupId;
       Snippet.update(snippet);
+			markOneSnippetAsSaved(snippet);
     };
 
     var findById = function (source, id) {

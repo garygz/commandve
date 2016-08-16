@@ -4,62 +4,56 @@ var httpHelper = require('../helpers/https-helper.js'),
 		appConfig = require('../helpers/app-config'),
     groups = require('../helpers/groups.js'),
     google = require('../helpers/googleplus'),
-    github = require('../helpers/git-hub');
+    github = require('../helpers/git-hub'),
+    utils = require('../helpers/utils');
 
 
-var CLIENT_ID,CLIENT_SECRET,CLIENT_SECRET,CLIENT_SECRET,CLIENT_SECRET,
-	APP_MODE,ENABLE_CLIENT_SIDE_LOGGING,GOOGLE_CLIENT_ID,
-	GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URL;
+var clientId,clientSecret,
+	appMode,enableClientSideLogging,googleClientId,
+	googleClientSecret, googleRedirectUrl;
 
 exports.setGitHubOAuth = function(config){
-  CLIENT_ID = config.clientId;
-  CLIENT_SECRET = config.clientSecret;
-  APP_MODE = config.appMode;
+  clientId = config.clientId;
+  clientSecret = config.clientSecret;
+  appMode = config.appMode;
   //REMOVE false this for TEST ONLY
-  ENABLE_CLIENT_SIDE_LOGGING = "false";//(APP_MODE === 'development').toString();
-  GOOGLE_CLIENT_ID = config.googleClientId;
-  GOOGLE_CLIENT_SECRET = config.googleClientSecret;
-  GOOGLE_REDIRECT_URL = google.setRedirectURL(config);
+  enableClientSideLogging = "false";//(appMode === 'development').toString();
+  googleClientId = config.googleClientId;
+  googleClientSecret = config.googleClientSecret;
+  googleRedirectUrl = google.setRedirectURL(config);
 };
 
 exports.listUsers = function(req,res){
-	appConfig.getUserModel().find({}, function(error, users){
-      if(error)  {
-          handleErrors(error, res);
-         }else{
-          res.json(users);
-         }
-    });
+
+	var promise = appConfig.getUserModel().find({}).exec();
+  utils.resolvePromiseAndRespond(promise, res);
 
 };
 
 
 exports.findUser = function(req,res) {
-	appConfig.getUserModel().findById(req.params.id, function (error, user) {
-		if (error) {
-			handleErrors(error, res);
-		} else {
-			res.json(user);
-		}
 
-	});
+	var promise = appConfig.getUserModel().findById(req.params.id).exec();
+  utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.loginUser = function(req,res){
     console.log("login", req.body);
-    appConfig.getUserModel().findOne({email:req.body.email, password: req.body.password}, function(error, user){
-        if(error)  {
-          handleErrors(error, res);
-         }else{
-          if(user){
-            req.session.user = user;
-            res.json(user);
-          }else{
-            res.stats(404).send();
-          }
-         }
+    var onError = utils.createErrorHandler(res),
+        promise;
 
-    });
+    var onSuccess = function (user) {
+      if(user){
+        req.session.user = user;
+        res.json(user);
+      }else{
+        res.stats(404).send();
+      }
+    };
+
+    promise = appConfig.getUserModel().findOne({email:req.body.email, password: req.body.password}).exec();
+
+    promise.then(onSuccess, onError);
 };
 
 
@@ -74,14 +68,8 @@ exports.logoutUser = function(req,res){
  */
 exports.signupUser = function(req,res){
     console.log("create user", req.body);
-    appConfig.getUserModel().create({username: req.body.username, email:req.body.email, password: req.body.password}, function(error, user){
-        if(error)  {
-          handleErrors(error, res);
-         }else{
-          res.json(user);
-         }
-
-    });
+    var promise = appConfig.getUserModel().create({username: req.body.username, email:req.body.email, password: req.body.password}).exec();
+    utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.authenticateGoogle = function(req,res) {
@@ -103,9 +91,7 @@ exports.authenticateGoogle = function(req,res) {
 
       };
 
-      var onFail = function(err){
-        handleErrors(err,res);
-      };
+      var onFail = utils.createErrorHandler(res);
 
       var onObtainTokens = function(tokens){
         google.getUser(tokens,onResolveUser, onFail);
@@ -121,8 +107,8 @@ exports.authenticateGithub = function(req,res){
       redirect('/');
     }else{
         var data = querystring.stringify({
-             client_id : CLIENT_ID,
-             client_secret : CLIENT_SECRET,
+             client_id : clientId,
+             client_secret : clientSecret,
              code : code
           });
 
@@ -137,41 +123,12 @@ exports.authenticateGithub = function(req,res){
 
         };
 
-        httpHelper.httpPost(options,data,
-                function(accessData){
-                  console.log(accessData);
-                  github.getGitHubProfile(accessData, function(user){
-                      //SUCCESS - we are able to login
-                      var onFailEmail = function(err){
-                        console.log(err,"Failed to obtain email from GitHub", user._id);
-                      };
-                      var onFailGroups = function(err){
-                        console.log(err,"Failed to create default groups", user._id);
-                        onDefaultGroupCreation();
-                      };
-                      var onDefaultGroupCreation = function(){
-                        console.log("login success", user);
-                        req.session.user = user;
-                        res.redirect('/');
-                      };
+        var onSuccess = function(accessData){
+					console.log(accessData);
+					github.getGitHubProfile(accessData, createOnSuccessfulLogin(req, res),logAndRedirectHome);
+				};
 
-                      var onEmailResoluionSuccess = function(user){
-                        groups.findOrCreateDefaultGroups(user, onDefaultGroupCreation, onFailGroups);
-                      };
-
-											github.resolveGitHubProfileEmail(user, onEmailResoluionSuccess, onFailEmail);
-
-                    },
-                     function(err){
-                        console.log(err);
-                        res.redirect('/')
-                     }
-                  );
-                },
-                function(err){
-                  console.log(err);
-                  res.redirect('/')
-               });
+        httpHelper.httpPost(options,data,onSuccess, logAndRedirectHome);
 
     }
 };
@@ -181,10 +138,10 @@ exports.getLoggedInUser = function(req,res){
     console.log("login", req.query);
     if (req.query.mode){
       var clientIdJson = {
-        clientId: CLIENT_ID,
-        googleAuthURL: GOOGLE_REDIRECT_URL,
-        mode: APP_MODE,
-        log: ENABLE_CLIENT_SIDE_LOGGING
+        clientId: clientId,
+        googleAuthURL: googleRedirectUrl,
+        mode: appMode,
+        log: enableClientSideLogging
       };
       res.json(clientIdJson);
     }else if (req.session.user){
@@ -200,43 +157,54 @@ exports.deleteUser = function(req, res){
       console.log("delete user", id);
       if(!id){
         res.status(400).send();
-      }
-
-      var deleteUser = function(err){
-        appConfig.getUserModel().remove(removeParm, function(err){
-          if(err){
-            handleErrors(err,res);
-          }else{
-            res.status(200).send();
-          }
-        });
-
-      };
-      var deleteAllGroups = function(){
-          appConfig.getGroupModel().remove(removeParm, function(err){
-            if(err){
-              handleErrors(err,res);
-            }else{
-              deleteUser();
-            }
-          });
-      };
-
-      var deleteAllSnippets = function(){
-        appConfig.getSnippetModel().remove(removeParm, function(err){
-          if(err){
-            handleErrors(err,res);
-          }else{
-            deleteAllGroups();
-          }
-        })
-      };
-
-      deleteAllSnippets();
+      } else {
+				deleteAllSnippets();
+			}
 };
 
-var handleErrors = function(err, res, msg){
-  console.log(err.stack);
-  msg = msg || 'Unable to process your request';
-  res.status(500).send(msg);
+// Private
+
+var deleteAllGroups = function(res){
+	var promise = appConfig.getGroupModel().remove(removeParm).exec();
+	promise.then(function(){deleteUser(res)}, utils.createErrorHandler(res));
+};
+
+var deleteAllSnippets = function(res){
+	var promise = appConfig.getSnippetModel().remove(removeParm).exec();
+	promise.then(function(){deleteAllGroups(res)}, utils.createErrorHandler(res));
+};
+
+var deleteUser = function(res){
+	var promise = appConfig.getUserModel().remove(removeParm).exec();
+	promise.then(function(){res.status(200).send()}, utils.createErrorHandler(res));
+};
+
+var createOnSuccessfulLogin = function (req, res) {
+	return function (user) {
+			//SUCCESS - we are able to login
+			var onFailEmail = function (err) {
+				console.log(err, "Failed to obtain email from GitHub", user._id);
+			};
+			var onFailGroups = function (err) {
+				console.log(err, "Failed to create default groups", user._id);
+				onDefaultGroupCreation();
+			};
+			var onDefaultGroupCreation = function () {
+				console.log("login success", user);
+				req.session.user = user;
+				res.redirect('/');
+			};
+
+			var onEmailResoluionSuccess = function (user) {
+				groups.findOrCreateDefaultGroups(user, onDefaultGroupCreation, onFailGroups);
+			};
+
+			github.resolveGitHubProfileEmail(user, onEmailResoluionSuccess, onFailEmail);
+
+		}
+};
+
+var logAndRedirectHome = function(err){
+	console.log(err);
+	res.redirect('/')
 };
