@@ -139,46 +139,46 @@ var createSnippetMapFromRequest = function(req){
 
 var createSnippetFromRequest = function(req,res,callbackSuccess,callbackError){
 
-    var paramsIn = createSnippetMapFromRequest(req);
+	var paramsIn = createSnippetMapFromRequest(req);
 
 
-    console.log("create new snippet",  paramsIn);
+	console.log("create new snippet",  paramsIn);
 
-    var SnippetModel = appConfig.getSnippetModel(),
-				snippet = SnippetModel(paramsIn),
-				onFailure = utils.createErrorHandler(res, "Failed to save the snippet");
+	var SnippetModel = appConfig.getSnippetModel(),
+			snippet = SnippetModel(paramsIn),
+			onFailure = utils.createErrorHandler(res, "Failed to save the snippet");
 
-    snippet.save(function (err) {
-    		if (err) {
-    			onFailure(err);
-				} else {
-					processSuccessSnippetOperation(res, snippet, true)
-				}
-		});
+	snippet.save(function (err) {
+			if (err) {
+				onFailure(err);
+			} else {
+				processSuccessSnippetOperation(res, snippet, true)
+			}
+	});
 
 };
 
 var createOrUpdateGitsSnippet = function(snippet, isNew){
 
-		isNew = isNew || false;
+	isNew = isNew || false;
 
-		var logSuccess = function(gist){
-			console.log("success: updated gist", gist);
-		};
+	var logSuccess = function(gist){
+		console.log("success: updated gist", gist);
+	};
 
-		var logFailure = function(gist){
-			console.log("FAILED: to update gist for: " , snippet);
-		};
+	var logFailure = function(gist){
+		console.log("FAILED: to update gist for: " , snippet);
+	};
 
-    var updateGist = function () {
-				if(isGroupGitHub(snippet.group)){
-					gitHub.updateGist(snippet, logSuccess, logFailure, isNew);
-				}
-		};
+	var updateGist = function () {
+			if(isGroupGitHub(snippet.group)){
+				gitHub.updateGist(snippet, logSuccess, logFailure, isNew);
+			}
+	};
 
-    var promise = appConfig.getSnippetModel().findOne({_id: snippet._id}).populate('user').populate('group').exec();
+	var promise = appConfig.getSnippetModel().findOne({_id: snippet._id}).populate('user').populate('group').exec();
 
-		promise.then(updateGist, logFailure);
+	promise.then(updateGist, logFailure);
 };
 
 var isGroupGitHub = function(group){
@@ -186,8 +186,8 @@ var isGroupGitHub = function(group){
 };
 
 var processSuccessSnippetOperation = function(res, snippet, isNew){
-  console.log("New Snippet", isNew, snippet);
-  res.status(200).send();
+	console.log("New Snippet", isNew, snippet);
+	res.status(200).send();
 
 	isNew = isNew || false;
 

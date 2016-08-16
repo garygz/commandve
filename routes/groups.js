@@ -112,35 +112,35 @@ exports.deleteGroup = function(req, res){
 //Private
 
 var findGroupById = function(id, groups){
-  if(groups==null){
-    return null;
-  }
-  for(var i=0;i<groups.length;i++){
+	if(groups==null){
+		return null;
+	}
+	for(var i=0;i<groups.length;i++){
 
-    if(groups[i]._id.equals(id)){
-      return groups[i];
-    }
-  }
-  return null;
+		if(groups[i]._id.equals(id)){
+			return groups[i];
+		}
+	}
+	return null;
 };
 
 var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
-  if(groups === null || groups.length === 0){
-    return;
-  }
+	if(groups === null || groups.length === 0){
+		return;
+	}
 
-  var calculateGroupSnippetCountProjection = [
-    {$match: {
-      user: groups[0].user
-    }},
+	var calculateGroupSnippetCountProjection = [
+		{$match: {
+			user: groups[0].user
+		}},
 
-    {$group: {
-      _id: "$group",
-      total: {$sum: 1}
-    }}
-  ];
-  console.log("aggregate groups by", calculateGroupSnippetCountProjection);
-  var promise = appConfig.getSnippetModel().aggregate(calculateGroupSnippetCountProjection).exec();
+		{$group: {
+			_id: "$group",
+			total: {$sum: 1}
+		}}
+	];
+	console.log("aggregate groups by", calculateGroupSnippetCountProjection);
+	var promise = appConfig.getSnippetModel().aggregate(calculateGroupSnippetCountProjection).exec();
 
 	var onSuccess = function (logs) {
 		groups.forEach(function(item){item.content_count = 0;});
