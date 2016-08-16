@@ -11,105 +11,102 @@ var groups = require('../helpers/groups.js'),
 //Public
 
 exports.listGroups = function(req,res){
-		var query = appConfig.getGroupModel().find({user: req.params.user_id}),
-				promise = query.exec();
-
-		utils.resolvePromiseAndRespond( promise, res);
-
+	var query = appConfig.getGroupModel().find({user: req.params.user_id}),
+			promise = query.exec();
+	utils.resolvePromiseAndRespond( promise, res);
 };
 
 exports.findGroups = function(req,res){
-		var promise = appConfig.getGroupModel().findById(req.params.id).exec();
-
-		utils.resolvePromiseAndRespond( promise, res);
+	var promise = appConfig.getGroupModel().findById(req.params.id).exec();
+	utils.resolvePromiseAndRespond( promise, res);
 };
 
 exports.findUserGroups = function(req,res){
-    var userId = req.params.user_id,
-			promise = appConfig.getGroupModel().find({user: userId}).sort({created_at: 1}).exec();
+	var userId = req.params.user_id,
+		promise = appConfig.getGroupModel().find({user: userId}).sort({created_at: 1}).exec();
 
-		var onSuccess = function ( groups ) {
-			var onSuccess = function(){res.json(groups);};
-			var onFail = utils.createErrorHandler(res, "Failed to get group counts");
-			calcGroupSnippetCount(groups, onSuccess, onFail);
-		};
+	var onSuccess = function ( groups ) {
+		var onSuccess = function(){res.json(groups);};
+		var onFail = utils.createErrorHandler(res, "Failed to get group counts");
+		calcGroupSnippetCount(groups, onSuccess, onFail);
+	};
 
-		promise.then(
-			onSuccess,
-			utils.createErrorHandler(res)
-		);
+	promise.then(
+		onSuccess,
+		utils.createErrorHandler(res)
+	);
 
 };
 
 exports.createGroup = function(req,res){
-    var onSuccess = createSuccessfulGroupResponse(res),
-				onFail = utils.createErrorHandler(res, "Failed to create a group"),
-				user = {_id : req.params.user_id};
+	var onSuccess = createSuccessfulGroupResponse(res),
+			onFail = utils.createErrorHandler(res, "Failed to create a group"),
+			user = {_id : req.params.user_id};
 
-    if(!user._id){
-      res.status(400).status("Missing user id");
-      return;
-    }
+	if(!user._id){
+		res.status(400).status("Missing user id");
+		return;
+	}
 
-    var findOptions = {
-        user: user._id,
-        name: req.body.name,
-        group_type: constants.GROUP_TYPE_UNCATEGORIZED
-    };
-    var createOptions = {
-				user: user._id,
-				group_type: constants.GROUP_TYPE_UNCATEGORIZED,
-				name: req.body.name,
-				description: req.body.description
-    };
+	var findOptions = {
+			user: user._id,
+			name: req.body.name,
+			group_type: constants.GROUP_TYPE_UNCATEGORIZED
+	};
+	var createOptions = {
+			user: user._id,
+			group_type: constants.GROUP_TYPE_UNCATEGORIZED,
+			name: req.body.name,
+			description: req.body.description
+	};
 
-    if(req.body.image_url){
-      createOptions.image_url = req.body.image_url;
-    }
+	if(req.body.image_url){
+		createOptions.image_url = req.body.image_url;
+	}
 
-    console.log("create group", createOptions);
-    groups.findOrCreateNewGroup(user, findOptions, createOptions,onSuccess,onFail);
+	console.log("create group", createOptions);
+	groups.findOrCreateNewGroup(user, findOptions, createOptions,onSuccess,onFail);
 };
 
 //TODO update using findOne and save
 //otherwise all fields get overwritten
 exports.updateGroup = function(req,res){
-		var user = {_id : req.body.user},
-    	 	findOptions = {
-        _id: req.params.id
-    		},
-				updateOptions = {
-					name: req.body.name,
-					description: req.body.description
-				},
-				onFail = utils.createErrorHandler(res, "Failed to update a group"),
-				promise;
+	var user = {_id : req.body.user},
+			findOptions = {
+			_id: req.params.id
+			},
+			updateOptions = {
+				name: req.body.name,
+				description: req.body.description
+			},
+			onFail = utils.createErrorHandler(res, "Failed to update a group"),
+			promise;
 
-    if(req.body.image_url){
-      updateOptions.image_url = req.body.image_url;
-    }
+	if(req.body.image_url){
+		updateOptions.image_url = req.body.image_url;
+	}
 
-    var onSuccess = function(){
-      appConfig.getGroupModel().findOne(findOptions).then(
-	      	createSuccessfulGroupResponse(res),
-					onFail
-        );
-    };
+	var onSuccess = function(){
+		appConfig.getGroupModel().findOne(findOptions).then(
+				createSuccessfulGroupResponse(res),
+				onFail
+			);
+	};
 
-    console.log("update group", updateOptions);
-    promise = appConfig.getGroupModel().update(findOptions, updateOptions).exec();
+	console.log("update group", updateOptions);
+	promise = appConfig.getGroupModel().update(findOptions, updateOptions).exec();
 
-		promise.then (
-			onSuccess,
-			onFail
-		);
+	promise.then (
+		onSuccess,
+		onFail
+	);
 };
 
 exports.deleteGroup = function(req, res){
-    //TODO remove all snippetRouter for a group first
-    var promise = appConfig.getGroupModel().findOneAndRemove({_id: req.params.id}).exec();
+	//TODO remove all snippetRouter for a group first
+	var promise = appConfig.getGroupModel().findOneAndRemove({_id: req.params.id}).exec();
 
-		utils.resolvePromiseAndRespond( promise, res);
+	utils.resolvePromiseAndRespond( promise, res);
 };
 
 //Private

@@ -24,142 +24,137 @@ exports.setGitHubOAuth = function(config){
 };
 
 exports.listUsers = function(req,res){
-
 	var promise = appConfig.getUserModel().find({}).exec();
-  utils.resolvePromiseAndRespond(promise, res);
-
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 
 exports.findUser = function(req,res) {
-
 	var promise = appConfig.getUserModel().findById(req.params.id).exec();
-  utils.resolvePromiseAndRespond(promise, res);
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.loginUser = function(req,res){
-    console.log("login", req.body);
-    var onError = utils.createErrorHandler(res),
-        promise;
+	console.log("login", req.body);
+	var onError = utils.createErrorHandler(res),
+			promise;
 
-    var onSuccess = function (user) {
-      if(user){
-        req.session.user = user;
-        res.json(user);
-      }else{
-        res.stats(404).send();
-      }
-    };
+	var onSuccess = function (user) {
+		if(user){
+			req.session.user = user;
+			res.json(user);
+		}else{
+			res.stats(404).send();
+		}
+	};
 
-    promise = appConfig.getUserModel().findOne({email:req.body.email, password: req.body.password}).exec();
-
-    promise.then(onSuccess, onError);
+	promise = appConfig.getUserModel().findOne({email:req.body.email, password: req.body.password}).exec();
+	promise.then(onSuccess, onError);
 };
 
 
 exports.logoutUser = function(req,res){
-    console.log("log out user");
-    req.session.destroy();
-    res.redirect('/');
+	console.log("log out user");
+	req.session.destroy();
+	res.redirect('/');
 };
 
 /*
  deprecated - we will use github for now
  */
 exports.signupUser = function(req,res){
-    console.log("create user", req.body);
-    var promise = appConfig.getUserModel().create({username: req.body.username, email:req.body.email, password: req.body.password}).exec();
-    utils.resolvePromiseAndRespond(promise, res);
+	console.log("create user", req.body);
+	var promise = appConfig.getUserModel().create({username: req.body.username, email:req.body.email, password: req.body.password}).exec();
+	utils.resolvePromiseAndRespond(promise, res);
 };
 
 exports.authenticateGoogle = function(req,res) {
-      console.log("google code",req.query);
+	console.log("google code",req.query);
 
-      //this is the final step after a user logged in
-      var onCreateGroup = function(){
-        res.redirect('/');
-      };
+	//this is the final step after a user logged in
+	var onCreateGroup = function(){
+		res.redirect('/');
+	};
 
-      var onCreateUserSuccess = function(user){
-          groups.findOrCreateDefaultGroupsForGoogle(user,onCreateGroup,onFail);
-          req.session.user = user;
-      };
+	var onCreateUserSuccess = function(user){
+			groups.findOrCreateDefaultGroupsForGoogle(user,onCreateGroup,onFail);
+			req.session.user = user;
+	};
 
-      var onResolveUser = function(tokens,userProfile){
-        var userJSON = users.convertFromGoogleToUser(userProfile,tokens);
-        users.findOrCreateUser(userJSON, onCreateUserSuccess,onFail);
+	var onResolveUser = function(tokens,userProfile){
+		var userJSON = users.convertFromGoogleToUser(userProfile,tokens);
+		users.findOrCreateUser(userJSON, onCreateUserSuccess,onFail);
 
-      };
+	};
 
-      var onFail = utils.createErrorHandler(res);
+	var onFail = utils.createErrorHandler(res);
 
-      var onObtainTokens = function(tokens){
-        google.getUser(tokens,onResolveUser, onFail);
-      };
+	var onObtainTokens = function(tokens){
+		google.getUser(tokens,onResolveUser, onFail);
+	};
 
-      google.getTokens(req.query.code, onObtainTokens,onFail);
+	google.getTokens(req.query.code, onObtainTokens,onFail);
 };
 
 exports.authenticateGithub = function(req,res){
-    var code = req.query.code;
+	var code = req.query.code;
 
-    if(!code){
-      redirect('/');
-    }else{
-        var data = querystring.stringify({
-             client_id : clientId,
-             client_secret : clientSecret,
-             code : code
-          });
+	if(code){
+		var data = querystring.stringify({
+			client_id : clientId,
+			client_secret : clientSecret,
+			code : code
+		});
 
-        var options = {
-          host: 'github.com',
-          path: '/login/oauth/access_token',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Content-Length': data.length
-          }
+		var options = {
+			host: 'github.com',
+			path: '/login/oauth/access_token',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				'Content-Length': data.length
+			}
 
-        };
+		};
 
-        var onSuccess = function(accessData){
-					console.log(accessData);
-					github.getGitHubProfile(accessData, createOnSuccessfulLogin(req, res),logAndRedirectHome);
-				};
+		var onSuccess = function(accessData){
+			console.log(accessData);
+			github.getGitHubProfile(accessData, createOnSuccessfulLogin(req, res),logAndRedirectHome);
+		};
 
-        httpHelper.httpPost(options,data,onSuccess, logAndRedirectHome);
-
-    }
+		httpHelper.httpPost(options,data,onSuccess, logAndRedirectHome);
+	}else{
+		redirect('/');
+	}
 };
 
 
 exports.getLoggedInUser = function(req,res){
-    console.log("login", req.query);
-    if (req.query.mode){
-      var clientIdJson = {
-        clientId: clientId,
-        googleAuthURL: googleRedirectUrl,
-        mode: appMode,
-        log: enableClientSideLogging
-      };
-      res.json(clientIdJson);
-    }else if (req.session.user){
-      res.json(req.session.user);
-    }else{
-      res.status(404).send();
-    }
+	console.log("login", req.query);
+	if (req.query.mode){
+		var clientIdJson = {
+			clientId: clientId,
+			googleAuthURL: googleRedirectUrl,
+			mode: appMode,
+			log: enableClientSideLogging
+		};
+		res.json(clientIdJson);
+	}else if (req.session.user){
+		res.json(req.session.user);
+	}else{
+		res.status(404).send();
+	}
 };
 
 exports.deleteUser = function(req, res){
-      var id = req.params.user_id;
-      var removeParm = {user:id};
-      console.log("delete user", id);
-      if(!id){
-        res.status(400).send();
-      } else {
-				deleteAllSnippets();
-			}
+	var id = req.params.user_id;
+	var removeParm = {user:id};
+	console.log("delete user", id);
+	if(!id){
+		res.status(400).send();
+	} else {
+		deleteAllSnippets();
+	}
 };
 
 // Private
