@@ -5,70 +5,62 @@
 
 var groups = require('../helpers/groups.js'),
     appConfig = require('../helpers/app-config'),
-    constants = require('../helpers/constants.js');
+    constants = require('../helpers/constants.js'),
+		utils = require('../helpers/utils');
 
 //Public
 
 exports.listGroups = function(req,res){
-    appConfig.getGroupModel().find({user: req.params.user_id}, function(error, groups){
-      if(error)  {
-          handleErrors(error, res);
-         }else{
-          res.json(groups);
-         }
-    });
-}
+		var query = appConfig.getGroupModel().find({user: req.params.user_id}),
+				promise = query.exec();
+
+		utils.resolvePromiseAndRespond( promise, res);
+
+};
 
 exports.findGroups = function(req,res){
-    appConfig.getGroupModel().findById(req.params.id, function(error, group){
-        if(error)  {
-          handleErrors(error, res);
-         }else{
-          res.json(group);
-         }
+		var promise = appConfig.getGroupModel().findById(req.params.id).exec();
 
-    });
+		utils.resolvePromiseAndRespond( promise, res);
 };
 
 exports.findUserGroups = function(req,res){
-    appConfig.getGroupModel().find({user: req.params.user_id}).sort({created_at: 1}).exec(function(error, groups){
-      if(error)  {
-          handleErrors(error, res);
-         }else{
-          var onSuccess = function(){res.json(groups);}
-          var onFail = function(err){handleErrors(err, res, "Failed to get group counts")}
-          calcGroupSnippetCount(groups, onSuccess, onFail);
+    var userId = req.params.user_id,
+			promise = appConfig.getGroupModel().find({user: userId}).sort({created_at: 1}).exec();
 
-         }
-    });
+		var onSuccess = function ( groups ) {
+			var onSuccess = function(){res.json(groups);};
+			var onFail = utils.createErrorHandler(res, "Failed to get group counts");
+			calcGroupSnippetCount(groups, onSuccess, onFail);
+		};
+
+		promise.then(
+			onSuccess,
+			utils.createErrorHandler(res)
+		);
+
 };
 
 exports.createGroup = function(req,res){
-
-    var onSuccess = function(group){
-      res.json(group);
-    };
-
-    var onFail = function(err){
-      handleErrors(err,res,"Failed to create a group");
-    };
-
-    var user = {_id : req.params.user_id};
+    var onSuccess = createSuccessfulGroupResponse(res),
+				onFail = utils.createErrorHandler(res, "Failed to create a group"),
+				user = {_id : req.params.user_id};
 
     if(!user._id){
       res.status(400).status("Missing user id");
       return;
     }
+
     var findOptions = {
         user: user._id,
         name: req.body.name,
         group_type: constants.GROUP_TYPE_UNCATEGORIZED
     };
     var createOptions = {
-      user: user._id,
-      group_type: constants.GROUP_TYPE_UNCATEGORIZED,
-      name: req.body.name,
-      description: req.body.description,
+				user: user._id,
+				group_type: constants.GROUP_TYPE_UNCATEGORIZED,
+				name: req.body.name,
+				description: req.body.description
     };
 
     if(req.body.image_url){
@@ -82,68 +74,45 @@ exports.createGroup = function(req,res){
 //TODO update using findOne and save
 //otherwise all fields get overwritten
 exports.updateGroup = function(req,res){
-
-
-    var user = {_id : req.body.user};
-    var findOptions = {
+		var user = {_id : req.body.user},
+    	 	findOptions = {
         _id: req.params.id
-    };
-    var updateOptions = {
-      name: req.body.name,
-      description: req.body.description
-    };
+    		},
+				updateOptions = {
+					name: req.body.name,
+					description: req.body.description
+				},
+				onFail = utils.createErrorHandler(res, "Failed to update a group"),
+				promise;
 
     if(req.body.image_url){
       updateOptions.image_url = req.body.image_url;
     }
 
     var onSuccess = function(){
-      appConfig.getGroupModel().findOne(findOptions, function(err, group){
-        if(err){
-          onFail(err);
-        }else{
-          res.json(group);
-        }
-      });
-
-    };
-
-    var onFail = function(err){
-      handleErrors(err,res,"Failed to update a group");
+      appConfig.getGroupModel().findOne(findOptions).then(
+	      	createSuccessfulGroupResponse(res),
+					onFail
+        );
     };
 
     console.log("update group", updateOptions);
-    appConfig.getGroupModel().update(findOptions, updateOptions, function(err, count){
-        if(err){
-          onFail(err);
-        }else{
-          onSuccess();
-        }
-    });
+    promise = appConfig.getGroupModel().update(findOptions, updateOptions).exec();
+
+		promise.then (
+			onSuccess,
+			onFail
+		);
 };
 
 exports.deleteGroup = function(req, res){
     //TODO remove all snippetRouter for a group first
-    appConfig.getGroupModel().findOneAndRemove(
-      {_id: req.params.id}
-    ).exec(
-      function(error, group){
-        if(error){
-          handleErrors(error, res);
-        }else{
-          res.json(group);
-        }
-      }
-    );
+    var promise = appConfig.getGroupModel().findOneAndRemove({_id: req.params.id}).exec();
+
+		utils.resolvePromiseAndRespond( promise, res);
 };
 
 //Private
-
-var handleErrors = function(err, res, msg){
-  console.log(err.stack);
-  msg = msg || 'Unable to process your request';
-  res.status(500).send(msg);
-};
 
 var findGroupById = function(id, groups){
   if(groups==null){
@@ -174,26 +143,24 @@ var calcGroupSnippetCount =  function(groups, callbackSuccess,callbackError) {
     }}
   ];
   console.log("aggregate groups by", calculateGroupSnippetCountProjection);
-  appConfig.getSnippetModel().aggregate(calculateGroupSnippetCountProjection, function(err, logs){
-    if (err){
-      callbackError();
-    }else{
-      groups.forEach(function(item){item.content_count = 0;});
-      console.log(logs);
-      for(var i = 0;i<logs.length;i++){
-        var groupElemnt = logs[i];
+  var promise = appConfig.getSnippetModel().aggregate(calculateGroupSnippetCountProjection).exec();
 
-        var groupId = groupElemnt._id;
-        var foundGroup = findGroupById(groupId, groups);
+	var onSuccess = function (logs) {
+		groups.forEach(function(item){item.content_count = 0;});
+		console.log(logs);
+		for(var i = 0;i<logs.length;i++){
+			var groupElemnt = logs[i];
 
-        if(foundGroup){
-          foundGroup.content_count = groupElemnt.total;
-        }
-      }
-      groups.forEach(function(item){item.save();})
-      callbackSuccess(groups);
-    }
+			var groupId = groupElemnt._id;
+			var foundGroup = findGroupById(groupId, groups);
 
+			if(foundGroup){
+				foundGroup.content_count = groupElemnt.total;
+			}
+		}
+		groups.forEach(function(item){item.save();});
+		callbackSuccess(groups);
+	};
 
-  });
+	promise.then(onSuccess, callbackError);
 };
