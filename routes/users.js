@@ -1,3 +1,8 @@
+/**
+ * Route which supports all CRUD operations
+ * in relations to account creation and login
+ */
+
 var httpHelper = require('../helpers/https-helper.js'),
     users = require('../helpers/users.js'),
     querystring = require('querystring'),
@@ -176,27 +181,27 @@ var deleteUser = function(res){
 
 var createOnSuccessfulLogin = function (req, res) {
 	return function (user) {
-			//SUCCESS - we are able to login
-			var onFailEmail = function (err) {
-				console.log(err, "Failed to obtain email from GitHub", user._id);
-			};
-			var onFailGroups = function (err) {
-				console.log(err, "Failed to create default groups", user._id);
-				onDefaultGroupCreation();
-			};
-			var onDefaultGroupCreation = function () {
-				console.log("login success", user);
-				req.session.user = user;
-				res.redirect('/');
-			};
+		//SUCCESS - we are able to login
+		var onFailEmail = function (err) {
+			console.log(err, "Failed to obtain email from GitHub", user._id);
+		};
+		var onFailGroups = function (err) {
+			console.log(err, "Failed to create default groups", user._id);
+			onDefaultGroupCreation();
+		};
+		var onDefaultGroupCreation = function () {
+			console.log("login success", user);
+			req.session.user = user;
+			res.redirect('/');
+		};
 
-			var onEmailResoluionSuccess = function (user) {
-				groups.findOrCreateDefaultGroups(user, onDefaultGroupCreation, onFailGroups);
-			};
+		var onEmailResoluionSuccess = function (user) {
+			groups.findOrCreateDefaultGroups(user, onDefaultGroupCreation, onFailGroups);
+		};
 
-			github.resolveGitHubProfileEmail(user, onEmailResoluionSuccess, onFailEmail);
+		github.resolveGitHubProfileEmail(user, onEmailResoluionSuccess, onFailEmail);
 
-		}
+	}
 };
 
 var logAndRedirectHome = function(err){
